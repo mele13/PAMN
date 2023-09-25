@@ -14,7 +14,7 @@ Welcome to the Native Mobile Application Programming Assignments repository. Thi
 In this repository, you will find a collection of assignments, code, and documentation related to the Native Mobile Application Programming course. Each assignment is organized in its respective folder and may contain code, images, datasets, and reports.
 
 ## Assignments
-- [Assignment 1](https://github.com/mele13/https://github.com/mele13/PAMN/tree/main/P1)
+- [Assignment 1](https://github.com/mele13/PAMN/tree/main/P1)
 
 ## Getting Started
 To get started with the project, follow these steps:
