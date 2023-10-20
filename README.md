@@ -3,18 +3,24 @@
 Welcome to the Native Mobile Application Programming Assignments repository. This repository is dedicated to storing and managing the assignments for the Native Mobile Application Programming course.
 
 ## Table of Contents
-- [About This Repository](#about-this-repository)
-- [Assignments](#assignments)
-- [Getting Started](#getting-started)
-- [Contributing](#contributing)
-- [Disclaimer](#disclaimer)
+- [Native Mobile Application Programming Assignments Repository](#native-mobile-application-programming-assignments-repository)
+  - [Table of Contents](#table-of-contents)
+  - [About This Repository](#about-this-repository)
+  - [Assignments](#assignments)
+  - [Getting Started](#getting-started)
+  - [Contributing](#contributing)
+  - [Disclaimer](#disclaimer)
 
 ## About This Repository
 
 In this repository, you will find a collection of assignments, code, and documentation related to the Native Mobile Application Programming course. Each assignment is organized in its respective folder and may contain code, images, datasets, and reports.
 
 ## Assignments
-- [Assignment 1](https://github.com/mele13/PAMN/tree/main/P1)
+- [Assignment 1 - Web Accessibility Evaluation Report](https://github.com/mele13/PAMN/tree/main/S1%20-%20Informe%20sobre%20accesibilidad%20web)
+- [Assignment 2 - Interface Design](https://github.com/mele13/PAMN/tree/main/S2%20-%20Dise%C3%B1o%20de%20interfaces)
+- [Assignment 3 - Architectural design of an application](https://github.com/mele13/PAMN/tree/main/S3%20-%20Dise%C3%B1o%20arquitect%C3%B3nico%20de%20una%20aplicaci%C3%B3n)
+- [Assignment 4 - Choosing an architecture](https://github.com/mele13/PAMN/tree/main/S4%20-%20Elecci%C3%B3n%20de%20una%20arquitectura)
+- [Assignment 5 - CodeLabs](https://github.com/mele13/PAMN/tree/main/S5%20-%20CodeLabs)
 
 ## Getting Started
 To get started with the project, follow these steps:

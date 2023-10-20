@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">HappyBirthday_AS</string>
+    <string name="happy_birthday_text">Happy Birthday C:!</string>
+    <string name="signature_text">from c:</string>
+</resources>
