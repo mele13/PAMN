@@ -7,3 +7,8 @@ The chosen architecture for the application is the Model-View-ViewModel (MVVM) a
 Two essential use cases are presented: user registration and searching for animals available for adoption. These cases demonstrate how the MVVM architecture effectively manages user interactions and data flow within the application.
 
 The report concludes that the MVVM architecture aligns with the project's objectives of modularity, maintainability, and a user-friendly interface. It assures the team that this architecture will support the successful development of the application, delivering an exceptional user experience. Other architectural options, such as MVC, MVP, MVI, and Hexagonal, were considered but deemed less suitable for the project's scope and complexity.
+
+## Collaborators
+
+- [Selene](https://github.com/SeleneGonzalezCurbelo)
+- [Mele13](https://github.com/mele13)
