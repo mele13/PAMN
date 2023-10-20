@@ -7,3 +7,8 @@ The application offers various functionalities and key features, including user 
 The report includes wireframes and descriptions of the main interface components, such as the Landing Page, Sign Up, Login, Home, Animals for Adoption, Animal Profile, Donations, About Us, User Profile, Loader, and interactive buttons for navigation. Each section of the app serves a specific purpose, and the wireframes illustrate their layouts and functionalities, ensuring a user-friendly experience.
 
 The Sirius Animal Shelter mobile application offers a comprehensive solution for streamlining the animal adoption and sponsorship process while providing users with valuable information and features to support the shelter's mission.
+
+## Collaborators
+
+- [Selene](https://github.com/SeleneGonzalezCurbelo)
+- [Mele13](https://github.com/mele13)
