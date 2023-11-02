@@ -1,4 +1,24 @@
-S6 - CodeLabs Databases
-S6 - CodeLabs Databases/**
-S6 - Diseño de la base de datos
-S6 - Diseño de la base de datos/**
+*
+
+# Files
+!README.md
+
+# Directories
+!S1 - Informe sobre accesibilidad web/
+!S1 - Informe sobre accesibilidad web/*
+!S2 - Diseño de interfaces/
+!S2 - Diseño de interfaces/*
+!S3 - Diseño arquitectónico de una aplicación/
+!S3 - Diseño arquitectónico de una aplicación/**
+!S4 - Elección de una arquitectura/
+!S4 - Elección de una arquitectura/**
+!S5 - CodeLabs
+!S5 - CodeLabs/**
+# !S6 - CodeLabs Databases
+# !S6 - CodeLabs Databases/**
+# !S6 - Diseño de la base de datos
+# !S6 - Diseño de la base de datos/**
+# S7 - CodeLabs IU
+# S7 - CodeLabs IU/**
+!S7 - Patrones de diseño Factory
+!S7 - Patrones de diseño Factory/**
