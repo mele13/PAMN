@@ -6,4 +6,3 @@ This report focuses on the class structure of an application that utilizes the F
 1. Class Structure with Factory Method Pattern
 2. Key Application Elements
 3. Future-Proofing
-4. 
