@@ -23,7 +23,7 @@ In this repository, you will find a collection of assignments, code, and documen
 - [Assignment 5 - CodeLabs](https://github.com/mele13/PAMN/tree/main/S5%20-%20CodeLabs)
 - [Assignment 6 - CodeLabs Databases]<!--(https://github.com/mele13/PAMN/tree/main/S5%20-%20CodeLabs%20Databases) -->
 - [Assignment 7 - Database Design](https://github.com/mele13/PAMN/tree/main/S6%20-%20Dise%C3%B1o%20de%20la%20base%20de%20datos)
-- [Assignment 8 - Factory Method Design Patterns](https://github.com/mele13/PAMN/tree/main/S7%20-%20Patrones%20de%20dise%C3%B1o%20Factory) -->
+- [Assignment 8 - Factory Method Design Patterns](https://github.com/mele13/PAMN/tree/main/S7%20-%20Patrones%20de%20dise%C3%B1o%20Factory)
 - [Assignment 9 - Codelabs UI]<!--(https://github.com/mele13/PAMN/tree/main/S5%20-%20CodeLabs%20Databases) -->
 
 ## Getting Started
