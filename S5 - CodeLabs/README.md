@@ -1,7 +1,3 @@
-
-Capturas de pantalla de la App en el emulador
-Incluye un apartado en tu informe donde reflejes tu opinión sobre el CodeLab, las dificultades técnicas encontradas y cualquier otro aspecto relevante de tu experiencia
-
 ## Table of Contents
 - [CodeLabs: Your first Android app](#codelabs-your-first-android-app)
   - [Learning Android Studio](#learning-android-studio)
