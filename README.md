@@ -21,10 +21,12 @@ In this repository, you will find a collection of assignments, code, and documen
 - [Assignment 3 - Architectural design of an application](https://github.com/mele13/PAMN/tree/main/S3%20-%20Dise%C3%B1o%20arquitect%C3%B3nico%20de%20una%20aplicaci%C3%B3n)
 - [Assignment 4 - Choosing an architecture](https://github.com/mele13/PAMN/tree/main/S4%20-%20Elecci%C3%B3n%20de%20una%20arquitectura)
 - [Assignment 5 - CodeLabs](https://github.com/mele13/PAMN/tree/main/S5%20-%20CodeLabs)
-- [Assignment 6 - CodeLabs Databases]<!--(https://github.com/mele13/PAMN/tree/main/S5%20-%20CodeLabs%20Databases) -->
+- [Assignment 6 - CodeLabs Databases](https://github.com/mele13/PAMN/tree/main/S6%20-%20CodeLabs%20Databases)
 - [Assignment 7 - Database Design](https://github.com/mele13/PAMN/tree/main/S6%20-%20Dise%C3%B1o%20de%20la%20base%20de%20datos)
 - [Assignment 8 - Factory Method Design Patterns](https://github.com/mele13/PAMN/tree/main/S7%20-%20Patrones%20de%20dise%C3%B1o%20Factory)
-- [Assignment 9 - Codelabs UI]<!--(https://github.com/mele13/PAMN/tree/main/S5%20-%20CodeLabs%20Databases) -->
+- [Assignment 9 - Codelabs UI]<!--(https://github.com/mele13/PAMN/tree/main/S85%20-%20CodeLabs%20UI) -->
+- [Assignment 10 - Architecture Recommendations for Android Applications]<!--(https://github.com/mele13/PAMN/tree/main/S8%20-%20CodeLabs%20Databases) -->
+- [Final Project - Sirius Animal Shelter]<!--(https://github.com/mele13/PAMN/tree/main/Sirius)-->
 
 ## Getting Started
 To get started with the project, follow these steps:
