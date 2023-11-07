@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Sirius</string>
+
+    <!-- Navbar -->
+    <string name="home">Home</string>
+    <string name="animals">Animals</string>
+    <string name="donations">Donations</string>
+    <string name="aboutUs">About Us</string>
+
+    <!-- Home -->
+    <string name="newsIntro">What\'s New</string>
+    <string name="animalsIntro">Our friends</string>
+    <string name="lostIntro">Lost</string>
+    <string name="goodNewsIntro">Good news</string>
+
+    <!-- News -->
+    <!-- Animals -->
+    <!-- Donations -->
+    <!-- Lost -->
+    <!-- About Us -->
+</resources>
