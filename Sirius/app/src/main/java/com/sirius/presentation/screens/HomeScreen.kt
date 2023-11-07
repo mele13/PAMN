@@ -1,7 +1,9 @@
 package com.sirius.presentation.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,10 +35,11 @@ fun HomeScreen(imageList: List<Int>) {
         Column(
             modifier = Modifier.fillMaxWidth(),
         ) {
+            // What's up
             Text(
                 text = stringResource(id = R.string.newsIntro),
                 style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(6.dp)
             )
             LazyRow {
                 items(imageList) {imageResource ->
@@ -44,7 +48,61 @@ fun HomeScreen(imageList: List<Int>) {
                         contentDescription = null,
                         modifier = Modifier
                             .padding(8.dp)
-                            .size(120.dp)
+                            .size(100.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                    )
+                }
+            }
+            // Our friends
+            Text(
+                text = stringResource(id = R.string.animalsIntro),
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(6.dp)
+            )
+            LazyRow {
+                items(imageList) {imageResource ->
+                    Image(
+                        painter = painterResource(imageResource),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(100.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                    )
+                }
+            }
+            // Lost
+            Text(
+                text = stringResource(id = R.string.lostIntro),
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(6.dp)
+            )
+            LazyRow {
+                items(imageList) {imageResource ->
+                    Image(
+                        painter = painterResource(imageResource),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .size(100.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                    )
+                }
+            }
+            // Good News
+            Text(
+                text = stringResource(id = R.string.goodNewsIntro),
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(6.dp)
+            )
+            LazyRow {
+                items(imageList) {imageResource ->
+                    Image(
+                        painter = painterResource(imageResource),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(100.dp)
                             .clip(MaterialTheme.shapes.medium)
                     )
                 }
@@ -52,7 +110,6 @@ fun HomeScreen(imageList: List<Int>) {
         }
     }
 }
-
 
 @Preview
 @Composable
