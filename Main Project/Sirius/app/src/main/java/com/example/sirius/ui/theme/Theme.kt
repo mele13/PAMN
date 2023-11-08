@@ -1,4 +1,4 @@
-package com.sirius.ui.theme
+package com.example.sirius.ui.theme
 
 import android.app.Activity
 import android.os.Build

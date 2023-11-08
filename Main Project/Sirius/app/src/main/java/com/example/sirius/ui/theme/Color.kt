@@ -1,4 +1,4 @@
-package com.sirius.ui.theme
+package com.example.sirius.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

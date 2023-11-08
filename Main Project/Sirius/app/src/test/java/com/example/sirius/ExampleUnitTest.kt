@@ -1,4 +1,4 @@
-package com.sirius
+package com.example.sirius
 
 import org.junit.Test
 

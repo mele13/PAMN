@@ -1,11 +1,12 @@
-package com.sirius.navigation
+package com.example.sirius.navigation
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import com.sirius.R
+import com.example.sirius.R
 
 @Composable
 fun createDestination(route: String, selectedIcon: Int, iconTextId: Int): Destinations {

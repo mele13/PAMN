@@ -1,4 +1,4 @@
-package com.sirius.presentation.components
+package com.example.sirius.view.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,17 +10,18 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.sirius.navigation.Destinations
-import com.sirius.navigation.Routes
-import com.sirius.presentation.screens.AnimalsGallery
-import com.sirius.presentation.screens.generateSampleAnimalList
-import androidx.navigation.compose.rememberNavController
+import com.example.sirius.view.screens.AnimalsGallery
+import com.example.sirius.view.screens.generateSampleAnimalList
 import androidx.navigation.compose.composable
-import com.sirius.navigation.createDestinations
-import com.sirius.presentation.screens.HomeScreenPreview
+import com.example.sirius.viewmodel.AnimalViewModel
+import com.example.sirius.navigation.Destinations
+import com.example.sirius.navigation.Routes
+import com.example.sirius.navigation.createDestinations
+import com.example.sirius.view.screens.HomeScreenPreview
 
 @Composable
 fun NavigationContent(
@@ -44,7 +45,9 @@ fun NavigationContent(
                     HomeScreenPreview()
                 }
                 composable(Routes.ANIMALS) {
-                    AnimalsGallery(animalList = generateSampleAnimalList())
+                    val viewModel: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
+                    val animalList = generateSampleAnimalList(viewModel)
+                    AnimalsGallery(animalList = animalList)
                 }
 //                composable(Routes.DONATIONS) {}
 //                composable(Routes.ABOUTUS) {}
