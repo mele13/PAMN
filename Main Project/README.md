@@ -5,9 +5,10 @@ This repository documents the features and technical details of the "Sirius" mob
 1. Project Creation
 2. Main Pages
 3. Navigation Bar
-4. Styles and Customization
-5. Link to Repository
-6. Technical Summary
+4. Database Creation
+5. Styles and Customization
+6. Link to Repository
+7. Technical Summary
 
 ## Application's GIF
 ![Application's demonstration gif](./Tools/E1.gif)
