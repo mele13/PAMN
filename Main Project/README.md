@@ -10,4 +10,4 @@ This repository documents the features and technical details of the "Sirius" mob
 6. Technical Summary
 
 ## Application's GIF
-
+![Application's demonstration gif](./Tools/E1.gif)
