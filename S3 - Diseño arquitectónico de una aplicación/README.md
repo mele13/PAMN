@@ -12,3 +12,5 @@ The report concludes that the MVVM architecture aligns with the project's object
 
 - [Selene](https://github.com/SeleneGonzalezCurbelo)
 - [Mele13](https://github.com/mele13)
+
+**Please Note: This project is developed solely for a university project.**

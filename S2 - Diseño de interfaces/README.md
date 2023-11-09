@@ -12,3 +12,5 @@ The Sirius Animal Shelter mobile application offers a comprehensive solution for
 
 - [Selene](https://github.com/SeleneGonzalezCurbelo)
 - [Mele13](https://github.com/mele13)
+
+**Please Note: This project is developed solely for a university project.**

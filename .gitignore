@@ -3,7 +3,8 @@
 *.txt
 
 S9*
-S8 - CodeLabs*
+S8*
+S10*
 *Sirius*
 
 !Sirius/

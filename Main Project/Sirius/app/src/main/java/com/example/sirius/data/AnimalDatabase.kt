@@ -1,13 +1,14 @@
-package com.example.sirius.model
+package com.example.sirius.data
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.sirius.model.Animal
 
 @Database(entities = [Animal::class], version = 1, exportSchema = false)
 abstract class AnimalDatabase: RoomDatabase() {
-    abstract fun animalDao():AnimalDao
+    abstract fun animalDao(): AnimalDao
 
     companion object {
         @Volatile

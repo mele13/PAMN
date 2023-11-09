@@ -39,3 +39,5 @@ I encountered a technical issue during the course that required me to make a mod
 
 ## Overall Experience
 Throughout the CodeLabs tutorial, I found instances where the content, while well-structured and suitable for beginners, became somewhat monotonous and less engaging, particularly for more experienced users.
+
+**Please Note: This project is developed solely for a university project.**

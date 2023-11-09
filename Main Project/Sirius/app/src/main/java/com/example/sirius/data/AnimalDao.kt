@@ -1,10 +1,11 @@
-package com.example.sirius.model
+package com.example.sirius.data
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.sirius.model.Animal
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -20,3 +20,5 @@ The objective of this exercise is to learn how to store simple key-value pair da
 
 ## Overall Experience
 The overall experience of using Room in Kotlin for Android development was positive. Room provided a simplified and convinient way to handle data persistence in Android apps. Altough I still find it easier to just use common databases such as MySQL, MongoDB or even Firebase (e.g. image storage).
+
+**Please Note: This project is developed solely for a university project.**

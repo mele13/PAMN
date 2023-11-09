@@ -7,3 +7,5 @@ This report provides architectural recommendations for various application devel
 3. Financial Application for a Large Corporation: Hexagonal Architecture
 4. Health and Wellness Platform for Hospitals: Clean Architecture
 5. Prototype Application for a Hackathon: Model-View-Presenter (MVP)
+
+**Please Note: This project is developed solely for a university project.**

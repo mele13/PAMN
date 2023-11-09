@@ -12,3 +12,5 @@ This report offers an analysis of guidelines sourced from the official [Android 
 ## Collaborators
 - [Selene](https://github.com/SeleneGonzalezCurbelo)
 - [Mele13](https://github.com/mele13)
+
+**Please Note: This project is developed solely for a university project.**

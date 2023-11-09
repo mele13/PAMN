@@ -9,6 +9,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -49,8 +50,12 @@ fun NavigationContent(
                     val animalList = generateSampleAnimalList(viewModel)
                     AnimalsGallery(animalList = animalList)
                 }
-//                composable(Routes.DONATIONS) {}
-//                composable(Routes.ABOUTUS) {}
+                composable(Routes.DONATIONS) {
+                    HomeScreenPreview()
+                }
+                composable(Routes.ABOUTUS) {
+                    HomeScreenPreview()
+                }
             }
             Navbar(
                 selectedDestination = selectedDestination,
@@ -76,7 +81,7 @@ fun Navbar(
             onClick = { navigateDestination(destinations) },
             icon = {
                 Icon(
-                    imageVector = destinations.selectedIcon,
+                    painter = painterResource(id = destinations.selectedIcon),
                     contentDescription = stringResource(id = destinations.iconTextId)
                 )
             }
