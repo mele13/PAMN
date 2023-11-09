@@ -8,3 +8,7 @@ This report offers an analysis of guidelines sourced from the official [Android 
 3. UI Layer: ViewModel Event Handling
 4. Layered Architecture: Data Layer with Repositories
 5. Layered Architecture: Clear Data Layer
+
+## Collaborators
+- [Selene](https://github.com/SeleneGonzalezCurbelo)
+- [Mele13](https://github.com/mele13)
