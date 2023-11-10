@@ -29,8 +29,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sirius.R
 import com.example.sirius.model.News
 import com.example.sirius.model.Animal
-import com.example.sirius.viewmodel.AnimalViewModel
 import com.example.sirius.viewmodel.NewsViewModel
+import com.example.sirius.viewmodel.navigation.AnimalViewModel
 import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -42,97 +42,99 @@ fun HomeScreen(animalList: List<Animal>, newsList: List<News>, imageList: List<I
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Column(
+        LazyColumn(
             modifier = Modifier.fillMaxWidth(),
         ) {
-            // What's up
-            Text(
-                text = stringResource(id = R.string.animalsIntro),
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(6.dp)
-            )
-            LazyRow {
-                items(newsList) {news ->
-                    Column(
-                        modifier = Modifier.padding(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+            item {
+                // What's up
+                Text(
+                    text = stringResource(id = R.string.animalsIntro),
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(6.dp)
+                )
+                LazyRow {
+                    items(newsList) {news ->
+                        Column(
+                            modifier = Modifier.padding(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.dog1),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .clip(MaterialTheme.shapes.medium)
+                            )
+                            Text(
+                                text = news.titleNews,
+                                style = MaterialTheme.typography.labelLarge,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+                // Our friends
+                Text(
+                    text = stringResource(id = R.string.animalsIntro),
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(6.dp)
+                )
+                LazyRow {
+                    items(animalList) {animal ->
+                        Column(
+                            modifier = Modifier.padding(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.dog1),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .clip(MaterialTheme.shapes.medium)
+                            )
+                            Text(
+                                text = animal.nameAnimal,
+                                style = MaterialTheme.typography.labelLarge,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+                // Lost
+                Text(
+                    text = stringResource(id = R.string.lostIntro),
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(6.dp)
+                )
+                LazyRow {
+                    items(imageList) {imageResource ->
                         Image(
-                            painter = painterResource(R.drawable.dog1),
+                            painter = painterResource(imageResource),
                             contentDescription = null,
                             modifier = Modifier
+                                .padding(6.dp)
                                 .size(100.dp)
                                 .clip(MaterialTheme.shapes.medium)
                         )
-                        Text(
-                            text = news.titleNews,
-                            style = MaterialTheme.typography.labelLarge,
-                            textAlign = TextAlign.Center
-                        )
                     }
                 }
-            }
-            // Our friends
-            Text(
-                text = stringResource(id = R.string.animalsIntro),
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(6.dp)
-            )
-            LazyRow {
-                items(animalList) {animal ->
-                    Column(
-                        modifier = Modifier.padding(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                // Good News
+                Text(
+                    text = stringResource(id = R.string.goodNewsIntro),
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(6.dp)
+                )
+                LazyRow {
+                    items(imageList) {imageResource ->
                         Image(
-                            painter = painterResource(R.drawable.dog1),
+                            painter = painterResource(imageResource),
                             contentDescription = null,
                             modifier = Modifier
+                                .padding(8.dp)
                                 .size(100.dp)
                                 .clip(MaterialTheme.shapes.medium)
                         )
-                        Text(
-                            text = animal.nameAnimal,
-                            style = MaterialTheme.typography.labelLarge,
-                            textAlign = TextAlign.Center
-                        )
                     }
-                }
-            }
-            // Lost
-            Text(
-                text = stringResource(id = R.string.lostIntro),
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(6.dp)
-            )
-            LazyRow {
-                items(imageList) {imageResource ->
-                    Image(
-                        painter = painterResource(imageResource),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .size(100.dp)
-                            .clip(MaterialTheme.shapes.medium)
-                    )
-                }
-            }
-            // Good News
-            Text(
-                text = stringResource(id = R.string.goodNewsIntro),
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(6.dp)
-            )
-            LazyRow {
-                items(imageList) {imageResource ->
-                    Image(
-                        painter = painterResource(imageResource),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(100.dp)
-                            .clip(MaterialTheme.shapes.medium)
-                    )
                 }
             }
         }

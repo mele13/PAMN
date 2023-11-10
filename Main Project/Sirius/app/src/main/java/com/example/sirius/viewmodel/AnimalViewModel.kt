@@ -1,4 +1,4 @@
-package com.example.sirius.viewmodel
+package com.example.sirius.viewmodel.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,7 +11,14 @@ import kotlinx.coroutines.flow.Flow
 
 class AnimalViewModel(private val animalDao: AnimalDao) : ViewModel() {
     fun getAllAnimals(): Flow<List<Animal>> = animalDao.getAllAnimals()
-    fun getAnimalByName(name: String): Flow<List<Animal>> = animalDao.getAnimalByName(name)
+
+    fun getAge(): Flow<List<Int>> = animalDao.getAge()
+    fun getBreed(): Flow<List<String>> = animalDao.getBreed()
+    fun getTypeAnimal(): Flow<List<String>> = animalDao.getTypeAnimal()
+
+    fun getAnimalsByAgeASC(option: Int): Flow<List<Animal>> = animalDao.getAnimalsByAgeASC(option)
+    fun getAnimalsByBreed(option: String): Flow<List<Animal>> = animalDao.getAnimalsByBreed(option)
+    fun getAnimalsByTypeAnimal(option: String): Flow<List<Animal>> = animalDao.getAnimalsByTypeAnimal(option)
 
     companion object {
         val factory: ViewModelProvider.Factory = viewModelFactory {

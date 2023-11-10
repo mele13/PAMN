@@ -33,4 +33,27 @@ interface AnimalDao {
 
     @Query("SELECT * FROM Animal WHERE breed = :breed ORDER BY time_shelter DESC")
     fun getAnimalByBreed(breed: String): Flow<List<Animal>>
+
+
+    @Query("SELECT * FROM Animal WHERE age = :age ORDER BY age ASC")
+    fun getAnimalsByAgeASC(age: Int): Flow<List<Animal>>
+
+    @Query("SELECT DISTINCT age FROM Animal")
+    fun getAge(): Flow<List<Int>>
+
+    @Query("SELECT * FROM Animal WHERE age = :age ORDER BY age DESC")
+    fun getAnimalsByAgeDesc(age: Int): Flow<List<Animal>>
+
+    //Ordenarnos???
+    @Query("SELECT * FROM Animal WHERE breed = :breed")
+    fun getAnimalsByBreed(breed: String): Flow<List<Animal>>
+
+    @Query("SELECT DISTINCT breed FROM Animal")
+    fun getBreed(): Flow<List<String>>
+
+    @Query("SELECT * FROM Animal WHERE type_animal = :typeAnimal")
+    fun getAnimalsByTypeAnimal(typeAnimal: String): Flow<List<Animal>>
+
+    @Query("SELECT DISTINCT type_animal FROM Animal")
+    fun getTypeAnimal(): Flow<List<String>>
 }

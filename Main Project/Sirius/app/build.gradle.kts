@@ -67,6 +67,7 @@ dependencies {
     // Room
     implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
+    implementation("androidx.benchmark:benchmark-macro:1.2.0")
     ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
 
     // ViewModel

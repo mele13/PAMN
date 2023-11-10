@@ -13,6 +13,7 @@ fun createDestination(route: String, selectedIcon: Int, iconTextId: Int): Destin
     return Destinations(
         route = route,
         selectedIcon = selectedIcon,
+        unselectedIcon = selectedIcon,
         iconTextId = iconTextId,
     )
 }
@@ -30,6 +31,7 @@ fun createDestinations(): List<Destinations> {
 data class Destinations(
     val route: String,
     val selectedIcon: Int,
+    val unselectedIcon: Int,
     val iconTextId: Int
 )
 
