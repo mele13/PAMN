@@ -1,4 +1,4 @@
-package com.example.sirius.view.components
+package com.example.sirius.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -9,7 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.sirius.navigation.Routes
+import com.example.sirius.view.components.NavigationActions
+import com.example.sirius.view.components.NavigationContent
 
 @Composable
 fun NavigationController (){

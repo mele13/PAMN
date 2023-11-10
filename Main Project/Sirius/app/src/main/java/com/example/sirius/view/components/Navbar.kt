@@ -1,5 +1,6 @@
 package com.example.sirius.view.components
 
+import DonationsScreen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,7 +52,7 @@ fun NavigationContent(
                     AnimalsGallery(animalList = animalList)
                 }
                 composable(Routes.DONATIONS) {
-                    HomeScreenPreview()
+                    DonationsScreen()
                 }
                 composable(Routes.ABOUTUS) {
                     HomeScreenPreview()

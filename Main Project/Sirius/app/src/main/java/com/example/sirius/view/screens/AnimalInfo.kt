@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,30 +19,44 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.sirius.R
+
+@Composable
+fun AnimalInfo() {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .width(152.dp)
+                .clip(MaterialTheme.shapes.medium), // Edge rounding
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.dog1),
+                contentDescription = "animal.descriptio",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .aspectRatio(1f)
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "animal.descriptio",
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+
 
 @Preview
 @Composable
-fun AnimalInfoScreen(animal: Animal) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .width(152.dp)
-            .clip(MaterialTheme.shapes.medium), // Edge rounding
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(id = animal.imageRes),
-            contentDescription = animal.description,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxSize()
-                .aspectRatio(1f)
-        )
-    }
-    Spacer(modifier = Modifier.height(8.dp))
-    Text(
-        text = animal.description,
-        style = MaterialTheme.typography.bodyMedium,
-        textAlign = TextAlign.Center
-    )
+fun AnimalInfoScreen() {
+    AnimalInfo()
 }
+

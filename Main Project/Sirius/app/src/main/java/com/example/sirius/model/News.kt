@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(tableName = "News")
 data class News (
@@ -19,12 +20,13 @@ data class News (
         @NonNull
         @ColumnInfo(name = "long_info")
         val longInfoNews: String,
-    // Date, until_date?,
-
-    //@NonNull
-    //@ColumnInfo(name = "medical_record")
-    //val medicalRecordAnimal: String,
-    //@NonNull
-    //@ColumnInfo(name = "image")
-    //val imageAnimal: String,
+        @NonNull
+        @ColumnInfo(name = "published_date")
+        val publishedDate: String,
+        @NonNull
+        @ColumnInfo(name = "created_at")
+        val createdAt: String,
+        @ColumnInfo(name = "until_date")
+        val untilDate: String?
+        // image
 )
