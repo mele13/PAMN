@@ -1,4 +1,4 @@
-package com.example.sirius.data
+package com.example.sirius.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete

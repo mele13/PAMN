@@ -6,7 +6,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.sirius.AnimalApplication
 import com.example.sirius.model.Animal
-import com.example.sirius.data.AnimalDao
+import com.example.sirius.data.dao.AnimalDao
 import kotlinx.coroutines.flow.Flow
 
 class AnimalViewModel(private val animalDao: AnimalDao) : ViewModel() {

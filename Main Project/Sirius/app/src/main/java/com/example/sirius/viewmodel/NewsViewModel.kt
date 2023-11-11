@@ -2,15 +2,12 @@ package com.example.sirius.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.sirius.AnimalApplication
-import com.example.sirius.data.NewsDao
+import com.example.sirius.data.dao.NewsDao
 import com.example.sirius.model.News
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
-import java.util.Date
 
 class NewsViewModel(private val newsDao: NewsDao) : ViewModel() {
 
