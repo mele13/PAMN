@@ -319,7 +319,7 @@ fun AnimalCard(animal: Animal) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.dog1),
-                    contentDescription = animal.shortInfoAnimal,
+                    contentDescription = "${animal.typeAnimal}: ${animal.nameAnimal}",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
@@ -345,7 +345,7 @@ fun AnimalCard(animal: Animal) {
             }
 
             Text(
-                text = animal.shortInfoAnimal,
+                text = "${animal.nameAnimal}, ${animal.ageAnimal}",
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 color = Color.Black
@@ -363,12 +363,13 @@ fun generateSampleAnimalList(viewModel: AnimalViewModel): List<Animal> {
             nameAnimal = animal.nameAnimal,
             ageAnimal = animal.ageAnimal,
             sexAnimal = animal.sexAnimal,
-            stateAnimal = animal.stateAnimal,
+            waitingAdoption = animal.waitingAdoption,
             shortInfoAnimal = animal.shortInfoAnimal,
             longInfoAnimal = animal.longInfoAnimal,
             breedAnimal = animal.breedAnimal,
             typeAnimal = animal.typeAnimal,
-            timeShelter = animal.timeShelter
+            timeShelter = animal.timeShelter,
+            fosterCare = animal.fosterCare
         )
     }
 }

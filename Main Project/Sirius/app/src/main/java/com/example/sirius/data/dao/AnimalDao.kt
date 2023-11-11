@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.sirius.model.Animal
+import com.example.sirius.model.TypeAnimal
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -29,11 +30,10 @@ interface AnimalDao {
     fun getAnimalByTimeShelter(timeShelter: String): Flow<List<Animal>>
 
     @Query("SELECT * FROM Animal WHERE type_animal = :typeAnimal ORDER BY time_shelter DESC")
-    fun getAnimalByTypeAnimal(typeAnimal: String): Flow<List<Animal>>
+    fun getAnimalByTypeAnimal(typeAnimal: TypeAnimal): Flow<List<Animal>>
 
     @Query("SELECT * FROM Animal WHERE breed = :breed ORDER BY time_shelter DESC")
     fun getAnimalByBreed(breed: String): Flow<List<Animal>>
-
 
     @Query("SELECT * FROM Animal WHERE age = :age ORDER BY age ASC")
     fun getAnimalsByAgeASC(age: Int): Flow<List<Animal>>
@@ -52,8 +52,15 @@ interface AnimalDao {
     fun getBreed(): Flow<List<String>>
 
     @Query("SELECT * FROM Animal WHERE type_animal = :typeAnimal")
-    fun getAnimalsByTypeAnimal(typeAnimal: String): Flow<List<Animal>>
+    fun getAnimalsByTypeAnimal(typeAnimal: TypeAnimal): Flow<List<Animal>>
 
     @Query("SELECT DISTINCT type_animal FROM Animal")
     fun getTypeAnimal(): Flow<List<String>>
+
+    @Query("SELECT * FROM Animal WHERE waiting_adoption = :isWaitingAdoption ORDER BY time_shelter DESC")
+    fun getAnimalsForAdoption(isWaitingAdoption: Int): Flow<List<Animal>>
+
+    @Query("SELECT * FROM Animal WHERE foster_care = :isInFosterCare ORDER BY time_shelter DESC")
+    fun getAnimalsInFosterCare(isInFosterCare: Int): Flow<List<Animal>>
+
 }

@@ -12,12 +12,13 @@ CREATE TABLE IF NOT EXISTS Animal (
     "name" TEXT NOT NULL,
     "age" INTEGER NOT NULL,
     "sex" TEXT NOT NULL,
-    "state" TEXT NOT NULL,
+    "waiting_adoption" INTEGER NOT NULL,
     "short_info" TEXT NOT NULL,
     "long_info" TEXT NOT NULL,
     "breed" TEXT NOT NULL,
     "type_animal" TEXT NOT NULL,
     "time_shelter" INTEGER NOT NULL,
+    "foster_care" INTEGER NOT NULL,
     PRIMARY KEY("id")
 );
 '''
@@ -72,12 +73,13 @@ def create_animals(cursor, num_animals):
             'name': f'Animal {i}',
             'age': random.randint(1, 10),
             'sex': random.choice(['M', 'F']),
-            'state': random.choice(['Adoption', 'Reserved']),
+            'waiting_adoption': random.choice([True, False]),
             'short_info': f'Short Info {i}',
             'long_info': f'Long Info {i}',
             'breed': f'Breed {i}',
             'type_animal': random.choice(type_animal_enum),
-            'time_shelter': random.randint(1, 40)
+            'time_shelter': random.randint(1, 40),
+            'foster_care': random.choice([True, False])
         }
         for i in range(1, num_animals + 1)
     ]
@@ -125,7 +127,7 @@ def main():
     # Create tables and insert data
     create_table_and_insert_data(cursor, 'Animals', CREATE_ANIMALS_TABLE, 10, create_animals)
     create_table_and_insert_data(cursor, 'News', CREATE_NEWS_TABLE, 5, create_news)
-    create_table_and_insert_data(cursor, 'User', CREATE_USER_TABLE, 0, create_users)
+    create_table_and_insert_data(cursor, 'User', CREATE_USER_TABLE, 2, create_users)
 
     # Save changes and close the connection
     conn.commit()

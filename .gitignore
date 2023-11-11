@@ -3,9 +3,10 @@
 *.txt
 
 S9*
-S8 - Com*
 S10*
 *_Sirius
 Sirius_*
 !Sirius/
 !Sirius/**
+
+# *.db

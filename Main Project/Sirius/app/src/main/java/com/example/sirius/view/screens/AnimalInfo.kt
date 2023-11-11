@@ -52,8 +52,6 @@ fun AnimalInfo() {
     }
 }
 
-
-
 @Preview
 @Composable
 fun AnimalInfoScreen() {

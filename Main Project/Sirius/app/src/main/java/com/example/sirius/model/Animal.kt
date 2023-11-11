@@ -20,8 +20,8 @@ data class Animal (
     @ColumnInfo(name = "sex")
     val sexAnimal: String,
     @NonNull
-    @ColumnInfo(name = "state")
-    val stateAnimal: String,
+    @ColumnInfo(name = "waiting_adoption")
+    val waitingAdoption: Int, // 0 -> preAdoption | 1 -> adoption
     @NonNull
     @ColumnInfo(name = "short_info")
     val shortInfoAnimal: String,
@@ -33,11 +33,13 @@ data class Animal (
     val breedAnimal: String,
     @NonNull
     @ColumnInfo(name = "type_animal")
-    //Enumerado
-    val typeAnimal: String,
+    val typeAnimal: TypeAnimal,
     @NonNull
     @ColumnInfo(name = "time_shelter")
     val timeShelter: Int,
+    @NonNull
+    @ColumnInfo(name = "foster_care")
+    val fosterCare: Int, // 0 -> no foster care | 1 -> in foster care
     //@NonNull
     //@ColumnInfo(name = "medical_record")
     //val medicalRecordAnimal: String,

@@ -36,6 +36,7 @@ import com.example.sirius.view.screens.HomeScreenPreview
 import androidx.compose.ui.graphics.Color
 import com.example.sirius.ui.theme.Black
 import com.example.sirius.ui.theme.Green3
+import com.example.sirius.view.screens.HomeScreen
 import com.example.sirius.viewmodel.navigation.AnimalViewModel
 import kotlinx.coroutines.flow.firstOrNull
 
@@ -84,7 +85,8 @@ fun NavigationContent(
                     DonationsScreen()
                 }
                 composable(Routes.ABOUTUS) {
-                    AboutUsScreen()
+                    //AboutUsScreen()
+                    HomeScreenPreview()
                 }
             }
             Navbar(
