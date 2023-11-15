@@ -9,7 +9,6 @@ import com.example.sirius.navigation.NavigationController
 import com.example.sirius.viewmodel.navigation.AnimalViewModel
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: AnimalViewModel by viewModels { AnimalViewModel.factory }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

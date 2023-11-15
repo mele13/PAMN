@@ -26,6 +26,9 @@ interface AnimalDao {
     @Query("SELECT * FROM Animal WHERE name = :name ORDER BY time_shelter DESC")
     fun getAnimalByName(name: String): Flow<List<Animal>>
 
+    @Query("SELECT * FROM Animal WHERE id = :id")
+    fun getAnimalById(id: Int): Flow<Animal?>
+
     @Query("SELECT * FROM Animal WHERE time_shelter = :timeShelter ORDER BY time_shelter DESC")
     fun getAnimalByTimeShelter(timeShelter: String): Flow<List<Animal>>
 

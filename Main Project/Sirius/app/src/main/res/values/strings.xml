@@ -13,6 +13,10 @@
     <string name="lostIntro">Lost</string>
     <string name="goodNewsIntro">Good news</string>
 
+    <string name="item_detail_title">Item detail title</string>
+    <string name="animals_title">Animals title</string>
+    <string name="animal_detail_title">Animal detail title</string>
+
     <!-- News -->
     <!-- Animals -->
 

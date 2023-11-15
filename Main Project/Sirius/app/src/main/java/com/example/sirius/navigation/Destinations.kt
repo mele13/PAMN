@@ -25,7 +25,7 @@ fun createDestinations(): List<Destinations> {
         createDestination(Routes.ANIMALS, R.drawable.animals_icon, R.string.animals),
         createDestination(Routes.DONATIONS, R.drawable.donations_icon, R.string.donations),
         createDestination(Routes.ABOUTUS, R.drawable.aboutus_icon, R.string.aboutUs),
-    )
+        )
 }
 
 data class Destinations(
@@ -40,4 +40,5 @@ object Routes {
     const val ANIMALS = "animals"
     const val DONATIONS = "donations"
     const val ABOUTUS = "about us"
+    const val ANIMALINFO = "animal info"
 }

@@ -65,39 +65,36 @@ fun LocationCard(location: String) {
         ),
         border = BorderStroke(width = 0.dp, color = Color.Transparent)
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(4.dp) // Reduce vertical space
         ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = "Location",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = Color.Black
-                )
-                Text(
-                    text = location,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = Color.Black
-                )
-            }
+            Text(
+                text = "Location",
+                style = MaterialTheme.typography.headlineMedium,
+                color = Color.Black
+            )
+            Text(
+                text = location,
+                style = MaterialTheme.typography.labelLarge,
+                color = Color.Black
+            )
 
             // Mapa de Google
             Box(
-               modifier = Modifier
-                   .clip(MaterialTheme.shapes.medium), // Edge rounding
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(MaterialTheme.shapes.medium), // Edge rounding
                 contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.location_image),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(200.dp)
+                        .widthIn(0.8f.dp) // Adjust the width as needed
+                        .aspectRatio(1f) // Maintain aspect ratio
                 )
             }
         }
@@ -123,9 +120,11 @@ fun AboutUsScreen() {
                     .padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                RoundedImage(imageRes = R.drawable.dog1)
-                RoundedImage(imageRes = R.drawable.dog1)
-                RoundedImage(imageRes = R.drawable.dog1)
+                RoundedImage(imageRes = R.drawable.dog1, modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(8.dp)) // Add space between images
+                RoundedImage(imageRes = R.drawable.dog1, modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(8.dp)) // Add space between images
+                RoundedImage(imageRes = R.drawable.dog1, modifier = Modifier.weight(1f))
             }
         }
 

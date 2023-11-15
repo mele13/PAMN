@@ -1,7 +1,12 @@
 package com.example.sirius.viewmodel.navigation
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.sirius.AnimalApplication
@@ -10,8 +15,9 @@ import com.example.sirius.data.dao.AnimalDao
 import com.example.sirius.model.TypeAnimal
 import kotlinx.coroutines.flow.Flow
 
-class AnimalViewModel(private val animalDao: AnimalDao) : ViewModel() {
+class AnimalViewModel constructor(private val animalDao: AnimalDao) : ViewModel() {
     fun getAllAnimals(): Flow<List<Animal>> = animalDao.getAllAnimals()
+    fun getAnimalById(option: Int): Flow<Animal?> = animalDao.getAnimalById(option)
 
     fun getAge(): Flow<List<Int>> = animalDao.getAge()
     fun getBreed(): Flow<List<String>> = animalDao.getBreed()
@@ -28,7 +34,6 @@ class AnimalViewModel(private val animalDao: AnimalDao) : ViewModel() {
     fun getAnimalsInFosterCare(): Flow<List<Animal>> = animalDao.getAnimalsInFosterCare(1)
     fun getAnimalsForAdoption(): Flow<List<Animal>> = animalDao.getAnimalsForAdoption(1)
     fun getAnimalsInPreAdoption(): Flow<List<Animal>> = animalDao.getAnimalsForAdoption(0)
-
 
     companion object {
         val factory: ViewModelProvider.Factory = viewModelFactory {
