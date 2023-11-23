@@ -8,9 +8,20 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.sirius.AnimalApplication
 import com.example.sirius.data.dao.UserDao
 import com.example.sirius.model.User
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class UserViewModel(private val userDao: UserDao) : ViewModel() {
+
+    private val _loginStatus = MutableStateFlow(false)
+    val loginSatus: StateFlow<Boolean> = _loginStatus
+
+//    fun loginUser(username: String, password: String) {
+//        viewModelScope.launch {
+//            val user = user
+//        }
+//    }
 
     fun insertUser(user: User) {
         viewModelScope.launch {

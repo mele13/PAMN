@@ -41,4 +41,7 @@ object Routes {
     const val DONATIONS = "donations"
     const val ABOUTUS = "about us"
     const val ANIMALINFO = "animal info"
+    const val LOGIN = "login"
+    const val SIGNUP = "signup"
+    const val LANDINGPAGE = "landing page"
 }

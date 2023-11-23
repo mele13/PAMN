@@ -49,6 +49,21 @@ CREATE TABLE IF NOT EXISTS User (
 );
 '''
 
+photo_paths = [
+    'res/drawable/bernese1.jpg',
+    'res/drawable/bird1.jpg',
+    'res/drawable/budgerigar1.jpg',
+    'res/drawable/calico1.jpg',
+    'res/drawable/cat1.jpg',
+    'res/drawable/dog1.jpg',
+    'res/drawable/goldenretriever1.jpg',
+    'res/drawable/hollandlop1.jpg',
+    'res/drawable/minirex1.jpg'
+    'res/drawable/parrot1.jpg',
+    'res/drawable/persian1.jpg',
+    'res/drawable/rabbit1.jpg',
+]
+
 type_animal_enum = ['CAT', 'DOG', 'BIRD']
 
 def execute_query(cursor, query, data=None):
@@ -72,7 +87,7 @@ def create_animals(cursor, num_animals):
     animal_data = [
         {
             'name': f'Animal {i}',
-            'birth_date': (datetime.now() - timedelta(days=random.randint(30, 365))).strftime('%Y-%m-%d'),
+            'birth_date': (datetime.now() - timedelta(days=random.randint(1, 365*10))).strftime('%Y-%m-%d'),
             'sex': random.choice(['M', 'F']),
             'waiting_adoption': random.choice([0, 1]),
             'foster_care': random.choice([0, 1]),
@@ -81,7 +96,7 @@ def create_animals(cursor, num_animals):
             'breed': f'Breed {i}',
             'type_animal': random.choice(type_animal_enum),
             'entry_date': datetime.now().strftime('%Y-%m-%d'),
-            'photo_animal': f'path/to/photo_{i}.jpg'
+            'photo_animal': photo_paths[i % len(photo_paths)]
         }
         for i in range(1, num_animals + 1)
     ]
@@ -127,7 +142,7 @@ def main():
     cursor = conn.cursor()
 
     # Create tables and insert data
-    create_table_and_insert_data(cursor, 'Animals', CREATE_ANIMALS_TABLE, 10, create_animals)
+    create_table_and_insert_data(cursor, 'Animals', CREATE_ANIMALS_TABLE, 12, create_animals)
     create_table_and_insert_data(cursor, 'News', CREATE_NEWS_TABLE, 5, create_news)
     create_table_and_insert_data(cursor, 'User', CREATE_USER_TABLE, 2, create_users)
 

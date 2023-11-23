@@ -1,5 +1,7 @@
 package com.example.sirius.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -12,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sirius.view.components.NavigationActions
 import com.example.sirius.view.components.NavigationContent
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationController (){
     Surface(

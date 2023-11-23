@@ -44,6 +44,7 @@ import com.example.sirius.viewmodel.navigation.AnimalViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import com.example.sirius.R
 import com.example.sirius.view.screens.AnimalInfo
+import com.example.sirius.view.screens.LandingPage
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -53,7 +54,6 @@ fun NavigationContent(
     selectedDestination: String,
     navigateDestination: (Destinations) -> Unit
 ) {
-
     Row(
         modifier = modifier.fillMaxSize()
     ) {
@@ -63,7 +63,7 @@ fun NavigationContent(
             NavHost(
                 modifier = Modifier.weight(1f),
                 navController = navController,
-                startDestination = Routes.HOME
+                startDestination = Routes.LANDINGPAGE
             ) {
                 composable(route = Routes.HOME) {
                     //HomeScreenPreview()
@@ -110,11 +110,23 @@ fun NavigationContent(
 
                     AnimalInfo(navController, it.arguments?.getInt("id"), viewModel)
                 }
+                composable(route = Routes.LOGIN) {
+                    AboutUsScreen()
+                }
+                composable(route = Routes.SIGNUP) {
+                    AboutUsScreen()
+                }
+                composable(route = Routes.LANDINGPAGE) {
+                    LandingPage(navController = navController)
+                }
             }
-            Navbar(
-                selectedDestination = selectedDestination,
-                navigateDestination = navigateDestination,
-            )
+            val currentRoute = navController.currentBackStackEntry?.destination?.route
+            if (currentRoute !in listOf(Routes.LANDINGPAGE, Routes.SIGNUP, Routes.LOGIN)) {
+                Navbar(
+                    selectedDestination = selectedDestination,
+                    navigateDestination = navigateDestination,
+                )
+            }
         }
     }
 }

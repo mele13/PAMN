@@ -24,15 +24,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sirius.R
+import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.Gold
+import androidx.navigation.NavController
 
 @Composable
-fun LandingPage() {
+fun LandingPage(navController: NavController) {
     Surface(
         color = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()
@@ -78,9 +81,15 @@ fun LandingPage() {
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                RoundButton("Login / Sign Up")
+                RoundButton(
+                    text = stringResource(id = R.string.loginSignup),
+                    onClick = { navController.navigate(Routes.LOGIN) }
+                )
                 Spacer(modifier = Modifier.height(15.dp))
-                RoundButton("Join as a guest")
+                RoundButton(
+                    text = stringResource(id = R.string.guest),
+                    onClick = { navController.navigate(Routes.HOME) }
+                )
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }
@@ -88,10 +97,11 @@ fun LandingPage() {
 }
 
 @Composable
-fun RoundButton(text: String) {
+fun RoundButton(text: String, onClick: () -> Unit) {
     Button(
-        onClick = { /* Acción cuando se hace clic en el botón */ },
-        modifier = Modifier.width(219.dp)
+        onClick = onClick,
+        modifier = Modifier
+            .width(219.dp)
             .size(30.dp),
         shape = MaterialTheme.shapes.large,
         contentPadding = PaddingValues(0.dp),
@@ -102,14 +112,6 @@ fun RoundButton(text: String) {
             fontSize = 14.sp,
             fontWeight = FontWeight(400),
             color = Color(0xFF000000),
-
-
             )
     }
-}
-
-@Composable
-@Preview
-fun LandingPagePreview() {
-    LandingPage()
 }

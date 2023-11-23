@@ -3,6 +3,7 @@ package com.example.sirius.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.sirius.model.Animal
 import com.example.sirius.model.User
 import kotlinx.coroutines.flow.Flow
 
