@@ -2,7 +2,6 @@
 *.pdf
 *.txt
 
-S10*
 *_Sirius
 Sirius_*
 !Sirius/

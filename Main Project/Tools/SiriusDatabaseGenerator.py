@@ -10,15 +10,16 @@ CREATE_ANIMALS_TABLE = '''
 CREATE TABLE IF NOT EXISTS Animal (
     "id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
-    "age" INTEGER NOT NULL,
+    "birth_date" TEXT NOT NULL,
     "sex" TEXT NOT NULL,
     "waiting_adoption" INTEGER NOT NULL,
+    "foster_care" INTEGER NOT NULL,
     "short_info" TEXT NOT NULL,
     "long_info" TEXT NOT NULL,
     "breed" TEXT NOT NULL,
     "type_animal" TEXT NOT NULL,
-    "time_shelter" INTEGER NOT NULL,
-    "foster_care" INTEGER NOT NULL,
+    "entry_date" TEXT NOT NULL,
+    "photo_animal" TEXT NOT NULL,
     PRIMARY KEY("id")
 );
 '''
@@ -71,15 +72,16 @@ def create_animals(cursor, num_animals):
     animal_data = [
         {
             'name': f'Animal {i}',
-            'age': random.randint(1, 10),
+            'birth_date': (datetime.now() - timedelta(days=random.randint(30, 365))).strftime('%Y-%m-%d'),
             'sex': random.choice(['M', 'F']),
-            'waiting_adoption': random.choice([True, False]),
+            'waiting_adoption': random.choice([0, 1]),
+            'foster_care': random.choice([0, 1]),
             'short_info': f'Short Info {i}',
             'long_info': f'Long Info {i}',
             'breed': f'Breed {i}',
             'type_animal': random.choice(type_animal_enum),
-            'time_shelter': random.randint(1, 40),
-            'foster_care': random.choice([True, False])
+            'entry_date': datetime.now().strftime('%Y-%m-%d'),
+            'photo_animal': f'path/to/photo_{i}.jpg'
         }
         for i in range(1, num_animals + 1)
     ]

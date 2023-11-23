@@ -1,5 +1,9 @@
 package com.example.sirius.view.screens
 
+import android.annotation.SuppressLint
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -48,9 +52,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -61,18 +69,19 @@ import com.example.sirius.model.TypeAnimal
 import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.Gold
 import com.example.sirius.ui.theme.Green1
+import com.example.sirius.ui.theme.Orange
 import com.example.sirius.viewmodel.navigation.AnimalViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AnimalsGallery(
     navController: NavController,
-    ageList: List<Int>,
+    ageList: List<String>,
     breedList: List<String>,
     typeList: List<String>
 ) {
 
     val viewModel: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
-
 
     var selectedAge by remember { mutableStateOf("") }
     var selectedBreed by remember { mutableStateOf("") }
@@ -94,7 +103,7 @@ fun AnimalsGallery(
             horizontalArrangement = Arrangement.Center
         ) {
             DropdownButton(
-                text = "Age",
+                text = "Arrival year",
                 options = ageList.map { it.toString() },
                 selectedOption = selectedAge,
                 onOptionSelected = { selectedAge = it },
@@ -103,7 +112,7 @@ fun AnimalsGallery(
                     ageDropdownExpanded = expanded
                 },
                 viewModel = viewModel,
-                originalText = "Age"
+                originalText = "Arrival year"
             )
 
             ClearFilterIconButton(
@@ -152,9 +161,9 @@ fun AnimalsGallery(
         }
 
         val animalsByAge = if (selectedAge.isNotBlank()) {
-            val age = selectedAge.toIntOrNull()
+            val age = selectedAge
             if (age != null) {
-                viewModel.getAnimalsByAgeASC(age).collectAsState(emptyList()).value
+                viewModel.getAnimalsByAgeDesc(age).collectAsState(emptyList()).value
             } else {
                 emptyList()
             }
@@ -165,13 +174,13 @@ fun AnimalsGallery(
         val animalsByBreed = if (selectedBreed.isNotBlank()) {
             viewModel.getAnimalsByBreed(selectedBreed).collectAsState(emptyList()).value
         } else {
-            viewModel.getAllAnimals().collectAsState(emptyList()).value // Otra acción apropiada si no se ha seleccionado una raza
+            viewModel.getAllAnimals().collectAsState(emptyList()).value
         }
 
         val animalsByType = if (selectedType.isNotBlank()) {
             viewModel.getAnimalsByTypeAnimal(selectedType).collectAsState(emptyList()).value
         } else {
-            viewModel.getAllAnimals().collectAsState(emptyList()).value// Otra acción apropiada si no se ha seleccionado un tipo
+            viewModel.getAllAnimals().collectAsState(emptyList()).value
         }
 
         val filteredAnimals = animalsByAge.intersect(animalsByBreed.toSet()).intersect(animalsByType.toSet())
@@ -189,15 +198,15 @@ fun AnimalsGallery(
                         AnimalCard(
                             animal = animal,
                             navController = navController,
-                        ) /*{
-                           // navController.navigate(AnimalInfoScreen.AnimalInfo.route)
-                        }*/
+                        )
                     }
                 }
             }
         }
     }
 }
+
+
 
 @Composable
 fun ClearFilterIconButton(
@@ -221,6 +230,7 @@ fun ClearFilterIconButton(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DropdownButton(
     text: String,
@@ -264,11 +274,14 @@ fun DropdownButton(
                     },
                     onClick = {
                         when (text) {
-                            "Age" -> {
+                            "Arrival year" -> {
                                 if (option.isNotBlank()) {
-                                    viewModel.getAnimalsByAgeASC(option.toInt())
+                                    val year = getYearFromStringDate(option)
+                                    print(year)
+                                    viewModel.getAnimalsByAgeDesc(year)
                                 }
                             }
+
 
                             "Breed" -> {
                                 if (option.isNotBlank()) {
@@ -292,10 +305,10 @@ fun DropdownButton(
 }
 
 
+@SuppressLint("DiscouragedApi")
 @Composable
 fun AnimalCard(animal: Animal,
                navController: NavController,
-    // onNavigateToInfoAnimal: () -> Unit
 ) {
 
     var isFavorite by remember { mutableStateOf(false) }
@@ -320,26 +333,33 @@ fun AnimalCard(animal: Animal,
                 modifier = Modifier
                     .padding(4.dp)
             ) {
-                val imageResource = when (animal.typeAnimal) {
-                    TypeAnimal.DOG -> R.drawable.dog1
-                    TypeAnimal.CAT -> R.drawable.cat1
-                    TypeAnimal.BIRD -> R.drawable.bird1
-                    else -> {
-                        R.drawable.dog1
-                    }
-                }
+                val context = LocalContext.current
 
-                Image(
-                    painter = painterResource(id = imageResource),
-                    contentDescription = animal.shortInfoAnimal,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .aspectRatio(1f)
-                        .clickable {
-                            navController.navigate(route = Routes.ANIMALINFO + "/" + animal.id)
-                        }
+                // Obtener el nombre del recurso sin la ruta
+                val resourceName = animal.photoAnimal.substringAfterLast("/")
+
+                // Obtener el ID del recurso sin la ruta
+                val resourceId = context.resources.getIdentifier(
+                    resourceName.replace(".jpg", ""), "drawable", context.packageName
                 )
+
+                if (resourceId != 0) {
+                    // Si se encontró el recurso, cargar la imagen
+                    val painter = painterResource(id = resourceId)
+                    Image(
+                        painter = painter,
+                        contentDescription = animal.shortInfoAnimal,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .aspectRatio(1f)
+                            .clickable {
+                                navController.navigate(route = Routes.ANIMALINFO + "/" + animal.id)
+                            }
+                    )
+                } else {
+                    Log.e("AnimalImage", "Recurso no encontrado para ${animal.photoAnimal}")
+                }
                 if (isFavorite) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
@@ -358,14 +378,61 @@ fun AnimalCard(animal: Animal,
                     )
                 }
             }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                val adoptionText = if (animal.waitingAdoption == 1) {
+                    "Adoption"
+                } else {
+                    "Pre Adoption"
+                }
+
+                Text(
+                    text = adoptionText,
+                    style = TextStyle(
+                        fontSize = 10.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier
+                        .background(color = Orange, shape = RoundedCornerShape(4.dp))
+                        .padding(horizontal = 2.dp, vertical = 4.dp)
+                )
+
+                if (animal.fosterCare == 1) {
+                    Text(
+                        text = "In Foster Care",
+                        style = TextStyle(
+                            fontSize = 10.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier
+                            .background(color = Orange, shape = RoundedCornerShape(4.dp))
+                            .padding(horizontal = 2.dp, vertical = 4.dp)
+                    )
+                }
+            }
+
             Text(
                 text = animal.shortInfoAnimal,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                color = Color.Black
+                color = Color.Black,
+                modifier = Modifier
+                    .padding(5.dp)
+                    .align(Alignment.CenterHorizontally)
             )
         }
     }
+}
+
+fun getYearFromStringDate(dateString: String): String {
+    // Extrae los primeros cuatro caracteres de la cadena (el año)
+    return dateString.take(4)
 }
 
 

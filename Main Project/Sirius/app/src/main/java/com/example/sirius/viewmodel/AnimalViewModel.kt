@@ -15,25 +15,21 @@ import com.example.sirius.data.dao.AnimalDao
 import com.example.sirius.model.TypeAnimal
 import kotlinx.coroutines.flow.Flow
 
-class AnimalViewModel constructor(private val animalDao: AnimalDao) : ViewModel() {
+class AnimalViewModel(private val animalDao: AnimalDao) : ViewModel() {
     fun getAllAnimals(): Flow<List<Animal>> = animalDao.getAllAnimals()
-    fun getAnimalById(option: Int): Flow<Animal?> = animalDao.getAnimalById(option)
 
-    fun getAge(): Flow<List<Int>> = animalDao.getAge()
+    fun getAllAnimalsOrderedByDaysEntryDate(): Flow<List<Animal>> = animalDao.getAllAnimals()
+
+    fun getBirthYears(): Flow<List<String>> = animalDao.getBirthYears()
     fun getBreed(): Flow<List<String>> = animalDao.getBreed()
     fun getTypeAnimal(): Flow<List<String>> = animalDao.getTypeAnimal()
 
-    fun getAnimalsByAgeASC(option: Int): Flow<List<Animal>> = animalDao.getAnimalsByAgeASC(option)
+    fun getAnimalsByAgeDesc(birthDate: String): Flow<List<Animal>> = animalDao.getAnimalsByAgeDesc(birthDate)
+
     fun getAnimalsByBreed(option: String): Flow<List<Animal>> = animalDao.getAnimalsByBreed(option)
+    fun getAnimalsByTypeAnimal(option: String): Flow<List<Animal>> = animalDao.getAnimalsByTypeAnimal(option)
 
-    fun getAnimalsByTypeAnimal(option: String): Flow<List<Animal>> {
-        val typeAnimal = TypeAnimal.valueOf(option)
-        return animalDao.getAnimalsByTypeAnimal(typeAnimal)
-    }
-
-    fun getAnimalsInFosterCare(): Flow<List<Animal>> = animalDao.getAnimalsInFosterCare(1)
-    fun getAnimalsForAdoption(): Flow<List<Animal>> = animalDao.getAnimalsForAdoption(1)
-    fun getAnimalsInPreAdoption(): Flow<List<Animal>> = animalDao.getAnimalsForAdoption(0)
+    fun getAnimalById(option: Int): Flow<Animal?> = animalDao.getAnimalById(option)
 
     companion object {
         val factory: ViewModelProvider.Factory = viewModelFactory {

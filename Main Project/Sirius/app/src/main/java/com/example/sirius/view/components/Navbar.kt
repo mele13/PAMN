@@ -2,6 +2,8 @@ package com.example.sirius.view.components
 
 import AboutUsScreen
 import DonationsScreen
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,7 +33,6 @@ import androidx.navigation.compose.composable
 import com.example.sirius.navigation.Destinations
 import com.example.sirius.navigation.Routes
 import com.example.sirius.navigation.createDestinations
-import com.example.sirius.view.screens.HomeScreenPreview
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -44,6 +45,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import com.example.sirius.R
 import com.example.sirius.view.screens.AnimalInfo
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationContent(
     modifier: Modifier = Modifier,
@@ -66,7 +68,7 @@ fun NavigationContent(
                 composable(route = Routes.HOME) {
                     //HomeScreenPreview()
                     val animalVm: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
-                    val animalList by animalVm.getAllAnimals().collectAsState(initial = emptyList())
+                    val animalList by animalVm.getAllAnimalsOrderedByDaysEntryDate().collectAsState(initial = emptyList())
 
                     val newsVm: NewsViewModel = viewModel(factory = NewsViewModel.factory)
                     val newsList by newsVm.getNews().collectAsState(initial = emptyList())
@@ -77,12 +79,12 @@ fun NavigationContent(
                         R.drawable.dog1,
                         R.drawable.dog1,
                     )
-                    HomeScreen(animalList = animalList, newsList = newsList, imageList = imageList)
+                    HomeScreen(navController = navController, animalList = animalList, newsList = newsList, imageList = imageList)
                 }
                 composable(route = Routes.ANIMALS) {
                     val viewModel: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
 
-                    val ageList by viewModel.getAge().collectAsState(emptyList())
+                    val ageList by viewModel.getBirthYears().collectAsState(emptyList())
                     val breedList by viewModel.getBreed().collectAsState(emptyList())
                     val typeList by viewModel.getTypeAnimal().collectAsState(emptyList())
 

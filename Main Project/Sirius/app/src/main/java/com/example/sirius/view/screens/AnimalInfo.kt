@@ -1,5 +1,9 @@
 package com.example.sirius.view.screens
 
+import android.annotation.SuppressLint
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -23,8 +27,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,7 +40,10 @@ import com.example.sirius.R
 import com.example.sirius.model.Animal
 import com.example.sirius.model.TypeAnimal
 import com.example.sirius.viewmodel.navigation.AnimalViewModel
+import java.time.Year
 
+@SuppressLint("DiscouragedApi")
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AnimalInfo(navController: NavController, id: Int?, viewModel: AnimalViewModel) {
     Surface(
@@ -52,33 +62,69 @@ fun AnimalInfo(navController: NavController, id: Int?, viewModel: AnimalViewMode
         ) {
             item {
                 if (animal != null) {
-                    val imageResource = when (animal!!.typeAnimal) {
-                        TypeAnimal.DOG -> R.drawable.dog1
-                        TypeAnimal.CAT -> R.drawable.cat1
-                        TypeAnimal.BIRD -> R.drawable.bird1
-                        else -> {
-                            R.drawable.dog1
-                        }
-                    }
+                    val context = LocalContext.current
 
-                    Image(
-                        painter = painterResource(id = imageResource),
-                        contentDescription = animal!!.longInfoAnimal,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .aspectRatio(1f)
+                    // Obtener el nombre del recurso sin la ruta
+                    val resourceName = animal!!.photoAnimal.substringAfterLast("/")
+
+                    // Obtener el ID del recurso sin la ruta
+                    val resourceId = context.resources.getIdentifier(
+                        resourceName.replace(".jpg", ""), "drawable", context.packageName
                     )
+
+                    if (resourceId != 0) {
+                        // Si se encontró el recurso, cargar la imagen
+                        val painter = painterResource(id = resourceId)
+                        Image(
+                            painter = painter,
+                            contentDescription = animal!!.longInfoAnimal,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .aspectRatio(1f)
+                        )
+                    } else {
+                        Log.e("AnimalImage", "Recurso no encontrado para ${animal!!.photoAnimal}")
+                    }
                 }
             }
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 if (animal != null) {
                     Text(
+                        text = animal!!.nameAnimal,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        color = Color.Black
+                    )
+                    Text(
                         text = animal!!.longInfoAnimal,
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center
                     )
+                    val birthYear = animal!!.birthDate.substring(0, 4).toInt()
+                    println("birthYear")
+                    println(birthYear)
+                    val currentYear = Year.now().value
+                    println("currentYear")
+                    println(currentYear)
+                    var age = currentYear - birthYear
+                    if (age == 0){
+                        age = animal!!.birthDate.substring(6, 7).toInt()
+                        Text(
+                            text = "Edad: $age meses",
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center
+                        )
+                    } else {
+                        Text(
+                            text = "Edad: $age años",
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+
                 }
             }
             item {

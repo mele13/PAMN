@@ -1,8 +1,11 @@
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,45 +22,70 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.sirius.R
 import com.example.sirius.ui.theme.SiriusTheme
+import com.example.sirius.viewmodel.ContactsViewModel
 
+@SuppressLint("RememberReturnType")
 @Composable
 fun DonationsScreen() {
-    Column(
+    val viewModelContacts = remember { ContactsViewModel() }
+
+    Log.d("DonationsScreen", "DonationsScreen recomposed")
+
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        DonationsText(
-            textResourceId = R.string.donationsTitle,
-            style = MaterialTheme.typography.headlineSmall
-        )
-        DonationsText(
-            textResourceId = R.string.donationsText,
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(modifier = Modifier.weight(0.2f))
-        DonationButton(
-            onClick = { /* Handle PayPal donation */ },
-            imageResIdLeft = R.drawable.paypal_logo,
-            buttonText = "Donate with PayPal"
-        )
-        DonationButton(
-            onClick = { /* Handle debit/credit card donation */ },
-            imageResIdLeft = R.drawable.mastercard_logo,
-            buttonText = "Donate with Debit or Credit Card"
-        )
-        DonationButton(
-            onClick = { /* Handle Bizum donation */ },
-            imageResIdLeft = R.drawable.bizum_logo,
-            buttonText = "Donate with Bizum"
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        DonationsText(
-            textResourceId = R.string.donationsEnd,
-            style = MaterialTheme.typography.bodyLarge
-        )
+        item {
+            DonationsText(
+                textResourceId = R.string.donationsTitle,
+                style = MaterialTheme.typography.headlineSmall
+            )
+        }
+        item {
+            DonationsText(
+                textResourceId = R.string.donationsText,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
+        item {
+            Spacer(modifier = Modifier.height(10.dp)) // Ajusta la altura del Spacer según sea necesario
+        }
+        item {
+            DonationButton(
+                onClick = {
+                    viewModelContacts.changeBackgroundColor()
+                },
+                imageResIdLeft = R.drawable.paypal_logo,
+                buttonText = "Donate with PayPal"
+            )
+        }
+
+        item {
+            DonationButton(
+                onClick = { /* Handle debit/credit card donation */ },
+                imageResIdLeft = R.drawable.mastercard_logo,
+                buttonText = "Donate with Debit or Credit Card"
+            )
+        }
+        item {
+            DonationButton(
+                onClick = { /* Handle Bizum donation */ },
+                imageResIdLeft = R.drawable.bizum_logo,
+                buttonText = "Donate with Bizum"
+            )
+        }
+        item {
+            Spacer(modifier = Modifier.height(5.dp)) // Ajusta la altura del Spacer según sea necesario
+        }
+        item {
+            DonationsText(
+                textResourceId = R.string.donationsEnd,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
     }
 }
 
@@ -71,13 +99,14 @@ fun DonationButton(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp)
+            .heightIn(min = 80.dp) // Establece una altura mínima
+            .wrapContentHeight(Alignment.CenterVertically) // Hace que la altura se ajuste al contenido
             .padding(bottom = 16.dp),
         colors = ButtonDefaults.buttonColors(Color(0xFFFFA500))
     ) {
         Row(
             modifier = Modifier
-                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
                 .padding(8.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -105,7 +134,7 @@ fun DonationsImage(imageId: Int, size: Dp = 40.dp) {
 }
 
 @Composable
-fun DonationsText(@StringRes textResourceId: Int, style: TextStyle) {
+fun DonationsText(@StringRes textResourceId: Int, style: androidx.compose.ui.text.TextStyle) {
     Text(
         text = stringResource(id = textResourceId),
         style = style,
