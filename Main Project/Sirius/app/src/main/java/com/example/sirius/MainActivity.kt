@@ -29,21 +29,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-//@Composable
-//fun MainScreen() {
-//    var isLoggedIn by remember { mutableStateOf(false) }
-//
-//    if (isLoggedIn) {
-//
-//    } else {
-//        LoginScreen(
-//            onLoginClick = { username, password ->
-//                viewModel.loginUser(username, password)
-//            },
-//            onSignUpClick = {
-//                //
-//            }
-//        )
-//    }
-//}

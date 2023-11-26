@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import com.example.sirius.R
 import com.example.sirius.view.screens.AnimalInfo
 import com.example.sirius.view.screens.LandingPage
+import com.example.sirius.view.screens.LoginScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -111,7 +112,7 @@ fun NavigationContent(
                     AnimalInfo(navController, it.arguments?.getInt("id"), viewModel)
                 }
                 composable(route = Routes.LOGIN) {
-                    AboutUsScreen()
+                    LoginScreen()
                 }
                 composable(route = Routes.SIGNUP) {
                     AboutUsScreen()
