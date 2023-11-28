@@ -29,6 +29,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
@@ -71,22 +72,18 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.sirius.R
 import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.Green1
-import com.example.sirius.viewmodel.UserViewModel
-import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavController) {
-
-    val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory)
+fun SignupScreen(navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     val isSystemInDarkTheme = (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
     Box(
@@ -98,7 +95,7 @@ fun LoginScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(14.dp)
                 .offset(y = 80.dp),
 //            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -106,7 +103,7 @@ fun LoginScreen(navController: NavController) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(4.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Image(
@@ -114,12 +111,12 @@ fun LoginScreen(navController: NavController) {
                     contentDescription = null,
                 )
                 Text(
-                    text = stringResource(id = R.string.login),
+                    text = stringResource(id = R.string.signup),
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             // Username
             OutlinedTextField(
                 value = username,
@@ -133,7 +130,7 @@ fun LoginScreen(navController: NavController) {
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(3.dp)
                     .background(
                         MaterialTheme.colorScheme.background.copy(alpha = 0.3f),
                         MaterialTheme.shapes.medium
@@ -150,7 +147,38 @@ fun LoginScreen(navController: NavController) {
                     unfocusedBorderColor = Green1,
                 )
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(3.dp))
+            // Email
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = {
+                    Text(
+                        stringResource(id = R.string.email),
+                        style = TextStyle(color = if (isSystemInDarkTheme) Color.White else Color.Black)
+                    )
+                },
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp)
+                    .background(
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.3f),
+                        MaterialTheme.shapes.medium
+                    ),
+                textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Email,
+                        contentDescription = null
+                    )
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Green1,
+                    unfocusedBorderColor = Green1,
+                )
+            )
+            Spacer(modifier = Modifier.height(3.dp))
             // Password
             OutlinedTextField(
                 value = password,
@@ -165,7 +193,7 @@ fun LoginScreen(navController: NavController) {
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(3.dp)
                     .background(
                         MaterialTheme.colorScheme.background.copy(alpha = 0.3f),
                         MaterialTheme.shapes.medium
@@ -183,45 +211,32 @@ fun LoginScreen(navController: NavController) {
 //                    textColor = LocalContentColor.current,
                 )
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            // Sign Up
+            Spacer(modifier = Modifier.height(3.dp))
+            // Log In
             TextButton(
-                onClick = { navController.navigate(Routes.SIGNUP)  },
+                onClick = { navController.navigate(Routes.LOGIN) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(3.dp)
                     .offset(y = (-8).dp)
             ) {
                 Text(
-                    stringResource(id = R.string.account_signup),
+                    stringResource(id = R.string.account_login),
                     style = TextStyle(color = if (isSystemInDarkTheme) Color.White else Color.Black),
                     textAlign = TextAlign.Center
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
-            // Log In button
+            // Sign Up button
             TextButton(
-                onClick = {
-                    println("Trying to log in")
-                          userViewModel.viewModelScope.launch {
-                              println("Bef succ")
-                              val success = userViewModel.login(username, password)
-                              println("Succ $success")
-                              if (success) {
-                                  println("dentro succ")
-                                  navController.navigate(Routes.HOME)
-                              } else {
-                                  println("no se ha podido iniciar sesión $username, $password")
-                              }
-                          }
-                },
+                onClick = { },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
-                    .offset(y = 35.dp),
-                ) {
+                    .offset(y = 23.dp),
+            ) {
                 Text(
-                    stringResource(id = R.string.login),
+                    stringResource(id = R.string.signup),
                     color = Color.White,
                     fontSize = 25.sp
                 )
@@ -236,7 +251,7 @@ fun LoginScreen(navController: NavController) {
                 .size(230.dp)
                 .absoluteOffset((-6).dp)
         )
-        // Center - Log In button
+        // Center - Sign Up button
         Image(
             painter = painterResource(id = R.drawable.paw2),
             contentDescription = null,

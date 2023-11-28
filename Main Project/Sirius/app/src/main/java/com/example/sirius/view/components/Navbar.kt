@@ -46,6 +46,7 @@ import com.example.sirius.R
 import com.example.sirius.view.screens.AnimalInfo
 import com.example.sirius.view.screens.LandingPage
 import com.example.sirius.view.screens.LoginScreen
+import com.example.sirius.view.screens.SignupScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -112,10 +113,10 @@ fun NavigationContent(
                     AnimalInfo(navController, it.arguments?.getInt("id"), viewModel)
                 }
                 composable(route = Routes.LOGIN) {
-                    LoginScreen()
+                    LoginScreen(navController = navController)
                 }
                 composable(route = Routes.SIGNUP) {
-                    AboutUsScreen()
+                    SignupScreen(navController = navController)
                 }
                 composable(route = Routes.LANDINGPAGE) {
                     LandingPage(navController = navController)

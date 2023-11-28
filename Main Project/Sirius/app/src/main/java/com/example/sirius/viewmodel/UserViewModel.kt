@@ -11,17 +11,19 @@ import com.example.sirius.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class UserViewModel(private val userDao: UserDao) : ViewModel() {
-
-    private val _loginStatus = MutableStateFlow(false)
-    val loginSatus: StateFlow<Boolean> = _loginStatus
-
-//    fun loginUser(username: String, password: String) {
-//        viewModelScope.launch {
-//            val user = user
-//        }
-//    }
+    suspend fun login(username: String, password: String): Boolean {
+        return suspendCoroutine { continuation ->
+            viewModelScope.launch {
+                val user = userDao.getUserByCredentials(username, password)
+                val success = user != null
+                continuation.resume(success)
+            }
+        }
+    }
 
     fun insertUser(user: User) {
         viewModelScope.launch {
