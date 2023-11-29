@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,13 +30,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sirius.R
 import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.Gold
 import androidx.navigation.NavController
+import com.example.sirius.viewmodel.UserViewModel
 
 @Composable
 fun LandingPage(navController: NavController) {
+//    LaunchedEffect(key1 = true) {
+//        println("---------------------------------\nauth: ${userViewModel.isAuthenticated}")
+//        if (userViewModel.isAuthenticated) {
+//            println("is auth")
+//            navController.navigate(Routes.HOME) {
+//                popUpTo(Routes.LANDINGPAGE) {
+//                    inclusive = true
+//                }
+//            }
+//        }
+//    }
+
     Surface(
         color = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()

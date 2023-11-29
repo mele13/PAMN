@@ -1,5 +1,6 @@
 package com.example.sirius.view.screens
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -16,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.sirius.R
@@ -35,19 +38,30 @@ import com.example.sirius.model.News
 import com.example.sirius.model.Animal
 import com.example.sirius.navigation.Routes
 import com.example.sirius.viewmodel.NewsViewModel
+import com.example.sirius.viewmodel.UserViewModel
 import com.example.sirius.viewmodel.navigation.AnimalViewModel
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun HomeScreen(
     navController: NavController,
     animalList: List<Animal>,
     newsList: List<News>,
-    imageList: List<Int>
+    imageList: List<Int>,
+    userViewModel: UserViewModel
 ) {
+    LaunchedEffect(key1 = true) {
+        println("---------------------------------\n home auth: ${userViewModel.isAuthenticated}")
+        if (userViewModel.isAuthenticated) {
+            println("is auth")
+        }
+    }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -56,7 +70,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             item {
-                // What's up
+                // What's new
                 Text(
                     text = stringResource(id = R.string.newsIntro),
                     style = MaterialTheme.typography.headlineMedium,
@@ -112,7 +126,8 @@ fun HomeScreen(
                                 Image(
                                     painter = painter,
                                     contentDescription = null,
-                                    modifier = Modifier.size(100.dp)
+                                    modifier = Modifier
+                                        .size(100.dp)
                                         .clickable {
                                             navController.navigate(route = Routes.ANIMALINFO + "/" + animal.id)
                                         }

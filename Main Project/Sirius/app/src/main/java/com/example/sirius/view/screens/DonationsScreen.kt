@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -34,20 +35,22 @@ fun DonationsScreen() {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+            .padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         item {
             DonationsText(
                 textResourceId = R.string.donationsTitle,
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center
             )
         }
         item {
             DonationsText(
                 textResourceId = R.string.donationsText,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Justify
             )
         }
         item {
@@ -78,12 +81,13 @@ fun DonationsScreen() {
             )
         }
         item {
-            Spacer(modifier = Modifier.height(5.dp)) // Ajusta la altura del Spacer según sea necesario
+            Spacer(modifier = Modifier.height(5.dp))
         }
         item {
             DonationsText(
                 textResourceId = R.string.donationsEnd,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Justify
             )
         }
     }
@@ -134,11 +138,11 @@ fun DonationsImage(imageId: Int, size: Dp = 40.dp) {
 }
 
 @Composable
-fun DonationsText(@StringRes textResourceId: Int, style: androidx.compose.ui.text.TextStyle) {
+fun DonationsText(@StringRes textResourceId: Int, style: androidx.compose.ui.text.TextStyle, textAlign: TextAlign) {
     Text(
         text = stringResource(id = textResourceId),
         style = style,
-        color = Color.Black
+        textAlign = textAlign
     )
 }
 

@@ -47,12 +47,14 @@ import com.example.sirius.view.screens.AnimalInfo
 import com.example.sirius.view.screens.LandingPage
 import com.example.sirius.view.screens.LoginScreen
 import com.example.sirius.view.screens.SignupScreen
+import com.example.sirius.viewmodel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationContent(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    userViewModel: UserViewModel,
     selectedDestination: String,
     navigateDestination: (Destinations) -> Unit
 ) {
@@ -65,7 +67,8 @@ fun NavigationContent(
             NavHost(
                 modifier = Modifier.weight(1f),
                 navController = navController,
-                startDestination = Routes.LANDINGPAGE
+                startDestination = if (userViewModel.isAuthenticated) Routes.HOME
+                                   else Routes.LANDINGPAGE
             ) {
                 composable(route = Routes.HOME) {
                     //HomeScreenPreview()
@@ -81,7 +84,7 @@ fun NavigationContent(
                         R.drawable.dog1,
                         R.drawable.dog1,
                     )
-                    HomeScreen(navController = navController, animalList = animalList, newsList = newsList, imageList = imageList)
+                    HomeScreen(navController = navController, animalList = animalList, newsList = newsList, imageList = imageList, userViewModel = userViewModel)
                 }
                 composable(route = Routes.ANIMALS) {
                     val viewModel: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
@@ -113,10 +116,13 @@ fun NavigationContent(
                     AnimalInfo(navController, it.arguments?.getInt("id"), viewModel)
                 }
                 composable(route = Routes.LOGIN) {
-                    LoginScreen(navController = navController)
+                    LoginScreen(navController = navController, userViewModel = userViewModel)
                 }
                 composable(route = Routes.SIGNUP) {
-                    SignupScreen(navController = navController)
+                    SignupScreen(navController = navController, userViewModel = userViewModel)
+                }
+                composable(route = Routes.PROFILE) {
+                    //
                 }
                 composable(route = Routes.LANDINGPAGE) {
                     LandingPage(navController = navController)

@@ -72,15 +72,19 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.sirius.R
 import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.Green1
+import com.example.sirius.viewmodel.UserViewModel
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignupScreen(navController: NavController) {
+fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -229,7 +233,19 @@ fun SignupScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(20.dp))
             // Sign Up button
             TextButton(
-                onClick = { },
+                onClick = {
+                    println("Trying to sign up")
+                    userViewModel.viewModelScope.launch {
+                        println("Before success")
+                        val success = userViewModel.registerUser(username, email, password)
+                        if (success) {
+                            println("in success $success")
+                            navController.navigate(Routes.HOME)
+                        } else {
+                            println("no se ha podido crear una cuenta $success")
+                        }
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)

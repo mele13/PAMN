@@ -44,4 +44,5 @@ object Routes {
     const val LOGIN = "login"
     const val SIGNUP = "signup"
     const val LANDINGPAGE = "landing page"
+    const val PROFILE = "profile"
 }

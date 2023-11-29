@@ -1,6 +1,7 @@
 package com.example.sirius.view.screens
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
@@ -82,9 +83,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavController) {
-
-    val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory)
+fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val isSystemInDarkTheme = (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
@@ -202,16 +201,12 @@ fun LoginScreen(navController: NavController) {
             // Log In button
             TextButton(
                 onClick = {
-                    println("Trying to log in")
                           userViewModel.viewModelScope.launch {
-                              println("Bef succ")
                               val success = userViewModel.login(username, password)
-                              println("Succ $success")
                               if (success) {
-                                  println("dentro succ")
                                   navController.navigate(Routes.HOME)
                               } else {
-                                  println("no se ha podido iniciar sesión $username, $password")
+//                                  println("no se ha podido iniciar sesión $username, $password")
                               }
                           }
                 },

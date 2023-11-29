@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.sirius.R
@@ -26,7 +27,6 @@ fun SectionTitle(title: String) {
     Text(
         text = title,
         style = MaterialTheme.typography.headlineMedium,
-        color = Color.Black,
         modifier = Modifier.padding(bottom = 8.dp)
     )
 }
@@ -36,7 +36,6 @@ fun Paragraph(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.labelLarge,
-        color = Color.Black
     )
 }
 
@@ -74,12 +73,10 @@ fun LocationCard(location: String) {
             Text(
                 text = "Location",
                 style = MaterialTheme.typography.headlineMedium,
-                color = Color.Black
             )
             Text(
                 text = location,
                 style = MaterialTheme.typography.labelLarge,
-                color = Color.Black
             )
 
             // Mapa de Google
