@@ -12,34 +12,43 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.lifecycleScope
 import com.example.sirius.data.dao.UserDao
+import com.example.sirius.model.User
 import com.example.sirius.ui.theme.SiriusTheme
 import com.example.sirius.navigation.NavigationController
 import com.example.sirius.view.screens.LoginScreen
 import com.example.sirius.viewmodel.UserViewModel
 import com.example.sirius.viewmodel.navigation.AnimalViewModel
-
-
+import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
     private val userViewModel: UserViewModel by lazy {
-//        val animalApplication = application as AnimalApplication
-//        animalApplication.initContext(applicationContext)
+        val animalApplication = application as AnimalApplication
+        animalApplication.initContext(applicationContext)
         UserViewModel((application as AnimalApplication).userDao)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        val sharedPreferences = applicationContext.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
-//        val isAuthenticated = sharedPreferences.getBoolean("is_authenticated", false)
-//        userViewModel.isAuthenticated = isAuthenticated
+        val sharedPreferences = applicationContext.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
 
         setContent {
             SiriusTheme {
                 NavigationController(userViewModel)
                 //LandingPage()
                 //MyComposable(viewModel = viewModel)
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            if (userViewModel.currentUser.value == null) {
+                val userInfoJson = sharedPreferences.getString("user_info", null)
+                if (userInfoJson != null) {
+                    val user = Gson().fromJson(userInfoJson, User::class.java)
+                    userViewModel.login(user.username, user.password)
+                }
             }
         }
     }

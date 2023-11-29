@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS News (
     "published_date" TEXT NOT NULL,
     "created_at" TEXT NOT NULL,
     "until_date" TEXT,
+    "photo_news" TEXT NOT NULL,
     UNIQUE("title","published_date"),
     PRIMARY KEY("id")
 );
@@ -45,6 +46,7 @@ CREATE TABLE IF NOT EXISTS User (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" TEXT NOT NULL,
+    UNIQUE("email"),
     PRIMARY KEY("id")
 );
 '''
@@ -111,7 +113,8 @@ def create_news(cursor, num_news):
             'long_info': f'Info larga {i}',
             'published_date': datetime.now().strftime('%Y-%m-%d'),
             'created_at': datetime.now().strftime('%Y-%m-%d'),
-            'until_date': None
+            'until_date': None,
+            'photo_news': 'res/drawable/new_image.jpg'
         }
         for i in range(1, num_news + 1)
     ]
@@ -123,13 +126,13 @@ def create_users(cursor, num_users):
         {
             'username': 'sele',
             'email': 'sele@example.com',
-            'password': 'adminpassword1',
+            'password': 'sele',
             'role': 'admin'
         },
         {
             'username': 'mele',
             'email': 'mele@example.com',
-            'password': 'adminpassword2',
+            'password': 'mele',
             'role': 'admin'
         }
     ]

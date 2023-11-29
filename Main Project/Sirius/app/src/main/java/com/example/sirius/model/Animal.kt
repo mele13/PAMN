@@ -48,20 +48,4 @@ data class Animal (
     @NonNull
     @ColumnInfo(name = "photo_animal")
     val photoAnimal: String
-) {
-    @SuppressLint("NewApi")
-    fun getDaysSinceShelter(): Long {
-        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val shelterDate = LocalDate.parse(entryDate.toString(), dateFormatter)
-        val currentDate = LocalDate.now()
-        return ChronoUnit.DAYS.between(shelterDate, currentDate)
-    }
-
-    @SuppressLint("NewApi")
-    fun getDaysSinceShelter2(): Long {
-        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val shelterDate = LocalDate.parse(birthDate.toString(), dateFormatter)
-        val currentDate = LocalDate.now()
-        return ChronoUnit.DAYS.between(shelterDate, currentDate)
-    }
-}
+)

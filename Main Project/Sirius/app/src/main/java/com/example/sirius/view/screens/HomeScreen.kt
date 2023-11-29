@@ -46,7 +46,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@SuppressLint("CoroutineCreationDuringComposition")
+@SuppressLint("CoroutineCreationDuringComposition", "DiscouragedApi")
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -55,13 +55,6 @@ fun HomeScreen(
     imageList: List<Int>,
     userViewModel: UserViewModel
 ) {
-    LaunchedEffect(key1 = true) {
-        println("---------------------------------\n home auth: ${userViewModel.isAuthenticated}")
-        if (userViewModel.isAuthenticated) {
-            println("is auth")
-        }
-    }
-
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -70,7 +63,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             item {
-                // What's new
+                // What's New
                 Text(
                     text = stringResource(id = R.string.newsIntro),
                     style = MaterialTheme.typography.headlineMedium,
@@ -79,16 +72,37 @@ fun HomeScreen(
                 LazyRow {
                     items(newsList) {news ->
                         Column(
-                            modifier = Modifier.padding(8.dp),
+                            modifier = Modifier.padding(4.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Image(
-                                painter = painterResource(R.drawable.dog1),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .clip(MaterialTheme.shapes.medium)
+                            val context = LocalContext.current
+
+                            // Obtener el nombre del recurso sin la ruta
+                            val resourceName = news.photoNews.substringAfterLast("/")
+
+                            // Obtener el ID del recurso sin la ruta
+                            val resourceId = context.resources.getIdentifier(
+                                resourceName.replace(".jpg", ""), "drawable", context.packageName
                             )
+
+                            if (resourceId != 0) {
+                                // Si se encontró el recurso, cargar la imagen
+                                val painter = painterResource(id = resourceId)
+                                Image(
+                                    painter = painter,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(100.dp)
+                                )
+                            } else {
+                                Log.e("AnimalImage", "Recurso no encontrado para ${news.photoNews}")
+                            }
+//                            Image(
+//                                painter = painterResource(R.drawable.dog1),
+//                                contentDescription = null,
+//                                modifier = Modifier
+//                                    .size(100.dp)
+//                                    .clip(MaterialTheme.shapes.medium)
+//                            )
                             Text(
                                 text = news.titleNews,
                                 style = MaterialTheme.typography.labelLarge,
@@ -106,7 +120,7 @@ fun HomeScreen(
                 LazyRow {
                     items(animalList) {animal ->
                         Column(
-                            modifier = Modifier.padding(8.dp),
+                            modifier = Modifier.padding(4.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
 
                             ) {
@@ -127,6 +141,7 @@ fun HomeScreen(
                                     painter = painter,
                                     contentDescription = null,
                                     modifier = Modifier
+                                        .fillMaxSize()
                                         .size(100.dp)
                                         .clickable {
                                             navController.navigate(route = Routes.ANIMALINFO + "/" + animal.id)
@@ -170,7 +185,7 @@ fun HomeScreen(
                 LazyRow {
                     items(newsList) {new ->
                         Column(
-                            modifier = Modifier.padding(8.dp),
+                            modifier = Modifier.padding(4.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Image(
@@ -192,48 +207,3 @@ fun HomeScreen(
         }
     }
 }
-
-//@Composable
-//fun NewsItem(news: News) {
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(bottom = 16.dp)
-//    ) {
-//        Text(
-//            text = news.titleNews,
-//            style = MaterialTheme.typography.headlineSmall,
-//            fontWeight = FontWeight.Bold,
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Text(
-//            text = news.shortInfoNews,
-//            style = MaterialTheme.typography.bodySmall,
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Text(
-//            text = "Published Date: ${news.publishedDate}",
-////            style = MaterialTheme.typography.caption,
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//    }
-//}
-
-//@Preview
-//@Composable
-//fun HomeScreenPreview() {
-//    val imageList = listOf(
-//        R.drawable.dog1,
-//        R.drawable.dog1,
-//        R.drawable.dog1,
-//        R.drawable.dog1,
-//    )
-//
-//    val animalVm: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
-//    val animalList by animalVm.getAllAnimals().collectAsState(initial = emptyList())
-//
-//    val newsVm: NewsViewModel = viewModel(factory = NewsViewModel.factory)
-//    val newsList by newsVm.getNews().collectAsState(initial = emptyList())
-//
-//    HomeScreen(animalList, newsList, imageList)
-//}

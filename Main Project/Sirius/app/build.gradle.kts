@@ -90,6 +90,20 @@ dependencies {
     // Activity
     implementation("androidx.activity:activity-compose:1.8.0")
 
+    //Splash
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
+    //Map
+    implementation("com.google.maps.android:maps-compose:1.0.0")
+    implementation("com.google.android.gms:play-services-maps:18.0.2")
+
+    // Testing
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+
+    // JSON
+    implementation("com.google.code.gson:gson:2.8.9")
+
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     debugImplementation("androidx.compose.ui:ui-tooling")
 }

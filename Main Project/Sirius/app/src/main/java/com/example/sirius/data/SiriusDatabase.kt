@@ -12,7 +12,7 @@ import com.example.sirius.model.Animal
 import com.example.sirius.model.News
 import com.example.sirius.model.User
 
-@Database(entities = [Animal::class, News::class, User::class], version = 4, exportSchema = false)
+@Database(entities = [Animal::class, News::class, User::class], version = 5, exportSchema = false)
 abstract class SiriusDatabase: RoomDatabase() {
     abstract fun animalDao(): AnimalDao
     abstract fun newsDao(): NewsDao

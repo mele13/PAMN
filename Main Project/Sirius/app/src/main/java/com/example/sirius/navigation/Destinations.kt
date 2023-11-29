@@ -1,11 +1,11 @@
 package com.example.sirius.navigation
 
+import android.content.res.Configuration
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.platform.LocalContext
 import com.example.sirius.R
 
 @Composable
@@ -21,11 +21,24 @@ fun createDestination(route: String, selectedIcon: Int, iconTextId: Int): Destin
 @Composable
 fun createDestinations(): List<Destinations> {
     return listOf(
-        createDestination(Routes.HOME, R.drawable.home_icon, R.string.home),
-        createDestination(Routes.ANIMALS, R.drawable.animals_icon, R.string.animals),
-        createDestination(Routes.DONATIONS, R.drawable.donations_icon, R.string.donations),
-        createDestination(Routes.ABOUTUS, R.drawable.aboutus_icon, R.string.aboutUs),
-        )
+        createDestination(Routes.HOME, getIcon(R.drawable.home_icon, R.drawable.home_icon_wht), R.string.home),
+        createDestination(Routes.ANIMALS, getIcon(R.drawable.animals_icon, R.drawable.animals_icon_wht), R.string.animals),
+        createDestination(Routes.DONATIONS, getIcon(R.drawable.donations_icon, R.drawable.donations_icon_wht), R.string.donations),
+        createDestination(Routes.ABOUTUS, getIcon(R.drawable.aboutus_icon, R.drawable.aboutus_icon_wht), R.string.aboutUs),
+//        createDestination(Routes.PROFILE, getIcon(R.drawable.user_icon, R.drawable.user_icon_wht), R.string.profile)
+    )
+}
+
+//@Composable
+//fun profileDestination(): Destinations {
+//    return createDestination(Routes.PROFILE, getIcon(R.drawable.user_icon, R.drawable.user_icon_wht), R.string.profile)
+//}
+
+@Composable
+private fun getIcon(lightIcon: Int, darkIcon: Int): Int {
+    val isSystemInDarkTheme =
+        (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+    return if (isSystemInDarkTheme) darkIcon else lightIcon
 }
 
 data class Destinations(
@@ -45,4 +58,5 @@ object Routes {
     const val SIGNUP = "signup"
     const val LANDINGPAGE = "landing page"
     const val PROFILE = "profile"
+    const val LOADING = "loading"
 }

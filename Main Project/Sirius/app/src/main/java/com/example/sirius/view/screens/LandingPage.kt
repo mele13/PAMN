@@ -39,18 +39,6 @@ import com.example.sirius.viewmodel.UserViewModel
 
 @Composable
 fun LandingPage(navController: NavController) {
-//    LaunchedEffect(key1 = true) {
-//        println("---------------------------------\nauth: ${userViewModel.isAuthenticated}")
-//        if (userViewModel.isAuthenticated) {
-//            println("is auth")
-//            navController.navigate(Routes.HOME) {
-//                popUpTo(Routes.LANDINGPAGE) {
-//                    inclusive = true
-//                }
-//            }
-//        }
-//    }
-
     Surface(
         color = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()

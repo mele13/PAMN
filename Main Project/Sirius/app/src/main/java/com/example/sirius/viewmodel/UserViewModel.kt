@@ -21,58 +21,76 @@ import kotlin.coroutines.suspendCoroutine
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class UserViewModel(private val userDao: UserDao) : ViewModel() {
-    var isAuthenticated by mutableStateOf(false)
-//        private set
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> = _currentUser //datastore?
 
     suspend fun login(username: String, password: String): Boolean {
         return suspendCoroutine { continuation ->
             viewModelScope.launch {
-                val user = userDao.getUserByCredentials(username, password)
-                val success = user != null
-                isAuthenticated = success
-//                saveAuthenticationState(success)
-                continuation.resume(success)
+                try {
+                    val user = userDao.getUserByCredentials(username, password)
+                    val success = user != null
+                    if (user != null) {
+                        _currentUser.value = user
+                        saveAuthenticationState(user)
+                    }
+                    continuation.resume(success)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    continuation.resume(false)
+                }
             }
         }
     }
 
-//    private fun saveAuthenticationState(isAuthenticated: Boolean) {
-//        val sharedPreferences = AnimalApplication.context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
-//        sharedPreferences.edit().putBoolean("is_authenticated", isAuthenticated).apply()
-//    }
+    fun getAuthenticatedUser(): User? {
+        return _currentUser.value
+    }
+
+    private fun saveAuthenticationState(user: User?) {
+        val sharedPreferences = AnimalApplication.context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            if (user != null) {
+                putString("user_info", Gson().toJson(user))
+            } else {
+                remove("user_info")
+            }
+            apply()
+        }
+    }
 
     suspend fun registerUser(username: String, email: String, password: String): Boolean {
-        println("mele2 ${userDao.getUserByUsername("mele2")}")
-        return true
-//        return try {
-//            val newUser = User(
-//                username = username,
-//                email = email,
-//                password = password,
-//                role = "user"
-//            )
-//            viewModelScope.launch {
-//                userDao.insertUser(newUser)
-//                isAuthenticated = true
-////                saveAuthenticationState(true)
-//            }
-//            val insertedUser = userDao.getUserByUsername(username)
-//            println("inserted user $insertedUser")
-//            true
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            false
-//        }
+        return try {
+            val newUser = User(
+                username = username,
+                email = email,
+                password = password,
+                role = "user"
+            )
+            viewModelScope.launch {
+                userDao.insertUser(newUser)
+                _currentUser.value = newUser
+                saveAuthenticationState(newUser)
+            }
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 
     suspend fun logout() {
-        isAuthenticated = false
+        _currentUser.value = null
+        saveAuthenticationState(null)
     }
+
+    suspend fun updateUser() {}
 
     suspend fun getUserById(userId: Int): User? {
         return userDao.getUserById(userId)

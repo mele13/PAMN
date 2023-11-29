@@ -6,6 +6,7 @@
     <string name="animals">Animals</string>
     <string name="donations">Donations</string>
     <string name="aboutUs">About Us</string>
+    <string name="profile">Profile</string>
 
     <!-- Landing Page -->
     <string name="loginSignup">Log In / Sign Up</string>

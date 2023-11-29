@@ -31,6 +31,7 @@ fun NavigationController (userViewModel: UserViewModel){
         val selectedDestination = navBackStackEntry?.destination?.route ?: Routes.HOME
 
         NavigationContent(
+            modifier = Modifier,
             navController = navController,
             userViewModel = userViewModel,
             selectedDestination = selectedDestination,

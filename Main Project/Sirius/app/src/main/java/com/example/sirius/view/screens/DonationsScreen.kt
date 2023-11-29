@@ -21,17 +21,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.sirius.R
+import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.SiriusTheme
 import com.example.sirius.viewmodel.ContactsViewModel
 
 @SuppressLint("RememberReturnType")
 @Composable
-fun DonationsScreen() {
+fun DonationsScreen(navController: NavController) {
     val viewModelContacts = remember { ContactsViewModel() }
-
-    Log.d("DonationsScreen", "DonationsScreen recomposed")
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -50,16 +49,16 @@ fun DonationsScreen() {
             DonationsText(
                 textResourceId = R.string.donationsText,
                 style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Justify
+                textAlign = TextAlign.Justify,
             )
         }
         item {
-            Spacer(modifier = Modifier.height(10.dp)) // Ajusta la altura del Spacer según sea necesario
+            Spacer(modifier = Modifier.height(10.dp))
         }
         item {
             DonationButton(
                 onClick = {
-                    viewModelContacts.changeBackgroundColor()
+                    navController.navigate(route = Routes.LOADING + "/" + 1)
                 },
                 imageResIdLeft = R.drawable.paypal_logo,
                 buttonText = "Donate with PayPal"
@@ -68,14 +67,18 @@ fun DonationsScreen() {
 
         item {
             DonationButton(
-                onClick = { /* Handle debit/credit card donation */ },
+                onClick = {
+                    navController.navigate(route = Routes.LOADING + "/" + 1)
+                },
                 imageResIdLeft = R.drawable.mastercard_logo,
                 buttonText = "Donate with Debit or Credit Card"
             )
         }
         item {
             DonationButton(
-                onClick = { /* Handle Bizum donation */ },
+                onClick = {
+                    navController.navigate(route = Routes.LOADING + "/" + 1)
+                },
                 imageResIdLeft = R.drawable.bizum_logo,
                 buttonText = "Donate with Bizum"
             )
@@ -103,9 +106,9 @@ fun DonationButton(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 80.dp) // Establece una altura mínima
-            .wrapContentHeight(Alignment.CenterVertically) // Hace que la altura se ajuste al contenido
-            .padding(bottom = 16.dp),
+            .heightIn(min = 60.dp)
+            .wrapContentHeight(Alignment.CenterVertically)
+            .padding(bottom = 8.dp),
         colors = ButtonDefaults.buttonColors(Color(0xFFFFA500))
     ) {
         Row(
@@ -142,16 +145,7 @@ fun DonationsText(@StringRes textResourceId: Int, style: androidx.compose.ui.tex
     Text(
         text = stringResource(id = textResourceId),
         style = style,
-        textAlign = textAlign
+        textAlign = textAlign,
+        modifier = Modifier.padding(4.dp)
     )
-}
-
-@Preview
-@Composable
-fun DonationsScreenPreview() {
-    SiriusTheme {
-        Surface {
-            DonationsScreen()
-        }
-    }
 }

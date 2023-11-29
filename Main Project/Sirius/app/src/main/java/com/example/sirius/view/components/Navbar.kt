@@ -5,11 +5,16 @@ import DonationsScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -34,6 +39,8 @@ import com.example.sirius.navigation.Destinations
 import com.example.sirius.navigation.Routes
 import com.example.sirius.navigation.createDestinations
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.sirius.ui.theme.Black
@@ -45,7 +52,9 @@ import kotlinx.coroutines.flow.firstOrNull
 import com.example.sirius.R
 import com.example.sirius.view.screens.AnimalInfo
 import com.example.sirius.view.screens.LandingPage
+import com.example.sirius.view.screens.LoadingPage
 import com.example.sirius.view.screens.LoginScreen
+import com.example.sirius.view.screens.ProfileScreen
 import com.example.sirius.view.screens.SignupScreen
 import com.example.sirius.viewmodel.UserViewModel
 
@@ -58,17 +67,27 @@ fun NavigationContent(
     selectedDestination: String,
     navigateDestination: (Destinations) -> Unit
 ) {
-    Row(
-        modifier = modifier.fillMaxSize()
-    ) {
+    Box(modifier = modifier.fillMaxSize()) {
+        if (userViewModel.getAuthenticatedUser() != null) {
+            ProfileButton(
+                onClick = {
+                    navController.navigate(Routes.PROFILE)
+                },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+                    .zIndex(99f)
+            )
+        }
+
         Column(
             modifier = modifier.fillMaxSize()
         ) {
             NavHost(
                 modifier = Modifier.weight(1f),
                 navController = navController,
-                startDestination = if (userViewModel.isAuthenticated) Routes.HOME
-                                   else Routes.LANDINGPAGE
+                startDestination = if (userViewModel.getAuthenticatedUser() != null) Routes.HOME
+                else Routes.LOADING
             ) {
                 composable(route = Routes.HOME) {
                     //HomeScreenPreview()
@@ -88,7 +107,6 @@ fun NavigationContent(
                 }
                 composable(route = Routes.ANIMALS) {
                     val viewModel: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
-
                     val ageList by viewModel.getBirthYears().collectAsState(emptyList())
                     val breedList by viewModel.getBreed().collectAsState(emptyList())
                     val typeList by viewModel.getTypeAnimal().collectAsState(emptyList())
@@ -102,7 +120,7 @@ fun NavigationContent(
                 }
 
                 composable(route = Routes.DONATIONS) {
-                    DonationsScreen()
+                    DonationsScreen(navController = navController)
                 }
                 composable(route = Routes.ABOUTUS) {
                     AboutUsScreen()
@@ -127,16 +145,39 @@ fun NavigationContent(
                 composable(route = Routes.LANDINGPAGE) {
                     LandingPage(navController = navController)
                 }
+                composable(route = Routes.LOADING){
+                    LoadingPage(navController = navController, 0)
+                }
+                composable(route = Routes.LOADING + "/{id}",
+                    arguments = listOf(navArgument(name = "id") {
+                        type = NavType.IntType
+                        defaultValue = -1
+                    })
+                ) { navBackStackEntry ->
+                    val id = navBackStackEntry.arguments?.getInt("id") ?: -1
+                    LoadingPage(navController, id)
+                }
+                composable(route = Routes.PROFILE) {
+                    ProfileScreen(navController = navController, userViewModel = userViewModel)
+                }
             }
             val currentRoute = navController.currentBackStackEntry?.destination?.route
-            if (currentRoute !in listOf(Routes.LANDINGPAGE, Routes.SIGNUP, Routes.LOGIN)) {
+            if (currentRoute !in listOf(Routes.LANDINGPAGE, Routes.SIGNUP, Routes.LOGIN,
+                    Routes.LOADING, Routes.LOADING + "/{id}")) {
                 Navbar(
                     selectedDestination = selectedDestination,
                     navigateDestination = navigateDestination,
+                    userViewModel = userViewModel,
+                    navController = navController,
                 )
             }
         }
     }
+//    Row(
+//        modifier = modifier.fillMaxSize()
+//    ) {
+//
+//    }
 }
 
 
@@ -144,11 +185,13 @@ fun NavigationContent(
 fun Navbar(
     selectedDestination: String,
     navigateDestination: (Destinations) -> Unit,
+    userViewModel: UserViewModel,
+    navController: NavHostController
 ) {
     val destinations = createDestinations()
 
     NavigationBar(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         destinations.forEach { destination ->
             val selected = selectedDestination == destination.route
@@ -187,6 +230,15 @@ fun Navbar(
             )
         }
     }
+}
+
+@Composable
+fun ProfileButton(onClick: () -> Unit, modifier: Modifier) {
+    Icon(
+        imageVector = Icons.Default.Person,
+        contentDescription = "Profile",
+        modifier = modifier.clickable { onClick() }
+    )
 }
 
 class NavigationActions(private val navController: NavHostController) {
