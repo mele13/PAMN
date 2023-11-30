@@ -1,6 +1,7 @@
 package com.example.sirius.view.screens
 
 import android.content.res.Configuration
+import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
@@ -41,6 +42,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -51,8 +53,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalUriHandler
@@ -70,6 +78,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewModelScope
@@ -78,9 +87,9 @@ import androidx.navigation.NavController
 import com.example.sirius.R
 import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.Green1
+import com.example.sirius.view.components.CustomSnackbar
 import com.example.sirius.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,6 +97,8 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var signUpButtonClicked by remember { mutableStateOf(false) }
+    var errorMessage by rememberSaveable { mutableStateOf<String?>(null) }
     val isSystemInDarkTheme = (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
     Box(
@@ -104,23 +115,7 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
 //            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.sirius_name),
-                    contentDescription = null,
-                )
-                Text(
-                    text = stringResource(id = R.string.signup),
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-            }
-            Spacer(modifier = Modifier.height(4.dp))
+            SignUpHeader(isSystemInDarkTheme)
             // Username
             OutlinedTextField(
                 value = username,
@@ -147,8 +142,8 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Green1,
-                    unfocusedBorderColor = Green1,
+                    focusedBorderColor = if (signUpButtonClicked && username.isBlank()) Color.Red else Green1,
+                    unfocusedBorderColor = if (signUpButtonClicked && username.isBlank()) Color.Red else Green1,
                 )
             )
             Spacer(modifier = Modifier.height(3.dp))
@@ -178,8 +173,8 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Green1,
-                    unfocusedBorderColor = Green1,
+                    focusedBorderColor = if (signUpButtonClicked && email.isBlank()) Color.Red else Green1,
+                    unfocusedBorderColor = if (signUpButtonClicked && email.isBlank()) Color.Red else Green1,
                 )
             )
             Spacer(modifier = Modifier.height(3.dp))
@@ -210,9 +205,8 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Green1,
-                    unfocusedBorderColor = Green1,
-//                    textColor = LocalContentColor.current,
+                    focusedBorderColor = if (signUpButtonClicked && password.isBlank()) Color.Red else Green1,
+                    unfocusedBorderColor = if (signUpButtonClicked && password.isBlank()) Color.Red else Green1,
                 )
             )
             Spacer(modifier = Modifier.height(3.dp))
@@ -232,29 +226,52 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
             }
             Spacer(modifier = Modifier.height(20.dp))
             // Sign Up button
-            TextButton(
-                onClick = {
-                    println("Trying to sign up")
-                    userViewModel.viewModelScope.launch {
-                        println("Before success")
-                        val success = userViewModel.registerUser(username, email, password)
-                        if (success) {
-                            println("in success $success")
-                            navController.navigate(Routes.HOME)
-                        } else {
-//                            println("no se ha podido crear una cuenta $success")
-                        }
-                    }
-                },
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
-                    .offset(y = 23.dp),
+                    .offset(y = (-80).dp)
+                    .zIndex(-1f),
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    stringResource(id = R.string.signup),
-                    color = Color.White,
-                    fontSize = 25.sp
+                TextButton(
+                    onClick = {
+                        userViewModel.viewModelScope.launch {
+                            signUpButtonClicked = true
+                            val success = userViewModel.registerUser(username, email, password)
+                            if (success) {
+                                navController.navigate(Routes.HOME)
+                            } else {
+                                errorMessage = "Oops! Something went wrong during user creation"
+                            }
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .offset(y = 23.dp),
+                ) {
+                    Text(
+                        stringResource(id = R.string.signup),
+                        color = Color.White,
+                        fontSize = 25.sp
+                    )
+                }
+                // Center - Sign Up button
+                Image(
+                    painter = painterResource(id = R.drawable.paw2),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(230.dp)
+                        .zIndex(-10f)
+                        .offset(x = 16.dp)
+                )
+            }
+            // Error Snackbar
+            errorMessage?.let { message ->
+                CustomSnackbar(
+                    message = message,
+                    onDismiss = { errorMessage = null },
+                    isSystemInDarkTheme = isSystemInDarkTheme
                 )
             }
         }
@@ -266,15 +283,6 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
                 .align(Alignment.BottomStart)
                 .size(230.dp)
                 .absoluteOffset((-6).dp)
-        )
-        // Center - Sign Up button
-        Image(
-            painter = painterResource(id = R.drawable.paw2),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .size(230.dp)
-                .offset(x = 16.dp, y = 130.dp)
                 .zIndex(-1f)
         )
         // Top right big
@@ -292,11 +300,32 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
             painter = painterResource(id = R.drawable.paw4),
             contentDescription = null,
             modifier = Modifier
-//                .background(color = Color.Red)
                 .align(Alignment.TopEnd)
                 .size(120.dp)
                 .offset(x = 20.dp, y = 152.dp)
                 .zIndex(-2f)
         )
     }
+}
+
+@Composable
+fun SignUpHeader(isSystemInDarkTheme: Boolean) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(id = if (isSystemInDarkTheme) R.drawable.sirius_name
+                                           else R.drawable.sirius_name_wht),
+            contentDescription = null,
+        )
+        Text(
+            text = stringResource(id = R.string.signup),
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.align(Alignment.CenterVertically)
+        )
+    }
+    Spacer(modifier = Modifier.height(4.dp))
 }

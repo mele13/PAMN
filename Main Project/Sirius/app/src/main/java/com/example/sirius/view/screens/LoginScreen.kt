@@ -78,6 +78,7 @@ import androidx.navigation.NavController
 import com.example.sirius.R
 import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.Green1
+import com.example.sirius.view.components.CustomSnackbar
 import com.example.sirius.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -86,6 +87,8 @@ import kotlinx.coroutines.launch
 fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var logInButtonClicked by remember { mutableStateOf(false) }
+    var errorMessage by rememberSaveable { mutableStateOf<String?>(null) }
     val isSystemInDarkTheme = (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
     Box(
@@ -109,7 +112,8 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.sirius_name),
+                    painter = painterResource(id = if (isSystemInDarkTheme) R.drawable.sirius_name
+                                                   else R.drawable.sirius_name_wht),
                     contentDescription = null,
                 )
                 Text(
@@ -145,8 +149,8 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Green1,
-                    unfocusedBorderColor = Green1,
+                    focusedBorderColor = if (logInButtonClicked && username.isBlank()) Color.Red else Green1,
+                    unfocusedBorderColor = if (logInButtonClicked && username.isBlank()) Color.Red else Green1,
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -177,10 +181,9 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Green1,
-                    unfocusedBorderColor = Green1,
-//                    textColor = LocalContentColor.current,
-                )
+                    focusedBorderColor = if (logInButtonClicked && username.isBlank()) Color.Red else Green1,
+                    unfocusedBorderColor = if (logInButtonClicked && username.isBlank()) Color.Red else Green1,
+                ),
             )
             Spacer(modifier = Modifier.height(8.dp))
             // Sign Up
@@ -199,26 +202,74 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
             }
             Spacer(modifier = Modifier.height(20.dp))
             // Log In button
-            TextButton(
-                onClick = {
-                          userViewModel.viewModelScope.launch {
-                              val success = userViewModel.login(username, password)
-                              if (success) {
-                                  navController.navigate(Routes.HOME)
-                              } else {
-//                                  println("no se ha podido iniciar sesión $username, $password")
-                              }
-                          }
-                },
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
-                    .offset(y = 35.dp),
+                    .offset(y = (-80).dp)
+                    .zIndex(-1f),
+                contentAlignment = Alignment.Center
+            ) {
+                TextButton(
+                    onClick = {
+                        userViewModel.viewModelScope.launch {
+                            logInButtonClicked = true
+                            val success = userViewModel.login(username, password)
+                            if (success) {
+                                navController.navigate(Routes.HOME)
+                            } else {
+                                errorMessage = "Invalid username or password"
+                            }
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .offset(y = 23.dp),
                 ) {
-                Text(
-                    stringResource(id = R.string.login),
-                    color = Color.White,
-                    fontSize = 25.sp
+                    Text(
+                        stringResource(id = R.string.login),
+                        color = Color.White,
+                        fontSize = 25.sp
+                    )
+                }
+                // Center - Log In button
+                Image(
+                    painter = painterResource(id = R.drawable.paw2),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(230.dp)
+                        .zIndex(-10f)
+                        .offset(x = 16.dp)
+                )
+            }
+//            TextButton(
+//                onClick = {
+//                    userViewModel.viewModelScope.launch {
+//                        val success = userViewModel.login(username, password)
+//                        if (success) {
+//                            navController.navigate(Routes.HOME)
+//                        } else {
+//                            errorMessage = "Invalid username or password"
+//                        }
+//                    }
+//                },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(8.dp)
+//                    .offset(y = 35.dp),
+//                ) {
+//                Text(
+//                    stringResource(id = R.string.login),
+//                    color = Color.White,
+//                    fontSize = 25.sp
+//                )
+//            }
+            // Error Snackbar
+            errorMessage?.let { message ->
+                CustomSnackbar(
+                    message = message,
+                    onDismiss = { errorMessage = null },
+                    isSystemInDarkTheme = isSystemInDarkTheme
                 )
             }
         }
@@ -231,16 +282,16 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
                 .size(230.dp)
                 .absoluteOffset((-6).dp)
         )
-        // Center - Log In button
-        Image(
-            painter = painterResource(id = R.drawable.paw2),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .size(230.dp)
-                .offset(x = 16.dp, y = 130.dp)
-                .zIndex(-1f)
-        )
+//        // Center - Log In button
+//        Image(
+//            painter = painterResource(id = R.drawable.paw2),
+//            contentDescription = null,
+//            modifier = Modifier
+//                .align(Alignment.Center)
+//                .size(230.dp)
+//                .offset(x = 16.dp, y = 130.dp)
+//                .zIndex(-1f)
+//        )
         // Top right big
         Image(
             painter = painterResource(id = R.drawable.paw3),
@@ -256,7 +307,6 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
             painter = painterResource(id = R.drawable.paw4),
             contentDescription = null,
             modifier = Modifier
-//                .background(color = Color.Red)
                 .align(Alignment.TopEnd)
                 .size(120.dp)
                 .offset(x = 20.dp, y = 152.dp)

@@ -63,19 +63,23 @@ fun NavigationContent(
     navigateDestination: (Destinations) -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        ProfileButton(
-            onClick = {
-                if (userViewModel.getAuthenticatedUser() != null)
-                    navController.navigate(Routes.PROFILE)
-                else
-                    navController.navigate(Routes.LOGIN)
-            },
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(16.dp)
-                .zIndex(99f)
-        )
+        val currentRoute = navController.currentBackStackEntry?.destination?.route
+        if (currentRoute !in listOf(Routes.LOGIN, Routes.SIGNUP, Routes.LANDINGPAGE, Routes.LOADING)) {
+            ProfileButton(
+                onClick = {
+                    if (userViewModel.getAuthenticatedUser() != null)
+                        navController.navigate(Routes.PROFILE)
+                    else {
 
+                        navController.navigate(Routes.LOGIN)
+                    }
+                },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+                    .zIndex(99f)
+            )
+        }
         Column(
             modifier = modifier.fillMaxSize()
         ) {
@@ -83,7 +87,7 @@ fun NavigationContent(
                 modifier = Modifier.weight(1f),
                 navController = navController,
                 startDestination = if (userViewModel.getAuthenticatedUser() != null) Routes.HOME
-                else Routes.LOADING
+                                   else Routes.LOADING
             ) {
                 composable(route = Routes.HOME) {
                     //HomeScreenPreview()
@@ -135,9 +139,6 @@ fun NavigationContent(
                 composable(route = Routes.SIGNUP) {
                     SignupScreen(navController = navController, userViewModel = userViewModel)
                 }
-                composable(route = Routes.PROFILE) {
-                    //
-                }
                 composable(route = Routes.LANDINGPAGE) {
                     LandingPage(navController = navController)
                 }
@@ -157,32 +158,24 @@ fun NavigationContent(
                     ProfileScreen(navController = navController, userViewModel = userViewModel)
                 }
             }
-            val currentRoute = navController.currentBackStackEntry?.destination?.route
-            if (currentRoute !in listOf(Routes.LANDINGPAGE, Routes.SIGNUP, Routes.LOGIN,
-                    Routes.LOADING, Routes.LOADING + "/{id}")) {
+            if (currentRoute !in listOf(
+                    Routes.LANDINGPAGE, Routes.SIGNUP, Routes.LOGIN,
+                    Routes.LOADING, Routes.LOADING + "/{id}"
+                )
+            ) {
                 Navbar(
                     selectedDestination = selectedDestination,
                     navigateDestination = navigateDestination,
-                    userViewModel = userViewModel,
-                    navController = navController,
                 )
             }
         }
     }
-//    Row(
-//        modifier = modifier.fillMaxSize()
-//    ) {
-//
-//    }
 }
-
 
 @Composable
 fun Navbar(
     selectedDestination: String,
     navigateDestination: (Destinations) -> Unit,
-    userViewModel: UserViewModel,
-    navController: NavHostController
 ) {
     val destinations = createDestinations()
 

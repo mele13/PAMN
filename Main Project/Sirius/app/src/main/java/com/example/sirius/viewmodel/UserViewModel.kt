@@ -34,6 +34,10 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
         return suspendCoroutine { continuation ->
             viewModelScope.launch {
                 try {
+                    if (username.isBlank() || password.isBlank()) {
+                        continuation.resume(false)
+                        return@launch
+                    }
                     val user = getUserByCredentials(username, password)
                     val success = user != null
                     if (user != null) {
@@ -65,6 +69,7 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
     }
 
     suspend fun registerUser(username: String, email: String, password: String): Boolean {
+        if (username.isBlank() || email.isBlank() || password.isBlank()) return false
         if (!checkIfUserExists(username)) {
             return try {
                 val newUser = User(
