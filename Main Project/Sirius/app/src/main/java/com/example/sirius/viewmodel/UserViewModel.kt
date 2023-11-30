@@ -31,6 +31,8 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
     val currentUser: StateFlow<User?> = _currentUser //datastore?
 
     suspend fun login(username: String, password: String): Boolean {
+        Log.d("checkUser", "${userDao.getUserByUsername("mele2")}")
+        Log.d("checkUser_id", "${userDao.getUserById(3)}")
         return suspendCoroutine { continuation ->
             viewModelScope.launch {
                 try {
@@ -56,38 +58,44 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
     private fun saveAuthenticationState(user: User?) {
         val sharedPreferences = AnimalApplication.context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
-            if (user != null) {
+            if (user != null)
                 putString("user_info", Gson().toJson(user))
-            } else {
+            else
                 remove("user_info")
-            }
             apply()
         }
     }
 
     suspend fun registerUser(username: String, email: String, password: String): Boolean {
-        return try {
-            val newUser = User(
-                username = username,
-                email = email,
-                password = password,
-                role = "user"
-            )
-            viewModelScope.launch {
-                userDao.insertUser(newUser)
-                _currentUser.value = newUser
-                saveAuthenticationState(newUser)
+        if (!checkIfUserExists(username)) {
+            return try {
+                val newUser = User(
+                    username = username,
+                    email = email,
+                    password = password,
+                    role = "user"
+                )
+                viewModelScope.launch {
+                    userDao.insertUser(newUser)
+                    _currentUser.value = newUser
+                    saveAuthenticationState(newUser)
+                    Log.d("newUser", "${userDao.getUserByUsername(username)}")
+                }
+                true
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
             }
-            true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
         }
     }
 
     suspend fun logout() {
         _currentUser.value = null
         saveAuthenticationState(null)
+    }
+
+    suspend fun checkIfUserExists(): Boolean {
+
     }
 
     suspend fun updateUser() {}

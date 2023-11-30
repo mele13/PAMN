@@ -25,14 +25,8 @@ fun createDestinations(): List<Destinations> {
         createDestination(Routes.ANIMALS, getIcon(R.drawable.animals_icon, R.drawable.animals_icon_wht), R.string.animals),
         createDestination(Routes.DONATIONS, getIcon(R.drawable.donations_icon, R.drawable.donations_icon_wht), R.string.donations),
         createDestination(Routes.ABOUTUS, getIcon(R.drawable.aboutus_icon, R.drawable.aboutus_icon_wht), R.string.aboutUs),
-//        createDestination(Routes.PROFILE, getIcon(R.drawable.user_icon, R.drawable.user_icon_wht), R.string.profile)
     )
 }
-
-//@Composable
-//fun profileDestination(): Destinations {
-//    return createDestination(Routes.PROFILE, getIcon(R.drawable.user_icon, R.drawable.user_icon_wht), R.string.profile)
-//}
 
 @Composable
 private fun getIcon(lightIcon: Int, darkIcon: Int): Int {

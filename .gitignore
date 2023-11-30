@@ -3,7 +3,7 @@
 *.txt
 
 *_Sirius
-Sirius_*
+Sirius_org*
 !Sirius/
 !Sirius/**
 

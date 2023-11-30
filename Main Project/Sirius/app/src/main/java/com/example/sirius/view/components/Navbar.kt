@@ -68,17 +68,18 @@ fun NavigationContent(
     navigateDestination: (Destinations) -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        if (userViewModel.getAuthenticatedUser() != null) {
-            ProfileButton(
-                onClick = {
+        ProfileButton(
+            onClick = {
+                if (userViewModel.getAuthenticatedUser() != null)
                     navController.navigate(Routes.PROFILE)
-                },
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-                    .zIndex(99f)
-            )
-        }
+                else
+                    navController.navigate(Routes.LOGIN)
+            },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(16.dp)
+                .zIndex(99f)
+        )
 
         Column(
             modifier = modifier.fillMaxSize()
