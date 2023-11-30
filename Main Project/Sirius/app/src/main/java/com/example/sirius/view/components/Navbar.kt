@@ -9,7 +9,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,11 +19,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -47,8 +43,7 @@ import com.example.sirius.ui.theme.Black
 import com.example.sirius.ui.theme.Green3
 import com.example.sirius.view.screens.HomeScreen
 import com.example.sirius.viewmodel.NewsViewModel
-import com.example.sirius.viewmodel.navigation.AnimalViewModel
-import kotlinx.coroutines.flow.firstOrNull
+import com.example.sirius.viewmodel.AnimalViewModel
 import com.example.sirius.R
 import com.example.sirius.view.screens.AnimalInfo
 import com.example.sirius.view.screens.LandingPage

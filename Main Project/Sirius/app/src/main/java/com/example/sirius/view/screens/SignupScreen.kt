@@ -242,7 +242,7 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
                             println("in success $success")
                             navController.navigate(Routes.HOME)
                         } else {
-                            println("no se ha podido crear una cuenta $success")
+//                            println("no se ha podido crear una cuenta $success")
                         }
                     }
                 },

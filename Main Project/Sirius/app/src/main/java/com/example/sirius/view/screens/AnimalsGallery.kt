@@ -23,11 +23,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -64,16 +61,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.sirius.R
 import com.example.sirius.model.Animal
-import com.example.sirius.model.TypeAnimal
 import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.Gold
 import com.example.sirius.ui.theme.Green1
 import com.example.sirius.ui.theme.Orange
-import com.example.sirius.viewmodel.navigation.AnimalViewModel
+import com.example.sirius.viewmodel.AnimalViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

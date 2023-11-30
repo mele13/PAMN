@@ -31,12 +31,10 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
     val currentUser: StateFlow<User?> = _currentUser //datastore?
 
     suspend fun login(username: String, password: String): Boolean {
-        Log.d("checkUser", "${userDao.getUserByUsername("mele2")}")
-        Log.d("checkUser_id", "${userDao.getUserById(3)}")
         return suspendCoroutine { continuation ->
             viewModelScope.launch {
                 try {
-                    val user = userDao.getUserByCredentials(username, password)
+                    val user = getUserByCredentials(username, password)
                     val success = user != null
                     if (user != null) {
                         _currentUser.value = user
@@ -76,10 +74,9 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
                     role = "user"
                 )
                 viewModelScope.launch {
-                    userDao.insertUser(newUser)
+                    insertUser(newUser)
                     _currentUser.value = newUser
                     saveAuthenticationState(newUser)
-                    Log.d("newUser", "${userDao.getUserByUsername(username)}")
                 }
                 true
             } catch (e: Exception) {
@@ -87,6 +84,7 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
                 false
             }
         }
+        return false
     }
 
     suspend fun logout() {
@@ -94,8 +92,9 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
         saveAuthenticationState(null)
     }
 
-    suspend fun checkIfUserExists(): Boolean {
-
+    suspend fun checkIfUserExists(username: String): Boolean {
+        if (getUserByUsername(username) != null) return true
+        return false
     }
 
     suspend fun updateUser() {}
@@ -118,6 +117,10 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
 
     suspend fun deleteAllUsers() {
         userDao.deleteAllUsers()
+    }
+
+    suspend fun insertUser(user: User) {
+        userDao.insertUser(user)
     }
 
     companion object {
