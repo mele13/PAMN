@@ -1,6 +1,7 @@
 package com.example.sirius.view.screens
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -36,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -60,6 +62,8 @@ fun AnimalInfo(navController: NavController, id: Int?, viewModel: AnimalViewMode
     ) {
         var isFavorite by remember { mutableStateOf(false) }
         val animal by viewModel.getAnimalById(id ?: 0).collectAsState(initial = null)
+        val isSystemInDarkTheme =
+            (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
         Box(
             modifier = Modifier
@@ -157,7 +161,8 @@ fun AnimalInfo(navController: NavController, id: Int?, viewModel: AnimalViewMode
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.32f)
+                    .fillMaxHeight(0.32f),
+                colorFilter = ColorFilter.tint(color = if (!isSystemInDarkTheme) Color.White else Color.Black)
             )
         }
 
@@ -171,7 +176,6 @@ fun AnimalInfo(navController: NavController, id: Int?, viewModel: AnimalViewMode
                     text = animal!!.nameAnimal,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Start,
-                    color = Color.Black,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 20.dp)

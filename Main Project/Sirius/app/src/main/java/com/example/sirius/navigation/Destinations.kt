@@ -18,10 +18,10 @@ fun createDestination(route: String, selectedIcon: Int, iconTextId: Int): Destin
 @Composable
 fun createDestinations(): List<Destinations> {
     return listOf(
-        createDestination(Routes.HOME, getIcon(R.drawable.home_icon, R.drawable.home_icon_wht), R.string.home),
-        createDestination(Routes.ANIMALS, getIcon(R.drawable.animals_icon, R.drawable.animals_icon_wht), R.string.animals),
-        createDestination(Routes.DONATIONS, getIcon(R.drawable.donations_icon, R.drawable.donations_icon_wht), R.string.donations),
-        createDestination(Routes.ABOUTUS, getIcon(R.drawable.aboutus_icon, R.drawable.aboutus_icon_wht), R.string.aboutUs),
+        createDestination(Routes.HOME, R.drawable.home_icon, R.string.home),
+        createDestination(Routes.ANIMALS, R.drawable.animals_icon, R.string.animals),
+        createDestination(Routes.DONATIONS, R.drawable.donations_icon, R.string.donations),
+        createDestination(Routes.ABOUTUS, R.drawable.aboutus_icon, R.string.aboutUs),
     )
 }
 

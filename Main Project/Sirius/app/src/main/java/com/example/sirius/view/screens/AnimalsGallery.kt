@@ -108,7 +108,8 @@ fun AnimalsGallery(
                     ageDropdownExpanded = expanded
                 },
                 viewModel = viewModel,
-                originalText = "Arrival year"
+                originalText = "Arrival year",
+                color = Color.White,
             )
 
             ClearFilterIconButton(
@@ -127,7 +128,8 @@ fun AnimalsGallery(
                     breedDropdownExpanded = expanded
                 },
                 viewModel = viewModel,
-                originalText = "Breed"
+                originalText = "Breed",
+                color = Color.White,
             )
 
             ClearFilterIconButton(
@@ -146,7 +148,8 @@ fun AnimalsGallery(
                     typeDropdownExpanded = expanded
                 },
                 viewModel = viewModel,
-                originalText = "Type"
+                originalText = "Type",
+                color = Color.White,
             )
 
             ClearFilterIconButton(
@@ -234,7 +237,8 @@ fun DropdownButton(
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
     viewModel: AnimalViewModel,
-    originalText: String
+    originalText: String,
+    color: Color,
 ) {
     Box {
         Button(
@@ -246,7 +250,10 @@ fun DropdownButton(
             colors = ButtonDefaults.buttonColors(Gold),
             contentPadding = PaddingValues(5.dp)
         ) {
-            Text(text = selectedOption.ifBlank { originalText })
+            Text(
+                text = selectedOption.ifBlank { originalText },
+                color = color
+            )
         }
 
         DropdownMenu(

@@ -10,9 +10,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -42,6 +46,7 @@ import com.example.sirius.navigation.createDestinations
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -184,8 +189,57 @@ fun Navbar(
     selectedDestination: String,
     navigateDestination: (Destinations) -> Unit,
 ) {
-    val isSystemInDarkTheme = (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+    val isSystemInDarkTheme =
+        (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     val destinations = createDestinations()
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min),
+//            .background(Color.Yellow.copy(alpha = 0.2f)),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        destinations.forEach { destination ->
+            val selected = selectedDestination == destination.route
+            val textColor = if (selected) Green3 else if (!isSystemInDarkTheme) Color.Black else Color.White
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .clickable {
+                        navigateDestination(destination)
+                    }
+                    .weight(1f)
+                    .background(if (selected) Green3.copy(alpha = 0.2f) else Color.Transparent)
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+            ) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Icon(
+                    painter = painterResource(
+                        id = if (selected) {
+                            destination.selectedIcon
+                        } else {
+                            destination.unselectedIcon
+                        }
+                    ),
+                    contentDescription = stringResource(id = destination.iconTextId),
+                    tint = if (selected) Green3 else if (!isSystemInDarkTheme) Color.Black else Color.White,
+                    modifier = Modifier.size(24.dp),
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(id = destination.iconTextId),
+                    color = textColor,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+    }
+
 
 //    NavigationBar(
 //        modifier = Modifier.fillMaxWidth(),
@@ -226,51 +280,6 @@ fun Navbar(
 
 //        }
 //    }
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .size(56.dp)
-            .background(Color.Gray)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            destinations.forEach { destination ->
-                val selected = selectedDestination == destination.route
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .clickable {
-                            navigateDestination(destination)
-                        }
-                        .padding(8.dp)
-                        .weight(1f)
-                        .background(if (selected) Color.Green.copy(alpha = 0.2f) else Color.Transparent)
-                        .fillMaxSize()
-                ) {
-                    Icon(
-                        painter = painterResource(id = if (selected) {
-                            destination.selectedIcon
-                        } else {
-                            destination.unselectedIcon
-                        }),
-                        contentDescription = stringResource(id = destination.iconTextId),
-                        tint = if (selected) Color.Green else Color.White,
-                        modifier = Modifier.size(24.dp),
-                    )
-                    Text(
-                        text = stringResource(id = destination.iconTextId),
-                        color = if (selected) Color.Green else Color.White
-                    )
-                }
-            }
-        }
-    }
 }
 
 @Composable
