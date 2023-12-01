@@ -58,6 +58,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layout
@@ -313,9 +314,9 @@ fun SignUpHeader(isSystemInDarkTheme: Boolean) {
         horizontalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = if (!isSystemInDarkTheme) R.drawable.sirius_name
-                                           else R.drawable.sirius_name_wht),
+            painter = painterResource(id =R.drawable.sirius_name),
             contentDescription = null,
+            colorFilter = ColorFilter.tint(color = if (isSystemInDarkTheme) Color.White else Color.Black)
         )
         Text(
             text = stringResource(id = R.string.signup),

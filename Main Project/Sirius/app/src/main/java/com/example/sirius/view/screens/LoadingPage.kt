@@ -33,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -73,13 +74,13 @@ fun LoadingPage (navController: NavHostController, id: Int = -1){
                 verticalArrangement = Arrangement.Top
             ) {
                 Image(
-                    painter = painterResource(id = if(!isSystemInDarkTheme) R.drawable.aboutus_icon
-                                                   else R.drawable.aboutus_icon_wht),
+                    painter = painterResource(id = R.drawable.aboutus_icon),
                     contentDescription = "Logo",
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier
                         .width(98.dp)
-                        .height(99.dp)
+                        .height(99.dp),
+                    colorFilter = ColorFilter.tint(color = if (isSystemInDarkTheme) Color.White else Color.Black)
                 )
             }
             // Overlayed images

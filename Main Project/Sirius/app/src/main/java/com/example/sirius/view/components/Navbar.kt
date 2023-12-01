@@ -197,7 +197,6 @@ fun Navbar(
         modifier = Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min),
-//            .background(Color.Yellow.copy(alpha = 0.2f)),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -279,6 +278,7 @@ fun Navbar(
 //            )
 
 //        }
+//    }
 //    }
 }
 

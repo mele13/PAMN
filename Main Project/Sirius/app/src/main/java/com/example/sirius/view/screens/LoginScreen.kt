@@ -57,6 +57,7 @@ import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalUriHandler
@@ -116,9 +117,9 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Image(
-                    painter = painterResource(id = if (!isSystemInDarkTheme) R.drawable.sirius_name
-                                                   else R.drawable.sirius_name_wht),
+                    painter = painterResource(id =R.drawable.sirius_name),
                     contentDescription = null,
+                    colorFilter = ColorFilter.tint(color = if (isSystemInDarkTheme) Color.White else Color.Black)
                 )
                 Text(
                     text = stringResource(id = R.string.login),
