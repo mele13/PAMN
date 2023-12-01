@@ -19,11 +19,16 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -48,6 +53,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.sirius.R
 import com.example.sirius.navigation.Routes
+import com.example.sirius.ui.theme.Green1
+import com.example.sirius.ui.theme.Green2
+import com.example.sirius.ui.theme.Green3
 import com.example.sirius.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -55,7 +63,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
     var user by remember { mutableStateOf(userViewModel.getAuthenticatedUser()) }
-    Log.d("user", "$user")
     var username by remember { mutableStateOf(user?.username ?: "") }
     var email by remember { mutableStateOf(user?.email ?: "") }
     var password by remember { mutableStateOf(user?.password ?: "") }
@@ -67,13 +74,19 @@ fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Username: $username", style = typography.labelSmall)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Email: $email", style = typography.labelSmall)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Password: $password", style = typography.labelSmall)
+            ProfileItem(label = stringResource(id = R.string.username), value = username)
+            ProfileItem(label = stringResource(id = R.string.email), value = email)
+
+            // Change Password Button
+            Spacer(modifier = Modifier.height(16.dp))
+            ChangePasswordButton(
+                onClick = {
+                    // Handle change password logic here
+                }
+            )
 
             // Log Out Button
             Spacer(modifier = Modifier.height(16.dp))
@@ -86,6 +99,33 @@ fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
                 }
             )
         }
+    }
+}
+
+@Composable
+fun ProfileItem(label: String, value: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = label,
+//            style = MaterialTheme.typography.labelLarge,
+//            color = MaterialTheme.colorScheme.primary
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        OutlinedTextField(
+            value = value,
+            onValueChange = { /* Noop - Non-editable field || si es editable: userViewModel.updateUser */ },
+            singleLine = true,
+            readOnly = true,
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Green1,
+                unfocusedBorderColor = Green1,
+            )
+        )
     }
 }
 
@@ -108,3 +148,21 @@ fun LogoutButton(onLogoutClick: () -> Unit) {
     }
 }
 
+@Composable
+fun ChangePasswordButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor  = Green3,
+            contentColor = Color.White)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+//            Icon(imageVector = Icons.Outlined.Lock, contentDescription = null)
+//            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = stringResource(id = R.string.change_password))
+        }
+    }
+}
