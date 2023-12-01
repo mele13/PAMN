@@ -52,6 +52,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -112,7 +116,7 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Image(
-                    painter = painterResource(id = if (isSystemInDarkTheme) R.drawable.sirius_name
+                    painter = painterResource(id = if (!isSystemInDarkTheme) R.drawable.sirius_name
                                                    else R.drawable.sirius_name_wht),
                     contentDescription = null,
                 )
@@ -202,68 +206,33 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
             }
             Spacer(modifier = Modifier.height(20.dp))
             // Log In button
-            Box(
+            TextButton(
+                onClick = {
+                    userViewModel.viewModelScope.launch {
+                        logInButtonClicked = true
+                        val success = userViewModel.login(username, password)
+                        if (success) {
+                            navController.navigate(Routes.HOME)
+                        } else {
+                            errorMessage = "Invalid username or password"
+                        }
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset(y = (-80).dp)
-                    .zIndex(-1f),
-                contentAlignment = Alignment.Center
+                    .padding(8.dp)
+                    .offset(y = 35.dp)
+                    .focusTarget(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = Color.White)
             ) {
-                TextButton(
-                    onClick = {
-                        userViewModel.viewModelScope.launch {
-                            logInButtonClicked = true
-                            val success = userViewModel.login(username, password)
-                            if (success) {
-                                navController.navigate(Routes.HOME)
-                            } else {
-                                errorMessage = "Invalid username or password"
-                            }
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .offset(y = 23.dp),
-                ) {
-                    Text(
-                        stringResource(id = R.string.login),
-                        color = Color.White,
-                        fontSize = 25.sp
-                    )
-                }
-                // Center - Log In button
-                Image(
-                    painter = painterResource(id = R.drawable.paw2),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(230.dp)
-                        .zIndex(-10f)
-                        .offset(x = 16.dp)
+                Text(
+                    stringResource(id = R.string.login),
+                    color = Color.White,
+                    fontSize = 25.sp
                 )
             }
-//            TextButton(
-//                onClick = {
-//                    userViewModel.viewModelScope.launch {
-//                        val success = userViewModel.login(username, password)
-//                        if (success) {
-//                            navController.navigate(Routes.HOME)
-//                        } else {
-//                            errorMessage = "Invalid username or password"
-//                        }
-//                    }
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(8.dp)
-//                    .offset(y = 35.dp),
-//                ) {
-//                Text(
-//                    stringResource(id = R.string.login),
-//                    color = Color.White,
-//                    fontSize = 25.sp
-//                )
-//            }
             // Error Snackbar
             errorMessage?.let { message ->
                 CustomSnackbar(
@@ -282,16 +251,16 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
                 .size(230.dp)
                 .absoluteOffset((-6).dp)
         )
-//        // Center - Log In button
-//        Image(
-//            painter = painterResource(id = R.drawable.paw2),
-//            contentDescription = null,
-//            modifier = Modifier
-//                .align(Alignment.Center)
-//                .size(230.dp)
-//                .offset(x = 16.dp, y = 130.dp)
-//                .zIndex(-1f)
-//        )
+        // Center - Log In button
+        Image(
+            painter = painterResource(id = R.drawable.paw2),
+            contentDescription = null,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(230.dp)
+                .offset(x = 16.dp, y = 130.dp)
+                .zIndex(-1f)
+        )
         // Top right big
         Image(
             painter = painterResource(id = R.drawable.paw3),

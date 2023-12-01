@@ -67,7 +67,7 @@ fun LandingPage(navController: NavController) {
                         painter = painterResource(id = R.drawable.aboutus_icon),
                         contentDescription = "Logo",
                         contentScale = ContentScale.FillBounds,
-                        modifier = Modifier.size(39.dp) // Ajusta el tamaño de la imagen según tus preferencias
+                        modifier = Modifier.size(39.dp)
                     )
                     Text(
                         text = "Sirius",
@@ -108,7 +108,7 @@ fun RoundButton(text: String, onClick: () -> Unit) {
             .size(30.dp),
         shape = MaterialTheme.shapes.large,
         contentPadding = PaddingValues(0.dp),
-        colors = ButtonDefaults.buttonColors(Gold.copy(alpha = 0.61f))
+        colors = ButtonDefaults.buttonColors(Gold.copy(alpha = 0.65f))
     ) {
         Text(
             text = text,

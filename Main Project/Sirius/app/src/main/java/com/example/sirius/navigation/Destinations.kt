@@ -1,10 +1,7 @@
 package com.example.sirius.navigation
 
 import android.content.res.Configuration
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import com.example.sirius.R
 
@@ -32,7 +29,7 @@ fun createDestinations(): List<Destinations> {
 private fun getIcon(lightIcon: Int, darkIcon: Int): Int {
     val isSystemInDarkTheme =
         (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
-    return if (isSystemInDarkTheme) darkIcon else lightIcon
+    return if (!isSystemInDarkTheme) darkIcon else lightIcon
 }
 
 data class Destinations(

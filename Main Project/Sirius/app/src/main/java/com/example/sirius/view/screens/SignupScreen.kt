@@ -226,44 +226,30 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
             }
             Spacer(modifier = Modifier.height(20.dp))
             // Sign Up button
-            Box(
+            TextButton(
+                onClick = {
+                    userViewModel.viewModelScope.launch {
+                        signUpButtonClicked = true
+                        val success = userViewModel.registerUser(username, email, password)
+                        if (success) {
+                            navController.navigate(Routes.HOME)
+                        } else {
+                            errorMessage = "Oops! Something went wrong during user creation"
+                        }
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset(y = (-80).dp)
-                    .zIndex(-1f),
-                contentAlignment = Alignment.Center
+                    .padding(8.dp)
+                    .offset(y = 23.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = Color.White)
             ) {
-                TextButton(
-                    onClick = {
-                        userViewModel.viewModelScope.launch {
-                            signUpButtonClicked = true
-                            val success = userViewModel.registerUser(username, email, password)
-                            if (success) {
-                                navController.navigate(Routes.HOME)
-                            } else {
-                                errorMessage = "Oops! Something went wrong during user creation"
-                            }
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .offset(y = 23.dp),
-                ) {
-                    Text(
-                        stringResource(id = R.string.signup),
-                        color = Color.White,
-                        fontSize = 25.sp
-                    )
-                }
-                // Center - Sign Up button
-                Image(
-                    painter = painterResource(id = R.drawable.paw2),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(230.dp)
-                        .zIndex(-10f)
-                        .offset(x = 16.dp)
+                Text(
+                    stringResource(id = R.string.signup),
+                    color = Color.White,
+                    fontSize = 25.sp
                 )
             }
             // Error Snackbar
@@ -283,6 +269,16 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
                 .align(Alignment.BottomStart)
                 .size(230.dp)
                 .absoluteOffset((-6).dp)
+                .zIndex(-1f)
+        )
+        // Center - Log In button
+        Image(
+            painter = painterResource(id = R.drawable.paw2),
+            contentDescription = null,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(230.dp)
+                .offset(x = 16.dp, y = 130.dp)
                 .zIndex(-1f)
         )
         // Top right big
@@ -317,7 +313,7 @@ fun SignUpHeader(isSystemInDarkTheme: Boolean) {
         horizontalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = if (isSystemInDarkTheme) R.drawable.sirius_name
+            painter = painterResource(id = if (!isSystemInDarkTheme) R.drawable.sirius_name
                                            else R.drawable.sirius_name_wht),
             contentDescription = null,
         )

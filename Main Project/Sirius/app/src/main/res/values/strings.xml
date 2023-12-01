@@ -14,6 +14,7 @@
     <!-- Landing Page -->
     <string name="loginSignup">Log In / Sign Up</string>
     <string name="guest">Join as a guest</string>
+    <string name="slogan">Proud to be an animal adopter</string>
 
     <!-- Log In & Sign Up-->
     <string name="login">Log In</string>
