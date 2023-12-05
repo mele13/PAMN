@@ -25,13 +25,6 @@ fun createDestinations(): List<Destinations> {
     )
 }
 
-@Composable
-private fun getIcon(lightIcon: Int, darkIcon: Int): Int {
-    val isSystemInDarkTheme =
-        (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
-    return if (!isSystemInDarkTheme) darkIcon else lightIcon
-}
-
 data class Destinations(
     val route: String,
     val selectedIcon: Int,

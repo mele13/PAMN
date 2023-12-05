@@ -12,7 +12,7 @@ import com.example.sirius.model.Animal
 import com.example.sirius.model.News
 import com.example.sirius.model.User
 
-@Database(entities = [Animal::class, News::class, User::class], version = 5, exportSchema = false)
+@Database(entities = [Animal::class, News::class, User::class], version = 6, exportSchema = false)
 abstract class SiriusDatabase: RoomDatabase() {
     abstract fun animalDao(): AnimalDao
     abstract fun newsDao(): NewsDao
@@ -21,22 +21,24 @@ abstract class SiriusDatabase: RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: SiriusDatabase? = null
-        private val database_path: String = "database/Sirius.db"
+        private const val database_path: String = "database/Sirius.db"
 
         fun getDatabase(context: Context): SiriusDatabase {
-            return INSTANCE ?: synchronized(this) {
-                Room.databaseBuilder(
-                    context,
+            val temInstance = INSTANCE
+            if(temInstance != null){
+                return temInstance
+            }
+            synchronized(this){
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
                     SiriusDatabase::class.java,
                     "app_database"
                 )
-                    // Base de datos de inicialización
-                    .createFromAsset(database_path)
-                    .fallbackToDestructiveMigration()
+//                    .createFromAsset(database_path)
+//                    .fallbackToDestructiveMigration()
                     .build()
-                    .also {
-                        INSTANCE = it
-                    }
+                INSTANCE = instance
+                return instance
             }
         }
     }

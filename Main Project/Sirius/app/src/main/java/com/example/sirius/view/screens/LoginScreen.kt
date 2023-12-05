@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absoluteOffset
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -36,6 +37,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -95,6 +97,7 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
     var logInButtonClicked by remember { mutableStateOf(false) }
     var errorMessage by rememberSaveable { mutableStateOf<String?>(null) }
     val isSystemInDarkTheme = (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+    var passwordVisibility by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -170,7 +173,8 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
                     )
                 },
                 singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
+                visualTransformation = if (passwordVisibility) VisualTransformation.None
+                                       else PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -185,9 +189,21 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
                         contentDescription = null
                     )
                 },
+                trailingIcon = {
+                    if (password.isNotBlank()) {
+                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                            Icon(
+                                painter = if (passwordVisibility) painterResource(id = R.drawable.visibility)
+                                          else painterResource(id = R.drawable.visibility_off),
+                                contentDescription = if (passwordVisibility) "Hide password" else "Show password",
+                                modifier = Modifier.aspectRatio(0.5f)
+                            )
+                        }
+                    }
+                },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = if (logInButtonClicked && username.isBlank()) Color.Red else Green1,
-                    unfocusedBorderColor = if (logInButtonClicked && username.isBlank()) Color.Red else Green1,
+                    focusedBorderColor = if (logInButtonClicked && password.isBlank()) Color.Red else Green1,
+                    unfocusedBorderColor = if (logInButtonClicked && password.isBlank()) Color.Red else Green1,
                 ),
             )
             Spacer(modifier = Modifier.height(8.dp))

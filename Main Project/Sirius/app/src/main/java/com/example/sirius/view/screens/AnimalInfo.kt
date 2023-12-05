@@ -77,6 +77,10 @@ fun AnimalInfo(navController: NavController, id: Int?, viewModel: AnimalViewMode
                 if (animal != null) {
                     val context = LocalContext.current
 
+                    // Split the image paths by commas to get first element
+                    val firstImagePath = animal!!.photoAnimal.split(',').firstOrNull()?.trim()
+                    // if (!firstImagePath.isNullOrBlank())
+
                     // Obtener el nombre del recurso sin la ruta
                     val resourceName = animal!!.photoAnimal.substringAfterLast("/")
 
@@ -84,7 +88,7 @@ fun AnimalInfo(navController: NavController, id: Int?, viewModel: AnimalViewMode
                     val resourceId = context.resources.getIdentifier(
                         resourceName.replace(".jpg", ""), "drawable", context.packageName
                     )
-
+//                        .split(",")
                     if (resourceId != 0) {
                         // Si se encontró el recurso, cargar la imagen
                         val painter = painterResource(id = resourceId)

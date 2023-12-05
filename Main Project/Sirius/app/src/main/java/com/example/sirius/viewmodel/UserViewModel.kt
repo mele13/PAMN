@@ -76,7 +76,8 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
                     username = username,
                     email = email,
                     password = password,
-                    role = "user"
+                    role = "user",
+                    photoUser = "res/drawable/user_default_image.jpg",
                 )
                 viewModelScope.launch {
                     insertUser(newUser)

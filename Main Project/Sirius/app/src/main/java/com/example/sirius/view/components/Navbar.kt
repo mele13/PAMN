@@ -105,17 +105,10 @@ fun NavigationContent(
                     //HomeScreenPreview()
                     val animalVm: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
                     val animalList by animalVm.getAllAnimalsOrderedByDaysEntryDate().collectAsState(initial = emptyList())
-
                     val newsVm: NewsViewModel = viewModel(factory = NewsViewModel.factory)
                     val newsList by newsVm.getNews().collectAsState(initial = emptyList())
 
-                    val imageList = listOf(
-                        R.drawable.dog1,
-                        R.drawable.dog1,
-                        R.drawable.dog1,
-                        R.drawable.dog1,
-                    )
-                    HomeScreen(navController = navController, animalList = animalList, newsList = newsList, imageList = imageList, userViewModel = userViewModel)
+                    HomeScreen(navController = navController, animalList = animalList, newsList = newsList)
                 }
                 composable(route = Routes.ANIMALS) {
                     val viewModel: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)

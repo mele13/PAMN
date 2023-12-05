@@ -29,5 +29,8 @@ data class News (
         @ColumnInfo(name = "until_date")
         val untilDate: String?,
         @ColumnInfo(name = "photo_news")
-        val photoNews: String
+        val photoNews: String,
+        @NonNull
+        @ColumnInfo(name = "good_news")
+        val goodNews: Int, // 0 -> not good news | 1 -> it is good news
 )

@@ -1,5 +1,7 @@
 package com.example.sirius.data.dao
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -8,6 +10,9 @@ import androidx.room.Update
 import com.example.sirius.model.Animal
 import com.example.sirius.model.TypeAnimal
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Dao
 interface AnimalDao {

@@ -24,8 +24,11 @@ data class User(
     @ColumnInfo(name = "role")
     //Enumerado
     val role: String,
-    // Image, Favourites
+    @NonNull
+    @ColumnInfo(name = "photo_user")
+    val photoUser: String,
+    // Favourites
 ) {
-    constructor(username: String, email: String, password: String, role: String)
-            : this(0, username, email, password, role) //null id
+    constructor(username: String, email: String, password: String, role: String, photoUser: String)
+            : this(0, username, email, password, role, photoUser)
 }

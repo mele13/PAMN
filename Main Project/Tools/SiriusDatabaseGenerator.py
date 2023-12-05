@@ -1,7 +1,9 @@
 import os
+import json
 import sqlite3
 import random
 from datetime import datetime, timedelta
+from InsertData import *
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(current_dir, 'Sirius.db')
@@ -34,6 +36,7 @@ CREATE TABLE IF NOT EXISTS News (
     "created_at" TEXT NOT NULL,
     "until_date" TEXT,
     "photo_news" TEXT NOT NULL,
+    "good_news" INTEGER NOT NULL,
     UNIQUE("title","published_date"),
     PRIMARY KEY("id")
 );
@@ -46,12 +49,13 @@ CREATE TABLE IF NOT EXISTS User (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" TEXT NOT NULL,
+    "photo_user" TEXT NOT NULL,
     UNIQUE("email"),
     PRIMARY KEY("id")
 );
 '''
 
-photo_paths = [
+animal_photo_paths = [
     'res/drawable/bernese1.jpg',
     'res/drawable/bird1.jpg',
     'res/drawable/budgerigar1.jpg',
@@ -66,7 +70,26 @@ photo_paths = [
     'res/drawable/rabbit1.jpg',
 ]
 
+user_photo_paths = [
+    'res/drawable/user_image1.jpg',
+    'res/drawable/user_image2.jpg',
+    'res/drawable/user_image3.jpg',
+    'res/drawable/user_image4.jpg',
+    'res/drawable/user_image5.jpg',
+    'res/drawable/user_image6.jpg',
+    'res/drawable/user_image7.jpg',
+    'res/drawable/user_image8.jpg',
+    'res/drawable/user_image9.jpg',
+    'res/drawable/user_image10.jpg',
+    'res/drawable/user_default_image.jpg',
+]
+
 type_animal_enum = ['CAT', 'DOG', 'BIRD']
+
+animals_not_shuffled = getAnimalsData()
+animals = list(animals_not_shuffled.values())
+random.shuffle(animals)
+news = getNewsData()
 
 def execute_query(cursor, query, data=None):
     if data:
@@ -98,7 +121,7 @@ def create_animals(cursor, num_animals):
             'breed': f'Breed {i}',
             'type_animal': random.choice(type_animal_enum),
             'entry_date': datetime.now().strftime('%Y-%m-%d'),
-            'photo_animal': photo_paths[i % len(photo_paths)]
+            'photo_animal': animal_photo_paths[i % len(animal_photo_paths)]
         }
         for i in range(1, num_animals + 1)
     ]
@@ -114,7 +137,8 @@ def create_news(cursor, num_news):
             'published_date': datetime.now().strftime('%Y-%m-%d'),
             'created_at': datetime.now().strftime('%Y-%m-%d'),
             'until_date': None,
-            'photo_news': 'res/drawable/new_image.jpg'
+            'photo_news': 'res/drawable/new_image.jpg',
+            'good_news': random.choice([0, 1]),
         }
         for i in range(1, num_news + 1)
     ]
@@ -127,26 +151,71 @@ def create_users(cursor, num_users):
             'username': 'sele',
             'email': 'sele@example.com',
             'password': 'sele',
-            'role': 'admin'
+            'role': 'admin',
+            'photo_user': 'res/drawable/user_default_image.jpg',
         },
         {
             'username': 'mele',
             'email': 'mele@example.com',
             'password': 'mele',
-            'role': 'admin'
+            'role': 'admin',
+            'photo_user': 'res/drawable/user_default_image.jpg',
         }
     ]
 
     insert_records(cursor, 'User', user_data)
+
+def create_animals_from_data(cursor, num_animals):
+    animal_data = [
+        {
+            'name': animal['name'],
+            'birth_date': animal['birthDate'],
+            'sex': animal['sex'],
+            'waiting_adoption': animal['waiting_adoption'],
+            'foster_care': animal['foster_care'],
+            'short_info': animal['short_info'],
+            'long_info': animal['long_info'],
+            'breed': animal['breed'],
+            'type_animal': animal['type_animal'],
+            'entry_date': animal['entry_date'],
+            'photo_animal': animal['photo_animal'],
+        }
+        # for name, animal in animals.items()
+        for animal in animals
+    ][:num_animals]
+
+    insert_records(cursor, 'Animal', animal_data)
+
+def create_news_from_data(cursor, num_news):
+    news_data = [
+        {
+            'title': entry['title'],
+            'short_info': entry['short_info'],
+            'long_info': entry['long_info'],
+            'published_date': (datetime.now() - timedelta(days=random.randint(0, 365 * 2))).strftime('%Y-%m-%d'),
+            'created_at': (datetime.now() - timedelta(days=random.randint(0, 30))).strftime('%Y-%m-%d'),
+            'until_date': (datetime.now() - timedelta(days=random.randint(30, 30 + 6 * 30))).strftime('%Y-%m-%d'),
+            'photo_news': entry['photo_news'],
+            'good_news': entry['good_news'],
+        }
+        for title, entry in news.items()
+    ][:num_news]
+
+    insert_records(cursor, 'News', news_data)
 
 def main():
     # Connect to the database and create 'Sirius.db' file if it doesn't exist
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Create tables and insert data
-    create_table_and_insert_data(cursor, 'Animals', CREATE_ANIMALS_TABLE, 12, create_animals)
-    create_table_and_insert_data(cursor, 'News', CREATE_NEWS_TABLE, 5, create_news)
+    # Create tables and insert random data
+    # create_table_and_insert_data(cursor, 'Animals', CREATE_ANIMALS_TABLE, 12, create_animals)
+    # create_table_and_insert_data(cursor, 'News', CREATE_NEWS_TABLE, 5, create_news)
+    # create_table_and_insert_data(cursor, 'User', CREATE_USER_TABLE, 2, create_users)
+
+    # Create tables and insert specific data
+    create_table_and_insert_data(cursor, 'Animals', CREATE_ANIMALS_TABLE, len(animals), create_animals_from_data)
+    create_table_and_insert_data(cursor, 'News', CREATE_NEWS_TABLE, len(news), create_news_from_data)
     create_table_and_insert_data(cursor, 'User', CREATE_USER_TABLE, 2, create_users)
 
     # Save changes and close the connection

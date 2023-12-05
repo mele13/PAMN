@@ -3,6 +3,7 @@ package com.example.sirius.view.screens
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,8 +43,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -52,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.sirius.R
+import com.example.sirius.model.User
 import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.Green1
 import com.example.sirius.ui.theme.Green2
@@ -66,6 +72,7 @@ fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
     var username by remember { mutableStateOf(user?.username ?: "") }
     var email by remember { mutableStateOf(user?.email ?: "") }
     var password by remember { mutableStateOf(user?.password ?: "") }
+    var imageUrl by remember { mutableStateOf(user?.photoUser ?: "") }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -77,6 +84,7 @@ fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            UserImage(imageUrl = imageUrl, user)
             ProfileItem(label = stringResource(id = R.string.username), value = username)
             ProfileItem(label = stringResource(id = R.string.email), value = email)
 
@@ -166,3 +174,29 @@ fun ChangePasswordButton(onClick: () -> Unit) {
         }
     }
 }
+
+@Composable
+fun UserImage(imageUrl: String, user: User?) {
+    val context = LocalContext.current
+
+    // Obtener el nombre del recurso sin la ruta
+    val resourceName = user?.photoUser?.substringAfterLast("/")
+
+    // Obtener el ID del recurso sin la ruta
+    val resourceId = context.resources.getIdentifier(
+        resourceName?.replace(".jpg", ""), "drawable", context.packageName
+    )
+
+    if (resourceId != 0) {
+        // Si se encontró el recurso, cargar la imagen
+        val painter = painterResource(id = resourceId)
+        Image(
+            painter = painter,
+            contentDescription = null,
+            modifier = Modifier.size(150.dp)
+        )
+    } else {
+        Log.e("AnimalImage", "Recurso no encontrado para ${user?.photoUser}")
+    }
+}
+

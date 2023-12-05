@@ -1,6 +1,7 @@
 package com.example.sirius.view.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -23,6 +24,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -67,6 +69,7 @@ import com.example.sirius.ui.theme.Gold
 import com.example.sirius.ui.theme.Green1
 import com.example.sirius.ui.theme.Orange
 import com.example.sirius.viewmodel.AnimalViewModel
+import java.time.Year
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -305,18 +308,20 @@ fun DropdownButton(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DiscouragedApi")
 @Composable
-fun AnimalCard(animal: Animal,
-               navController: NavController,
-) {
+fun AnimalCard(animal: Animal, navController: NavController) {
 
     var isFavorite by remember { mutableStateOf(false) }
+    val birthYear = animal.birthDate.substring(0, 4).toInt()
+    val currentYear = Year.now().value
+    val age = currentYear - birthYear
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(0.65f)
+            .aspectRatio(0.7f)
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .clickable {
                 navController.navigate(route = Routes.ANIMALINFO + "/" + animal.id)
@@ -340,10 +345,11 @@ fun AnimalCard(animal: Animal,
                     .padding(4.dp)
             ) {
                 val context = LocalContext.current
-
+                // Obtener la primera imagen
+                val photoPath = animal.photoAnimal
+                val firstImagePath = photoPath.split(", ")[0].trim()
                 // Obtener el nombre del recurso sin la ruta
-                val resourceName = animal.photoAnimal.substringAfterLast("/")
-
+                val resourceName = firstImagePath.substringAfterLast("/")
                 // Obtener el ID del recurso sin la ruta
                 val resourceId = context.resources.getIdentifier(
                     resourceName.replace(".jpg", ""), "drawable", context.packageName
@@ -421,14 +427,23 @@ fun AnimalCard(animal: Animal,
                 }
 
                 Text(
-                    text = animal.shortInfoAnimal,
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = "${animal.nameAnimal}, ${getStringWithAge(age, animal)}",
+                    style = MaterialTheme.typography.bodyMedium,//.copy(fontWeight = FontWeight.Bold),
                     textAlign = TextAlign.Center,
                     color = Color.Black,
                     modifier = Modifier
-                        .padding(5.dp)
+                        .padding(4.dp)
                         .align(Alignment.CenterHorizontally)
                 )
+//                Text(
+//                    text = animal.shortInfoAnimal,
+//                    style = MaterialTheme.typography.bodyMedium,
+//                    textAlign = TextAlign.Center,
+//                    color = Color.Black,
+//                    softWrap = true,
+//                    modifier = Modifier
+//                        .align(Alignment.CenterHorizontally)
+//                )
             }
         }
     }
@@ -438,4 +453,14 @@ fun AnimalCard(animal: Animal,
 fun getYearFromStringDate(dateString: String): String {
     // Extrae los primeros cuatro caracteres de la cadena (el año)
     return dateString.take(4)
+}
+
+fun getStringWithAge(ori_age: Int, animal: Animal): String {
+    val age: Int
+    if (ori_age == 0 || ori_age < 0) {
+        age = animal.birthDate.substring(6, 7).toInt()
+        return "$age (mo)"
+    }
+    age = ori_age
+    return "$age"
 }
