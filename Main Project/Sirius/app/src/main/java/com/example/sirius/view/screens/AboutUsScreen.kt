@@ -1,3 +1,5 @@
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -16,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,15 +37,13 @@ fun SectionTitle(title: String) {
 }
 
 @Composable
-fun RoundedImage(@DrawableRes imageRes: Int, modifier: Modifier = Modifier) {
+fun RoundedImage(imageRes: Int, modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = imageRes),
         contentDescription = null,
         modifier = modifier
-            .fillMaxHeight()
-            .width(100.dp)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primary)
+            .fillMaxSize()
+            .clip(MaterialTheme.shapes.small)
     )
 }
 
@@ -78,8 +79,8 @@ fun LocationCard(location: String) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp) // Altura fija para el mapa (ajusta según sea necesario)
-                    .clip(MaterialTheme.shapes.medium) // Bordes redondeados
+                    .height(120.dp)
+                    .clip(MaterialTheme.shapes.medium)
                     .background(Green1)
             ) {
                 Image(
@@ -95,8 +96,12 @@ fun LocationCard(location: String) {
 }
 
 
+@SuppressLint("DiscouragedApi")
 @Composable
 fun AboutUsScreen() {
+    val shelterImages = listOf<String>("shelter1", "shelter2", "shelter3", "shelter4")
+    val context = LocalContext.current
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -114,18 +119,20 @@ fun AboutUsScreen() {
                     .padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                item {
-                    RoundedImage(imageRes = R.drawable.dog1)
-                }
-                item {
-                    RoundedImage(imageRes = R.drawable.dog1)
-                }
-                item {
-                    RoundedImage(imageRes = R.drawable.dog1)
-                }
-                item {
-                    // Add another image (replace R.drawable.dog1 with the appropriate resource)
-                    RoundedImage(imageRes = R.drawable.dog1)
+                for (image in shelterImages) {
+                    val resourceId = context.resources.getIdentifier(
+                        image, "drawable", context.packageName
+                    )
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .size(100.dp)
+                                .aspectRatio(1f)
+                                .clip(MaterialTheme.shapes.small)
+                        ) {
+                            RoundedImage(resourceId)
+                        }
+                    }
                 }
             }
         }
@@ -168,8 +175,8 @@ fun JustifiedText(text: String) {
         style = MaterialTheme.typography.labelLarge,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(end = 16.dp), // Agrega un relleno a la derecha para el espacio deseado
-        textAlign = TextAlign.Justify // Justifica el texto
+            .padding(end = 16.dp),
+        textAlign = TextAlign.Justify
     )
     Spacer(modifier = Modifier.padding(10.dp))
 }

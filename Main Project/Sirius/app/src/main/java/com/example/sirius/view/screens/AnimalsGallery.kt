@@ -68,6 +68,7 @@ import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.Gold
 import com.example.sirius.ui.theme.Green1
 import com.example.sirius.ui.theme.Orange
+import com.example.sirius.ui.theme.Wine
 import com.example.sirius.viewmodel.AnimalViewModel
 import java.time.Year
 
@@ -321,7 +322,7 @@ fun AnimalCard(animal: Animal, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(0.7f)
+            .aspectRatio(0.6f)
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .clickable {
                 navController.navigate(route = Routes.ANIMALINFO + "/" + animal.id)
@@ -345,18 +346,14 @@ fun AnimalCard(animal: Animal, navController: NavController) {
                     .padding(4.dp)
             ) {
                 val context = LocalContext.current
-                // Obtener la primera imagen
                 val photoPath = animal.photoAnimal
                 val firstImagePath = photoPath.split(", ")[0].trim()
-                // Obtener el nombre del recurso sin la ruta
                 val resourceName = firstImagePath.substringAfterLast("/")
-                // Obtener el ID del recurso sin la ruta
                 val resourceId = context.resources.getIdentifier(
                     resourceName.replace(".jpg", ""), "drawable", context.packageName
                 )
 
                 if (resourceId != 0) {
-                    // Si se encontró el recurso, cargar la imagen
                     val painter = painterResource(id = resourceId)
                     Image(
                         painter = painter,
@@ -373,7 +370,7 @@ fun AnimalCard(animal: Animal, navController: NavController) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
                         contentDescription = null,
-                        tint = Color.Black,
+                        tint = Wine,
                         modifier = Modifier.align(Alignment.TopEnd)
                             .clickable { isFavorite = !isFavorite }
                     )
@@ -381,15 +378,17 @@ fun AnimalCard(animal: Animal, navController: NavController) {
                     Icon(
                         imageVector = Icons.Default.FavoriteBorder,
                         contentDescription = null,
-                        tint = Color.Black,
+                        tint = Wine,
                         modifier = Modifier.align(Alignment.TopEnd)
                             .clickable { isFavorite = !isFavorite }
                     )
                 }
             }
-            Spacer(Modifier.padding(8.dp))
+            Spacer(Modifier.padding(4.dp))
             Column(
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .offset(y = (-15).dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 // Texto de adopción
@@ -428,22 +427,23 @@ fun AnimalCard(animal: Animal, navController: NavController) {
 
                 Text(
                     text = "${animal.nameAnimal}, ${getStringWithAge(age, animal)}",
-                    style = MaterialTheme.typography.bodyMedium,//.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     textAlign = TextAlign.Center,
                     color = Color.Black,
                     modifier = Modifier
                         .padding(4.dp)
                         .align(Alignment.CenterHorizontally)
                 )
-//                Text(
-//                    text = animal.shortInfoAnimal,
-//                    style = MaterialTheme.typography.bodyMedium,
-//                    textAlign = TextAlign.Center,
-//                    color = Color.Black,
-//                    softWrap = true,
-//                    modifier = Modifier
-//                        .align(Alignment.CenterHorizontally)
-//                )
+                Text(
+                    text = animal.shortInfoAnimal,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    color = Color.Black,
+                    softWrap = true,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth()
+                )
             }
         }
     }

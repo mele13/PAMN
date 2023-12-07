@@ -177,8 +177,12 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = if (signUpButtonClicked && email.isBlank()) Color.Red else Green1,
-                    unfocusedBorderColor = if (signUpButtonClicked && email.isBlank()) Color.Red else Green1,
+                    focusedBorderColor = if (email.isNotBlank() && !isEmailValid(email)
+                                             || signUpButtonClicked && email.isBlank()) Color.Red
+                                         else Green1,
+                    unfocusedBorderColor = if (email.isNotBlank() && !isEmailValid(email)
+                                               || signUpButtonClicked && email.isBlank()) Color.Red
+                                           else Green1,
                 )
             )
             Spacer(modifier = Modifier.height(3.dp))
@@ -223,8 +227,12 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
                     }
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = if (signUpButtonClicked && password.isBlank()) Color.Red else Green1,
-                    unfocusedBorderColor = if (signUpButtonClicked && password.isBlank()) Color.Red else Green1,
+                    focusedBorderColor = if (password.isNotBlank() && !isPasswordValid(password)
+                                             || signUpButtonClicked && password.isBlank()) Color.Red
+                                         else Green1,
+                    unfocusedBorderColor = if (password.isNotBlank() && !isPasswordValid(password)
+                                               || signUpButtonClicked && password.isBlank()) Color.Red
+                                           else Green1,
                 )
             )
             Spacer(modifier = Modifier.height(3.dp))
@@ -248,11 +256,17 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
                 onClick = {
                     userViewModel.viewModelScope.launch {
                         signUpButtonClicked = true
-                        val success = userViewModel.registerUser(username, email, password)
-                        if (success) {
-                            navController.navigate(Routes.HOME)
+                        if (isEmailValid(email) && isPasswordValid(password)) {
+                            val success = userViewModel.registerUser(username, email, password)
+                            if (success) {
+                                navController.navigate(Routes.HOME)
+                            } else {
+                                errorMessage = "Oops! Something went wrong during user creation"
+                            }
+                        } else if (!isPasswordValid(password)) {
+                            errorMessage = "Invalid password format.\nPassword must have at least 6 characters, 1 uppercase letter, and 1 special symbol\n"
                         } else {
-                            errorMessage = "Oops! Something went wrong during user creation"
+                            errorMessage = "Invalid email format.\nExpected format: name@example.com\n"
                         }
                     }
                 },
@@ -342,4 +356,14 @@ fun SignUpHeader(isSystemInDarkTheme: Boolean) {
         )
     }
     Spacer(modifier = Modifier.height(4.dp))
+}
+
+private fun isEmailValid(email: String): Boolean {
+    val emailRegex = Regex("^[A-Za-z](.*)(@)(.+)(\\.)(.+)")
+    return emailRegex.matches(email)
+}
+
+private fun isPasswordValid(password: String): Boolean {
+    val passwordRegex = Regex("^(?=.*[A-Z])(?=.*[.,\\-_!@#\$%^&*()])(.{6,})\$")
+    return passwordRegex.matches(password)
 }

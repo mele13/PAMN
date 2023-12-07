@@ -1,22 +1,28 @@
 package com.example.sirius.view.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
@@ -26,6 +32,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,7 +55,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sirius.R
+import com.example.sirius.model.Animal
 import com.example.sirius.ui.theme.Orange
+import com.example.sirius.ui.theme.Wine
 import com.example.sirius.viewmodel.AnimalViewModel
 import java.time.Year
 
@@ -64,169 +73,190 @@ fun AnimalInfo(navController: NavController, id: Int?, viewModel: AnimalViewMode
         val animal by viewModel.getAnimalById(id ?: 0).collectAsState(initial = null)
         val isSystemInDarkTheme =
             (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        val context = LocalContext.current
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight(0.75f)
-            ){
-                val animal by viewModel.getAnimalById(id ?: 0).collectAsState(initial = null)
+            LazyColumn(
+                verticalArrangement = Arrangement.Bottom
+            ) {
                 if (animal != null) {
-                    val context = LocalContext.current
-
-                    // Split the image paths by commas to get first element
-                    val firstImagePath = animal!!.photoAnimal.split(',').firstOrNull()?.trim()
-                    // if (!firstImagePath.isNullOrBlank())
-
-                    // Obtener el nombre del recurso sin la ruta
-                    val resourceName = animal!!.photoAnimal.substringAfterLast("/")
-
-                    // Obtener el ID del recurso sin la ruta
-                    val resourceId = context.resources.getIdentifier(
-                        resourceName.replace(".jpg", ""), "drawable", context.packageName
-                    )
-//                        .split(",")
-                    if (resourceId != 0) {
-                        // Si se encontró el recurso, cargar la imagen
-                        val painter = painterResource(id = resourceId)
-                        Image(
-                            painter = painter,
-                            contentDescription = animal!!.longInfoAnimal,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    } else {
-                        Log.e(
-                            "AnimalImage",
-                            "Recurso no encontrado para ${animal!!.photoAnimal}"
-                        )
-                    }
-                }
-
-                Column (
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp, bottom = 25.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Bottom
-                ){
-                    Row (
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        // Botón sobre la imagen
-                        Button(
-                            onClick = { },
+                    val photoPaths = animal!!.photoAnimal.split(", ").map { it.trim() }
+                    item {
+                        Box(
                             modifier = Modifier
-                                .width(200.dp),
-                            colors = ButtonDefaults.buttonColors(Orange)
+                                .fillMaxSize()
+                                .background(
+                                    color = Color.White
+                                )
                         ) {
+                            CarouselSlider(photoPaths, animal!!, context)
+                            Image(
+                                painter = painterResource(id = R.drawable.rectangle2),
+                                contentDescription = "rectangle",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .fillMaxHeight(0.32f)
+                                    .align(Alignment.BottomStart),
+                                colorFilter = ColorFilter.tint(color = colorScheme.background),
+                            )
+                            // Botón "Adopt me"
+                            Button(
+                                onClick = { /* Handle adoption */ },
+                                modifier = Modifier
+                                    .width(200.dp)
+                                    .align(Alignment.BottomCenter)
+                                    .offset(y = (-25).dp),
+                                colors = ButtonDefaults.buttonColors(Orange)
+                            ) {
+                                Text(
+                                    text = "Adopt me!",
+                                    style = TextStyle(
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight(400),
+                                        color = Color(0xFFFFFFFF),
+                                    ),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            // Icono de favorito
+                            if (isFavorite) {
+                                Icon(
+                                    imageVector = Icons.Default.Favorite,
+                                    contentDescription = null,
+                                    tint = Wine,
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
+                                        .padding(end = 16.dp)
+                                        .offset(x = (-40).dp, y = (-37).dp)
+                                        .clickable { isFavorite = !isFavorite }
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Default.FavoriteBorder,
+                                    contentDescription = null,
+                                    tint = Wine,
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
+                                        .padding(end = 16.dp)
+                                        .offset(x = (-40).dp, y = (-37).dp)
+                                        .clickable { isFavorite = !isFavorite }
+                                )
+                            }
+                        }
+                    }
+                    item {
+                        Text(
+                            text = animal!!.nameAnimal,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp)
+                        )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = animal!!.longInfoAnimal,
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp, end = 20.dp)
+                        )
+                    }
+                    val birthYear = animal!!.birthDate.substring(0, 4).toInt()
+                    val currentYear = Year.now().value
+                    var age = currentYear - birthYear
+                    if (age == 0) {
+                        age = animal!!.birthDate.substring(6, 7).toInt()
+                        item {
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Adopt me!",
-                                style = TextStyle(
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight(400),
-                                    color = Color(0xFFFFFFFF),
-                                ),
-                                textAlign = TextAlign.Center
+                                text = "Age: ${pluralize(age, "month", "months")}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 20.dp)
                             )
                         }
-
-                        // Icono de favorito
-                        if (isFavorite) {
-                            Icon(
-                                imageVector = Icons.Default.Favorite,
-                                contentDescription = null,
-                                tint = Color.Black,
+                    } else {
+                        item {
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = "Age: ${pluralize(age, "year", "years")}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Start,
                                 modifier = Modifier
-                                    .clickable { isFavorite = !isFavorite }
-                            )
-                        } else {
-                            Icon(
-                                imageVector = Icons.Default.FavoriteBorder,
-                                contentDescription = null,
-                                tint = Color.Black,
-                                modifier = Modifier
-                                    .clickable { isFavorite = !isFavorite }
+                                    .fillMaxWidth()
+                                    .padding(start = 20.dp)
                             )
                         }
                     }
-                }
-            }
-        }
-        Column (
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.rectangle),
-                contentDescription = "rectangle",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.32f),
-                colorFilter = ColorFilter.tint(color = if (!isSystemInDarkTheme) Color.White else Color.Black)
-            )
-        }
-
-        Column (
-            verticalArrangement = Arrangement.Bottom,
-            modifier = Modifier
-                .padding(bottom = 35.dp)
-        ) {
-            if (animal != null) {
-                Text(
-                    text = animal!!.nameAnimal,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp)
-                )
-                Text(
-                    text = animal!!.longInfoAnimal,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp)
-                )
-                val birthYear = animal!!.birthDate.substring(0, 4).toInt()
-                val currentYear = Year.now().value
-                var age = currentYear - birthYear
-                if (age == 0) {
-                    age = animal!!.birthDate.substring(6, 7).toInt()
-                    Text(
-                        text = "Age: $age months",
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp)
-                    )
-                } else {
-                    Text(
-                        text = "Age: $age years",
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp)
-                    )
-                }
-
-                IconButton(
-                    onClick = {
-                        navController.popBackStack()
-                    },
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .offset(x = (-16).dp)
-                ) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+                    item {
+                        IconButton(
+                            onClick = {
+                                navController.popBackStack()
+                            },
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .offset(x = (-16).dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = null
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
+
+@SuppressLint("DiscouragedApi")
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CarouselSlider(photoPaths: List<String>, animal: Animal, context: Context) {
+    val pagerState = rememberPagerState()
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        HorizontalPager(
+            pageCount = photoPaths.size,
+            state = pagerState,
+            key = { photoPaths[it] }
+        ) { index ->
+            val resourceName = photoPaths[index].substringAfterLast("/").replace(".jpg", "")
+            val resourceId = context.resources.getIdentifier(
+                resourceName, "drawable", context.packageName
+            )
+            if(resourceId != 0) {
+                GetImage(painter = resourceId, description = animal.shortInfoAnimal)
+            } else {
+                GetImage(painter = R.drawable.image_not_found, description = animal.shortInfoAnimal)
+            }
+        }
+    }
+}
+
+@Composable
+fun GetImage(painter: Int, description: String) {
+    Image(
+        painter = painterResource(id = painter),
+        contentDescription = description,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .fillMaxSize()
+    )
+}
+
+fun pluralize(value: Int, singular: String, plural: String): String {
+    return if (value == 1) "$value $singular" else "$value $plural"
+}
+
