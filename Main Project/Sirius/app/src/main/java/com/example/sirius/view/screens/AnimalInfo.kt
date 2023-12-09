@@ -53,27 +53,42 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.sirius.R
 import com.example.sirius.model.Animal
 import com.example.sirius.ui.theme.Orange
 import com.example.sirius.ui.theme.Wine
 import com.example.sirius.viewmodel.AnimalViewModel
+import com.example.sirius.viewmodel.UserViewModel
+import kotlinx.coroutines.launch
 import java.time.Year
 
-@SuppressLint("DiscouragedApi")
+@SuppressLint("DiscouragedApi", "CoroutineCreationDuringComposition")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AnimalInfo(navController: NavController, id: Int?, viewModel: AnimalViewModel) {
+fun AnimalInfo(
+    navController: NavController,
+    id: Int?,
+    viewModel: AnimalViewModel,
+    userViewModel: UserViewModel
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         var isFavorite by remember { mutableStateOf(false) }
         val animal by viewModel.getAnimalById(id ?: 0).collectAsState(initial = null)
-        val isSystemInDarkTheme =
-            (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
         val context = LocalContext.current
+        val userId = userViewModel.getAuthenticatedUser()?.id
+
+        if (userId != null) {
+            userViewModel.viewModelScope.launch {
+                userViewModel.getLikedAnimals(userId).collect { likedAnimals ->
+                    isFavorite = likedAnimals.any { it.id == (animal?.id ?: -1) }
+                }
+            }
+        }
 
         Box(
             modifier = Modifier
@@ -123,28 +138,46 @@ fun AnimalInfo(navController: NavController, id: Int?, viewModel: AnimalViewMode
                                 )
                             }
                             // Icono de favorito
-                            if (isFavorite) {
-                                Icon(
-                                    imageVector = Icons.Default.Favorite,
-                                    contentDescription = null,
-                                    tint = Wine,
-                                    modifier = Modifier
-                                        .align(Alignment.BottomEnd)
-                                        .padding(end = 16.dp)
-                                        .offset(x = (-40).dp, y = (-37).dp)
-                                        .clickable { isFavorite = !isFavorite }
-                                )
-                            } else {
-                                Icon(
-                                    imageVector = Icons.Default.FavoriteBorder,
-                                    contentDescription = null,
-                                    tint = Wine,
-                                    modifier = Modifier
-                                        .align(Alignment.BottomEnd)
-                                        .padding(end = 16.dp)
-                                        .offset(x = (-40).dp, y = (-37).dp)
-                                        .clickable { isFavorite = !isFavorite }
-                                )
+                            if (userId != null) {
+                                if (isFavorite) {
+                                    Icon(
+                                        imageVector = Icons.Default.Favorite,
+                                        contentDescription = null,
+                                        tint = Wine,
+                                        modifier = Modifier
+                                            .align(Alignment.BottomEnd)
+                                            .padding(end = 16.dp)
+                                            .offset(x = (-40).dp, y = (-37).dp)
+                                            .clickable {
+                                                isFavorite = !isFavorite
+                                                userViewModel.viewModelScope.launch {
+                                                    viewModel.removeLikedAnimal(
+                                                        animalId = animal!!.id,
+                                                        userId = userId
+                                                    )
+                                                }
+                                            }
+                                    )
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Default.FavoriteBorder,
+                                        contentDescription = null,
+                                        tint = Wine,
+                                        modifier = Modifier
+                                            .align(Alignment.BottomEnd)
+                                            .padding(end = 16.dp)
+                                            .offset(x = (-40).dp, y = (-37).dp)
+                                            .clickable {
+                                                isFavorite = !isFavorite
+                                                userViewModel.viewModelScope.launch {
+                                                    viewModel.insertLikedAnimal(
+                                                        animalId = animal!!.id,
+                                                        userId = userId
+                                                    )
+                                                }
+                                            }
+                                    )
+                                }
                             }
                         }
                     }
@@ -198,21 +231,21 @@ fun AnimalInfo(navController: NavController, id: Int?, viewModel: AnimalViewMode
                             )
                         }
                     }
-                    item {
-                        IconButton(
-                            onClick = {
-                                navController.popBackStack()
-                            },
-                            modifier = Modifier
-                                .padding(start = 8.dp)
-                                .offset(x = (-16).dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = null
-                            )
-                        }
-                    }
+//                    item {
+//                        IconButton(
+//                            onClick = {
+//                                navController.popBackStack()
+//                            },
+//                            modifier = Modifier
+//                                .padding(start = 8.dp)
+//                                .offset(x = (-16).dp)
+//                        ) {
+//                            Icon(
+//                                imageVector = Icons.Default.ArrowBack,
+//                                contentDescription = null
+//                            )
+//                        }
+//                    }
                 }
             }
         }

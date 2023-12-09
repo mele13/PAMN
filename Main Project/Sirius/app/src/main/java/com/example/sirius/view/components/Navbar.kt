@@ -5,8 +5,10 @@ import DonationsScreen
 import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,17 +23,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarDefaults
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,19 +44,18 @@ import com.example.sirius.navigation.Destinations
 import com.example.sirius.navigation.Routes
 import com.example.sirius.navigation.createDestinations
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.example.sirius.ui.theme.Black
 import com.example.sirius.ui.theme.Green3
+import com.example.sirius.ui.theme.Green4
 import com.example.sirius.view.screens.HomeScreen
 import com.example.sirius.viewmodel.NewsViewModel
 import com.example.sirius.viewmodel.AnimalViewModel
-import com.example.sirius.R
-import com.example.sirius.ui.theme.White
 import com.example.sirius.view.screens.AnimalInfo
 import com.example.sirius.view.screens.LandingPage
 import com.example.sirius.view.screens.LoadingPage
@@ -72,24 +71,31 @@ fun NavigationContent(
     navController: NavHostController,
     userViewModel: UserViewModel,
     selectedDestination: String,
-    navigateDestination: (Destinations) -> Unit
+    navigateDestination: (Destinations) -> Unit,
+    animalViewModel: AnimalViewModel
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         val currentRoute = navController.currentBackStackEntry?.destination?.route
-        if (currentRoute !in listOf(Routes.LOGIN, Routes.SIGNUP, Routes.LANDINGPAGE, Routes.LOADING)) {
+        if (currentRoute !in listOf(
+                Routes.LOGIN,
+                Routes.SIGNUP,
+                Routes.LANDINGPAGE,
+                Routes.LOADING,
+                Routes.ANIMALINFO,
+                Routes.ANIMALINFO + "/{id}"
+        )) {
             ProfileButton(
                 onClick = {
                     if (userViewModel.getAuthenticatedUser() != null)
                         navController.navigate(Routes.PROFILE)
                     else {
-
                         navController.navigate(Routes.LOGIN)
                     }
                 },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(16.dp)
-                    .zIndex(99f)
+                    .zIndex(99f),
             )
         }
         Column(
@@ -103,24 +109,24 @@ fun NavigationContent(
             ) {
                 composable(route = Routes.HOME) {
                     //HomeScreenPreview()
-                    val animalVm: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
-                    val animalList by animalVm.getAllAnimalsOrderedByDaysEntryDate().collectAsState(initial = emptyList())
+                    val animalList by animalViewModel.getAllAnimalsOrderedByDaysEntryDate().collectAsState(initial = emptyList())
                     val newsVm: NewsViewModel = viewModel(factory = NewsViewModel.factory)
                     val newsList by newsVm.getNews().collectAsState(initial = emptyList())
 
                     HomeScreen(navController = navController, animalList = animalList, newsList = newsList)
                 }
                 composable(route = Routes.ANIMALS) {
-                    val viewModel: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
-                    val ageList by viewModel.getBirthYears().collectAsState(emptyList())
-                    val breedList by viewModel.getBreed().collectAsState(emptyList())
-                    val typeList by viewModel.getTypeAnimal().collectAsState(emptyList())
+                    val ageList by animalViewModel.getBirthYears().collectAsState(emptyList())
+                    val breedList by animalViewModel.getBreed().collectAsState(emptyList())
+                    val typeList by animalViewModel.getTypeAnimal().collectAsState(emptyList())
 
                     AnimalsGallery(
                         navController = navController,
                         ageList = ageList,
                         breedList = breedList,
-                        typeList = typeList
+                        typeList = typeList,
+                        userViewModel = userViewModel,
+                        viewModel = animalViewModel
                     )
                 }
 
@@ -134,9 +140,13 @@ fun NavigationContent(
                     arguments = listOf(navArgument(name = "id") {
                         type = NavType.IntType
                     })) {
-                    val viewModel: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
 
-                    AnimalInfo(navController, it.arguments?.getInt("id"), viewModel)
+                    AnimalInfo(
+                        navController,
+                        it.arguments?.getInt("id"),
+                        animalViewModel,
+                        userViewModel
+                    )
                 }
                 composable(route = Routes.LOGIN) {
                     LoginScreen(navController = navController, userViewModel = userViewModel)
@@ -160,7 +170,11 @@ fun NavigationContent(
                     LoadingPage(navController, id)
                 }
                 composable(route = Routes.PROFILE) {
-                    ProfileScreen(navController = navController, userViewModel = userViewModel)
+                    ProfileScreen(
+                        navController = navController,
+                        userViewModel = userViewModel,
+                        animalViewModel = animalViewModel
+                    )
                 }
             }
             if (currentRoute !in listOf(
@@ -280,7 +294,7 @@ fun ProfileButton(onClick: () -> Unit, modifier: Modifier) {
     Icon(
         imageVector = Icons.Default.Person,
         contentDescription = "Profile",
-        modifier = modifier.clickable { onClick() }
+        modifier = modifier.clickable { onClick() },
     )
 }
 
@@ -294,3 +308,4 @@ class NavigationActions(private val navController: NavHostController) {
         }
     }
 }
+

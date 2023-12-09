@@ -13,11 +13,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.sirius.view.components.NavigationActions
 import com.example.sirius.view.components.NavigationContent
+import com.example.sirius.viewmodel.AnimalViewModel
 import com.example.sirius.viewmodel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavigationController (userViewModel: UserViewModel){
+fun NavigationController (userViewModel: UserViewModel, animalViewModel: AnimalViewModel){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -35,7 +36,8 @@ fun NavigationController (userViewModel: UserViewModel){
             navController = navController,
             userViewModel = userViewModel,
             selectedDestination = selectedDestination,
-            navigateDestination = navigateAction::navigateTo
+            navigateDestination = navigateAction::navigateTo,
+            animalViewModel = animalViewModel
         )
     }
 }

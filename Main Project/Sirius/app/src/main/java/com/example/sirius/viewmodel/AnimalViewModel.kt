@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.sirius.AnimalApplication
 import com.example.sirius.model.Animal
 import com.example.sirius.data.dao.AnimalDao
+import com.example.sirius.model.LikedAnimal
 import kotlinx.coroutines.flow.Flow
 
 class AnimalViewModel(private val animalDao: AnimalDao) : ViewModel() {
@@ -24,6 +25,13 @@ class AnimalViewModel(private val animalDao: AnimalDao) : ViewModel() {
     fun getAnimalsByTypeAnimal(option: String): Flow<List<Animal>> = animalDao.getAnimalsByTypeAnimal(option)
 
     fun getAnimalById(option: Int): Flow<Animal?> = animalDao.getAnimalById(option)
+
+    suspend fun insertLikedAnimal(animalId: Int, userId: Int) {
+        val likedAnimal = LikedAnimal(animalId = animalId, userId = userId)
+        animalDao.insertLikedAnimal(likedAnimal)
+    }
+    suspend fun removeLikedAnimal(userId: Int, animalId: Int) = animalDao.removeLikedAnimal(userId, animalId)
+    fun getLikedAnimals(userId: Int) = animalDao.getLikedAnimals(userId)
 
     companion object {
         val factory: ViewModelProvider.Factory = viewModelFactory {

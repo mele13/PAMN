@@ -26,4 +26,7 @@ interface UserDao {
 
     @Query("DELETE FROM User")
     suspend fun deleteAllUsers()
+
+    @Query("SELECT animal.* FROM Animal INNER JOIN LikedAnimal ON animal.id = LikedAnimal.animal_id WHERE LikedAnimal.user_id = :userId")
+    fun getLikedAnimals(userId: Int): Flow<List<Animal>>
 }

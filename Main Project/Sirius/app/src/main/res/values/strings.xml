@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Sirius</string>
+    <string name="api_key" translatable="false">AIzaSyCGv5fXGwfRBLnXN0X_XqWxoFBG2plIT_M</string>
 
     <!-- Globals -->
     <string name="close" translatable="false">Close</string>

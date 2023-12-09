@@ -129,6 +129,8 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
         userDao.insertUser(user)
     }
 
+    fun getLikedAnimals(userId: Int) = userDao.getLikedAnimals(userId)
+
     companion object {
         val factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

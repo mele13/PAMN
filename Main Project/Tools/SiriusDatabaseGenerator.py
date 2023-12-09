@@ -55,6 +55,15 @@ CREATE TABLE IF NOT EXISTS User (
 );
 '''
 
+CREATE_LIKED_ANIMAL_TABLE = '''
+CREATE TABLE IF NOT EXISTS LikedAnimal (
+    "id" INTEGER NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "animal_id" INTEGER NOT NULL,
+    PRIMARY KEY("id")
+);
+'''
+
 animal_photo_paths = [
     'res/drawable/bernese1.jpg',
     'res/drawable/bird1.jpg',
@@ -165,6 +174,10 @@ def create_users(cursor, num_users):
 
     insert_records(cursor, 'User', user_data)
 
+def create_liked_animals_table(cursor):
+    execute_query(cursor, CREATE_LIKED_ANIMAL_TABLE)
+    print("Created table LikedAnimal and inserted 0 records in database")
+
 def create_animals_from_data(cursor, num_animals):
     animal_data = [
         {
@@ -217,6 +230,7 @@ def main():
     create_table_and_insert_data(cursor, 'Animals', CREATE_ANIMALS_TABLE, len(animals), create_animals_from_data)
     create_table_and_insert_data(cursor, 'News', CREATE_NEWS_TABLE, len(news), create_news_from_data)
     create_table_and_insert_data(cursor, 'User', CREATE_USER_TABLE, 2, create_users)
+    create_liked_animals_table(cursor)
 
     # Save changes and close the connection
     conn.commit()

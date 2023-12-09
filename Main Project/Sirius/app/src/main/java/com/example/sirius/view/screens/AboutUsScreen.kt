@@ -4,6 +4,8 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -25,7 +28,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.sirius.R
 import com.example.sirius.ui.theme.Green1
+import com.example.sirius.ui.theme.Green4
 import com.example.sirius.ui.theme.SiriusTheme
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun SectionTitle(title: String) {
@@ -37,14 +47,23 @@ fun SectionTitle(title: String) {
 }
 
 @Composable
-fun RoundedImage(imageRes: Int, modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = imageRes),
-        contentDescription = null,
-        modifier = modifier
-            .fillMaxSize()
-            .clip(MaterialTheme.shapes.small)
-    )
+fun SquareImage(imageRes: Int, modifier: Modifier = Modifier) {
+    Box(
+        modifier = Modifier
+            .width(100.dp)
+            .height(100.dp)
+            .padding(2.dp)
+            .clip(MaterialTheme.shapes.extraSmall)
+    ) {
+        Image(
+            painter = painterResource(id = imageRes),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = modifier
+                .fillMaxSize()
+                .clip(MaterialTheme.shapes.extraSmall)
+        )
+    }
 }
 
 @Composable
@@ -70,10 +89,10 @@ fun LocationCard(location: String) {
                 text = "Location",
                 style = MaterialTheme.typography.headlineMedium,
             )
-            Text(
-                text = location,
-                style = MaterialTheme.typography.labelLarge,
-            )
+//            Text(
+//                text = location,
+//                style = MaterialTheme.typography.labelLarge,
+//            )
 
             // Mapa de Google
             Box(
@@ -83,15 +102,27 @@ fun LocationCard(location: String) {
                     .clip(MaterialTheme.shapes.medium)
                     .background(Green1)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.location_image),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(MaterialTheme.shapes.medium) // Bordes redondeados
-                )
+                AddGoogleMap()
             }
         }
+    }
+}
+
+@Composable
+fun AddGoogleMap() {
+    val sirius = LatLng(28.302164, -16.396366)
+    val marker = MarkerState(position = sirius)
+    val cameraPositionState = rememberCameraPositionState{
+        position = CameraPosition.fromLatLngZoom(sirius,15f)
+    }
+    GoogleMap (
+        modifier = Modifier.fillMaxSize(),
+        cameraPositionState = cameraPositionState
+    ) {
+        Marker(
+            state = marker,
+            title = "Sirius Canarias Animal Shelter"
+        )
     }
 }
 
@@ -124,13 +155,10 @@ fun AboutUsScreen() {
                         image, "drawable", context.packageName
                     )
                     item {
-                        Box(
-                            modifier = Modifier
-                                .size(100.dp)
-                                .aspectRatio(1f)
-                                .clip(MaterialTheme.shapes.small)
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            RoundedImage(resourceId)
+                            SquareImage(resourceId)
                         }
                     }
                 }

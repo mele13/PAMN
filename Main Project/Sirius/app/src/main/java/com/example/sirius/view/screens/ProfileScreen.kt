@@ -36,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,24 +56,34 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.room.util.getColumnIndex
 import com.example.sirius.R
+import com.example.sirius.model.Animal
+import com.example.sirius.model.LikedAnimal
 import com.example.sirius.model.User
 import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.Green1
 import com.example.sirius.ui.theme.Green2
 import com.example.sirius.ui.theme.Green3
+import com.example.sirius.viewmodel.AnimalViewModel
 import com.example.sirius.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
+fun ProfileScreen(
+    navController: NavController,
+    userViewModel: UserViewModel,
+    animalViewModel: AnimalViewModel
+) {
     var user by remember { mutableStateOf(userViewModel.getAuthenticatedUser()) }
     var username by remember { mutableStateOf(user?.username ?: "") }
     var email by remember { mutableStateOf(user?.email ?: "") }
     var password by remember { mutableStateOf(user?.password ?: "") }
     var imageUrl by remember { mutableStateOf(user?.photoUser ?: "") }
+    val likedAnimals by userViewModel.getLikedAnimals(user?.id ?: -1).collectAsState(emptyList())
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -106,6 +117,10 @@ fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
                     }
                 }
             )
+
+            // Liked animals
+            Spacer(modifier = Modifier.height(16.dp))
+            LikedAnimalsSection(likedAnimals, animalViewModel)
         }
     }
 }
@@ -196,7 +211,17 @@ fun UserImage(imageUrl: String, user: User?) {
             modifier = Modifier.size(150.dp)
         )
     } else {
-        Log.e("AnimalImage", "Recurso no encontrado para ${user?.photoUser}")
+        Log.e("UserImage", "Recurso no encontrado para ${user?.photoUser}")
     }
 }
 
+@Composable
+fun LikedAnimalsSection(likedAnimals: List<Animal>, animalViewModel: AnimalViewModel) {
+    if (likedAnimals.isNotEmpty()) {
+        likedAnimals.forEach { likedAnimal ->
+            Text(text = likedAnimal.nameAnimal)
+        }
+    } else {
+        Text(text = "No liked animals")
+    }
+}

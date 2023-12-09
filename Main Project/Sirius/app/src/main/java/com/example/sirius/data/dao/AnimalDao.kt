@@ -5,9 +5,11 @@ import androidx.annotation.RequiresApi
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.sirius.model.Animal
+import com.example.sirius.model.LikedAnimal
 import com.example.sirius.model.TypeAnimal
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -66,4 +68,13 @@ interface AnimalDao {
 
     @Query("SELECT DISTINCT type_animal FROM Animal")
     fun getTypeAnimal(): Flow<List<String>>
+
+    @Query("SELECT animal.* FROM Animal INNER JOIN LikedAnimal ON animal.id = LikedAnimal.animal_id WHERE LikedAnimal.user_id = :userId")
+    fun getLikedAnimals(userId: Int): Flow<List<Animal>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertLikedAnimal(likedAnimal: LikedAnimal)
+
+    @Query("DELETE FROM LikedAnimal WHERE user_id = :userId AND animal_id = :animalId")
+    suspend fun removeLikedAnimal(userId: Int, animalId: Int)
 }

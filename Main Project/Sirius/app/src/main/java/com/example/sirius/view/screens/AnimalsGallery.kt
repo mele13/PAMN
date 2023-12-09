@@ -61,6 +61,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.sirius.model.Animal
@@ -70,6 +71,10 @@ import com.example.sirius.ui.theme.Green1
 import com.example.sirius.ui.theme.Orange
 import com.example.sirius.ui.theme.Wine
 import com.example.sirius.viewmodel.AnimalViewModel
+import com.example.sirius.viewmodel.UserViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.time.Year
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -78,11 +83,10 @@ fun AnimalsGallery(
     navController: NavController,
     ageList: List<String>,
     breedList: List<String>,
-    typeList: List<String>
+    typeList: List<String>,
+    userViewModel: UserViewModel,
+    viewModel: AnimalViewModel
 ) {
-
-    val viewModel: AnimalViewModel = viewModel(factory = AnimalViewModel.factory)
-
     var selectedAge by remember { mutableStateOf("") }
     var selectedBreed by remember { mutableStateOf("") }
     var selectedType by remember { mutableStateOf("") }
@@ -165,11 +169,7 @@ fun AnimalsGallery(
 
         val animalsByAge = if (selectedAge.isNotBlank()) {
             val age = selectedAge
-            if (age != null) {
-                viewModel.getAnimalsByAgeDesc(age).collectAsState(emptyList()).value
-            } else {
-                emptyList()
-            }
+            viewModel.getAnimalsByAgeDesc(age).collectAsState(emptyList()).value
         } else {
             viewModel.getAllAnimals().collectAsState(emptyList()).value
         }
@@ -201,7 +201,9 @@ fun AnimalsGallery(
                 animal?.let { animal ->
                     AnimalCard(
                         animal = animal,
-                        navController = navController
+                        navController = navController,
+                        viewModel = viewModel,
+                        userViewModel = userViewModel
                     )
                 }
             }
@@ -310,14 +312,27 @@ fun DropdownButton(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("DiscouragedApi")
+@SuppressLint("DiscouragedApi", "CoroutineCreationDuringComposition")
 @Composable
-fun AnimalCard(animal: Animal, navController: NavController) {
-
+fun AnimalCard(
+    animal: Animal,
+    navController: NavController,
+    viewModel: AnimalViewModel,
+    userViewModel: UserViewModel
+) {
     var isFavorite by remember { mutableStateOf(false) }
     val birthYear = animal.birthDate.substring(0, 4).toInt()
     val currentYear = Year.now().value
     val age = currentYear - birthYear
+    val userId = userViewModel.getAuthenticatedUser()?.id
+
+    if (userId != null) {
+        userViewModel.viewModelScope.launch {
+            userViewModel.getLikedAnimals(userId).collect { likedAnimals ->
+                isFavorite = likedAnimals.any { it.id == animal.id }
+            }
+        }
+    }
 
     Card(
         modifier = Modifier
@@ -366,22 +381,42 @@ fun AnimalCard(animal: Animal, navController: NavController) {
                 } else {
                     Log.e("AnimalImage", "Recurso no encontrado para ${animal.photoAnimal}")
                 }
-                if (isFavorite) {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = null,
-                        tint = Wine,
-                        modifier = Modifier.align(Alignment.TopEnd)
-                            .clickable { isFavorite = !isFavorite }
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = null,
-                        tint = Wine,
-                        modifier = Modifier.align(Alignment.TopEnd)
-                            .clickable { isFavorite = !isFavorite }
-                    )
+                if (userId != null) {
+                    if (isFavorite) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = null,
+                            tint = Wine,
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .clickable {
+                                    isFavorite = !isFavorite
+                                    userViewModel.viewModelScope.launch {
+                                        viewModel.removeLikedAnimal(
+                                            animalId = animal.id,
+                                            userId = userId
+                                        )
+                                    }
+                                }
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.FavoriteBorder,
+                            contentDescription = null,
+                            tint = Wine,
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .clickable {
+                                    isFavorite = !isFavorite
+                                    userViewModel.viewModelScope.launch {
+                                        viewModel.insertLikedAnimal(
+                                            animalId = animal.id,
+                                            userId = userId
+                                        )
+                                    }
+                                }
+                        )
+                    }
                 }
             }
             Spacer(Modifier.padding(4.dp))
