@@ -12,8 +12,6 @@ class ContactsViewModel : ViewModel() {
         private set
 
     fun changeBackgroundColor() {
-        Log.d("ContactsViewModel", "changeBackgroundColor() called")
         backgroundColor = Color.Red
-        Log.d("ContactsViewModel", "backgroundColor: $backgroundColor")
     }
 }

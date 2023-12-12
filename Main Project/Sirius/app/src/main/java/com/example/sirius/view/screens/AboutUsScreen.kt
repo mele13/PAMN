@@ -181,7 +181,7 @@ fun AboutUsScreen() {
 
         item {
             SectionTitle("Contact Information")
-            JustifiedText("Email: info@shelter.org\nPhone: +1 123 456 7890")
+            JustifiedText("Email: sirius@shelter.org\nPhone: +1 123 456 7890")
         }
     }
 }

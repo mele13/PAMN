@@ -75,7 +75,7 @@ fun HomeScreen(
                 LazyRow(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    items(newsList) {news ->
+                    items(newsList) { news ->
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {

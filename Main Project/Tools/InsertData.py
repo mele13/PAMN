@@ -177,7 +177,7 @@ def getAnimalsData():
             'waiting_adoption': 1,
             'foster_care': 0,
             'short_info': 'Affy tabby',
-            'long_info': 'Meet Dorito, the charming orange tabby cat who is as sweet as a bag of chips! This kitty has a distinctive orange coat reminiscent of the famous cat Garfield.\nDorito is a bundle of joy, always seeking your attention. He loves to roll around on the floor while you shower him with affection. He is not one to pick fights; in fact, he is submissive and adores belly and head rubs.\nDespite his affectionate nature, he values his independence and enjoys exploring the great outdoors. Dorito is a goofy fellow who is not afraid of anything; he is truly fearless!\nThis laid-back feline gets along well with dogs who respect with space.',
+            'long_info': 'Meet Dorito, the charming orange tabby cat who is as sweet as a bag of chips! This kitty has a distinctive orange coat reminiscent of the famous cat Garfield.\nDorito is a bundle of joy, always seeking your attention. He loves to roll around on the floor while you shower him with affection. He is not one to pick fights; in fact, he is submissive and adores belly and head rubs.\nDespite his affectionate nature, he values his independence and enjoys exploring the great outdoors. Dorito is a goofy fellow who is not afraid of anything; he is truly fearless!\nThis laid-back feline gets along well with dogs who respect his space.',
             'breed': 'Common European',
             'type_animal': 'CAT',
             'entry_date': '2022-09-15',

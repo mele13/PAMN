@@ -48,6 +48,9 @@ interface AnimalDao {
     @Query("SELECT * FROM Animal WHERE breed = :breed ORDER BY entry_date DESC")
     fun getAnimalByBreed(breed: String): Flow<List<Animal>>
 
+    @Query("SELECT * FROM Animal WHERE id IN (:animalIds)")
+    fun getAnimalsByIds(animalIds: List<Int>): Flow<List<Animal>>
+
     @Query("SELECT * FROM Animal WHERE birth_date = :birthDate ORDER BY birth_date ASC")
     fun getAnimalsByAgeASC(birthDate: Int): Flow<List<Animal>>
 

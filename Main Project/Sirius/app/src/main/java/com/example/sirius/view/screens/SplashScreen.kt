@@ -1,7 +1,7 @@
 package com.example.sirius.view.screens
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -34,7 +33,6 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun LoadingPage (navController: NavHostController, id: Int = -1){
-    val isSystemInDarkTheme = (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     Surface(
         color = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()
@@ -57,7 +55,7 @@ fun LoadingPage (navController: NavHostController, id: Int = -1){
                     modifier = Modifier
                         .width(98.dp)
                         .height(99.dp),
-                    colorFilter = ColorFilter.tint(color = if (isSystemInDarkTheme) Color.White else Color.Black)
+                    colorFilter = ColorFilter.tint(color = if (isSystemInDarkTheme()) Color.White else Color.Black)
                 )
             }
             // Overlayed images

@@ -66,6 +66,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.sirius.model.Animal
 import com.example.sirius.navigation.Routes
+import com.example.sirius.tools.buildAnAgeText
+import com.example.sirius.tools.calculateAge
 import com.example.sirius.ui.theme.Gold
 import com.example.sirius.ui.theme.Green1
 import com.example.sirius.ui.theme.Orange
@@ -187,7 +189,6 @@ fun AnimalsGallery(
         }
 
         val filteredAnimals = animalsByAge.intersect(animalsByBreed.toSet()).intersect(animalsByType.toSet())
-        println("filteredAnimals: ${filteredAnimals}")
         val columns = 2 // Número de columnas en el grid
 
         LazyVerticalGrid(
@@ -220,7 +221,6 @@ fun ClearFilterIconButton(
     if (selectedOption.isNotBlank()) {
         IconButton(
             onClick = {
-                println("Clear filter clicked")
                 onClick()
                 onOptionSelected("")
             },
@@ -284,7 +284,6 @@ fun DropdownButton(
                             "Arrival year" -> {
                                 if (option.isNotBlank()) {
                                     val year = getYearFromStringDate(option)
-                                    print(year)
                                     viewModel.getAnimalsByAgeDesc(year)
                                 }
                             }
@@ -321,9 +320,7 @@ fun AnimalCard(
     userViewModel: UserViewModel
 ) {
     var isFavorite by remember { mutableStateOf(false) }
-    val birthYear = animal.birthDate.substring(0, 4).toInt()
-    val currentYear = Year.now().value
-    val age = currentYear - birthYear
+    val age = calculateAge(animal.birthDate)
     val userId = userViewModel.getAuthenticatedUser()?.id
 
     if (userId != null) {
@@ -461,7 +458,7 @@ fun AnimalCard(
                 }
 
                 Text(
-                    text = "${animal.nameAnimal}, ${getStringWithAge(age, animal)}",
+                    text = "${animal.nameAnimal}, ${buildAnAgeText(age, animal.birthDate, true)}",
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     textAlign = TextAlign.Center,
                     color = Color.Black,

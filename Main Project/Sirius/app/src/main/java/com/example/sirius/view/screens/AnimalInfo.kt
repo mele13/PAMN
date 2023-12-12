@@ -2,9 +2,7 @@ package com.example.sirius.view.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -12,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,13 +23,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
@@ -57,12 +54,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.sirius.R
 import com.example.sirius.model.Animal
+import com.example.sirius.tools.buildAnAgeText
+import com.example.sirius.tools.calculateAge
 import com.example.sirius.ui.theme.Orange
 import com.example.sirius.ui.theme.Wine
 import com.example.sirius.viewmodel.AnimalViewModel
 import com.example.sirius.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
-import java.time.Year
 
 @SuppressLint("DiscouragedApi", "CoroutineCreationDuringComposition")
 @RequiresApi(Build.VERSION_CODES.O)
@@ -137,6 +135,19 @@ fun AnimalInfo(
                                     textAlign = TextAlign.Center
                                 )
                             }
+                        }
+                    }
+                    item {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .padding(start = 20.dp)
+                        ) {
+                            Text(
+                                text = animal!!.nameAnimal,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Start,
+                            )
                             // Icono de favorito
                             if (userId != null) {
                                 if (isFavorite) {
@@ -145,9 +156,6 @@ fun AnimalInfo(
                                         contentDescription = null,
                                         tint = Wine,
                                         modifier = Modifier
-                                            .align(Alignment.BottomEnd)
-                                            .padding(end = 16.dp)
-                                            .offset(x = (-40).dp, y = (-37).dp)
                                             .clickable {
                                                 isFavorite = !isFavorite
                                                 userViewModel.viewModelScope.launch {
@@ -164,9 +172,6 @@ fun AnimalInfo(
                                         contentDescription = null,
                                         tint = Wine,
                                         modifier = Modifier
-                                            .align(Alignment.BottomEnd)
-                                            .padding(end = 16.dp)
-                                            .offset(x = (-40).dp, y = (-37).dp)
                                             .clickable {
                                                 isFavorite = !isFavorite
                                                 userViewModel.viewModelScope.launch {
@@ -182,16 +187,6 @@ fun AnimalInfo(
                         }
                     }
                     item {
-                        Text(
-                            text = animal!!.nameAnimal,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Start,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 20.dp)
-                        )
-                    }
-                    item {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = animal!!.longInfoAnimal,
@@ -202,34 +197,17 @@ fun AnimalInfo(
                                 .padding(start = 20.dp, end = 20.dp)
                         )
                     }
-                    val birthYear = animal!!.birthDate.substring(0, 4).toInt()
-                    val currentYear = Year.now().value
-                    var age = currentYear - birthYear
-                    if (age == 0) {
-                        age = animal!!.birthDate.substring(6, 7).toInt()
-                        item {
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "Age: ${pluralize(age, "month", "months")}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 20.dp)
-                            )
-                        }
-                    } else {
-                        item {
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Text(
-                                text = "Age: ${pluralize(age, "year", "years")}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 20.dp)
-                            )
-                        }
+                    val age = calculateAge(animal!!.birthDate)
+                    item {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Age: ${buildAnAgeText(age, animal!!.birthDate)}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp)
+                        )
                     }
 //                    item {
 //                        IconButton(
@@ -288,8 +266,3 @@ fun GetImage(painter: Int, description: String) {
             .fillMaxSize()
     )
 }
-
-fun pluralize(value: Int, singular: String, plural: String): String {
-    return if (value == 1) "$value $singular" else "$value $plural"
-}
-

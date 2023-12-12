@@ -4,6 +4,8 @@
 
     <!-- Globals -->
     <string name="close" translatable="false">Close</string>
+    <string name="save" translatable="false">Save</string>
+    <string name="details" translatable="false">Details</string>
 
     <!-- Navbar -->
     <string name="home" translatable="false">Home</string>
@@ -25,7 +27,15 @@
     <string name="password" translatable="false">Password</string>
     <string name="account_login" translatable="false">Got an account?\nLog In</string>
     <string name="account_signup" translatable="false">Don\'t have an account?\nSign Up</string>
+
+    <!-- Profile -->
+    <string name="new_profile_image" translatable="false">Select a new profile image</string>
+    <string name="liked_friends" translatable="false">Friends you like</string>
+    <string name="no_liked_friends" translatable="false">No liked animals</string>
+    <string name="logout" translatable="false">Log Out</string>
     <string name="change_password" translatable="false">Change password</string>
+    <string name="current_password" translatable="false">Current password</string>
+    <string name="new_password" translatable="false">New password</string>
 
     <!-- Home -->
     <string name="newsIntro" translatable="false">What\'s New</string>
@@ -52,6 +62,7 @@
     <string name="error_password_format" translatable="false">**Password must be at least six characters long</string>
     <string name="invalid_login" translatable="false">Invalid username or password. Please double-check your credentials</string>
     <string name="invalid_signup" translatable="false">Oops! Something went wrong during user creation</string>
+    <string name="error_date_format" translatable="false">Invalid date format</string>
 
     <!-- Navigation -->
     <string name="to_homepage" translatable="false">Go to Homepage</string>

@@ -2,10 +2,8 @@ package com.example.sirius.view.components
 
 import AboutUsScreen
 import DonationsScreen
-import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -30,8 +28,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,15 +40,11 @@ import com.example.sirius.navigation.Destinations
 import com.example.sirius.navigation.Routes
 import com.example.sirius.navigation.createDestinations
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.sirius.ui.theme.Green3
-import com.example.sirius.ui.theme.Green4
 import com.example.sirius.view.screens.HomeScreen
 import com.example.sirius.viewmodel.NewsViewModel
 import com.example.sirius.viewmodel.AnimalViewModel
@@ -82,7 +74,8 @@ fun NavigationContent(
                 Routes.LANDINGPAGE,
                 Routes.LOADING,
                 Routes.ANIMALINFO,
-                Routes.ANIMALINFO + "/{id}"
+                Routes.ANIMALINFO + "/{id}",
+                Routes.PROFILE
         )) {
             ProfileButton(
                 onClick = {
@@ -196,8 +189,6 @@ fun Navbar(
     selectedDestination: String,
     navigateDestination: (Destinations) -> Unit,
 ) {
-    val isSystemInDarkTheme =
-        (LocalContext.current.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     val destinations = createDestinations()
 
     Row(
@@ -209,7 +200,7 @@ fun Navbar(
     ) {
         destinations.forEach { destination ->
             val selected = selectedDestination == destination.route
-            val textColor = if (selected) Green3 else if (!isSystemInDarkTheme) Color.Black else Color.White
+            val textColor = if (selected) Green3 else if (!isSystemInDarkTheme()) Color.Black else Color.White
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -233,7 +224,7 @@ fun Navbar(
                         }
                     ),
                     contentDescription = stringResource(id = destination.iconTextId),
-                    tint = if (selected) Green3 else if (!isSystemInDarkTheme) Color.Black else Color.White,
+                    tint = if (selected) Green3 else if (!isSystemInDarkTheme()) Color.Black else Color.White,
                     modifier = Modifier.size(24.dp),
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -245,48 +236,6 @@ fun Navbar(
             }
         }
     }
-
-
-//    NavigationBar(
-//        modifier = Modifier.fillMaxWidth(),
-//    ) {
-//        destinations.forEach { destination ->
-//            val selected = selectedDestination == destination.route
-
-//            NavigationBarItem(
-//                selected = selected,
-//                onClick = { navigateDestination(destination) },
-//                icon = {
-//                    Column(
-//                        horizontalAlignment = Alignment.CenterHorizontally,
-//                        verticalArrangement = Arrangement.Center,
-//                        modifier = Modifier
-//                            .background(if (selected) Green3.copy(alpha = 0.2f) else Color.Transparent)
-//                            .fillMaxSize()
-//                    ) {
-//                        Icon(
-//                            painter = painterResource(id = if (selected) {
-//                                destination.selectedIcon
-//                            } else {
-//                                destination.unselectedIcon
-//                            }),
-//                            contentDescription = stringResource(id = destination.iconTextId),
-//                            tint = if (selected) Green3
-//                                   else if (!isSystemInDarkTheme) Color.Black else Color.White,
-//                            modifier = Modifier.size(24.dp),
-//                        )
-//                        Text(
-//                            text = stringResource(id = destination.iconTextId),
-//                            color = if (selected) Green3
-//                                    else if (!isSystemInDarkTheme) Color.Black else Color.White
-//                        )
-//                    }
-//                },
-//            )
-
-//        }
-//    }
-//    }
 }
 
 @Composable

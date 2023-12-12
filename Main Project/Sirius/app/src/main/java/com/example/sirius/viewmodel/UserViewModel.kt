@@ -1,9 +1,5 @@
 package com.example.sirius.viewmodel
 
-import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -14,21 +10,17 @@ import com.example.sirius.data.dao.UserDao
 import com.example.sirius.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.lifecycle.viewModelScope
+import android.util.Log
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class UserViewModel(private val userDao: UserDao) : ViewModel() {
     private val _currentUser = MutableStateFlow<User?>(null)
-    val currentUser: StateFlow<User?> = _currentUser //datastore?
+    val currentUser: StateFlow<User?> = _currentUser
 
     suspend fun login(username: String, password: String): Boolean {
         return suspendCoroutine { continuation ->
@@ -103,7 +95,31 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
         return false
     }
 
-    suspend fun updateUser() {}
+    suspend fun updateProfilePhoto(user: User, newPhoto: String) {
+        user.photoUser = newPhoto
+        userDao.updateProfilePhoto(user.id, newPhoto)
+        _currentUser.value = user
+    }
+
+    suspend fun updateUserName(user: User, newUserName: String) {
+        user.username = newUserName
+        userDao.update(user)
+    }
+
+    suspend fun updateEmail(user: User, newEmail: String) {
+        user.email = newEmail
+        userDao.update(user)
+    }
+
+    suspend fun updatePassword(user: User, currentPassword: String, newPassword: String): Boolean {
+        return if (user.password == currentPassword) {
+            user.password = newPassword
+            userDao.update(user)
+            true
+        } else {
+            false
+        }
+    }
 
     suspend fun getUserById(userId: Int): User? {
         return userDao.getUserById(userId)

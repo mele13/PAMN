@@ -24,6 +24,8 @@ class AnimalViewModel(private val animalDao: AnimalDao) : ViewModel() {
     fun getAnimalsByBreed(option: String): Flow<List<Animal>> = animalDao.getAnimalsByBreed(option)
     fun getAnimalsByTypeAnimal(option: String): Flow<List<Animal>> = animalDao.getAnimalsByTypeAnimal(option)
 
+    fun getAnimalsByIds(animalIds: List<Int>): Flow<List<Animal>> = animalDao.getAnimalsByIds(animalIds)
+
     fun getAnimalById(option: Int): Flow<Animal?> = animalDao.getAnimalById(option)
 
     suspend fun insertLikedAnimal(animalId: Int, userId: Int) {
