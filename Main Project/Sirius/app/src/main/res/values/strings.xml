@@ -5,7 +5,10 @@
     <!-- Globals -->
     <string name="close" translatable="false">Close</string>
     <string name="save" translatable="false">Save</string>
-    <string name="details" translatable="false">Details</string>
+    <string name="ok" translatable="false">Ok</string>
+
+    <!-- Animals -->
+    <string name="adopt_me" translatable="false">Adopt me!</string>
 
     <!-- Navbar -->
     <string name="home" translatable="false">Home</string>
@@ -63,6 +66,10 @@
     <string name="invalid_login" translatable="false">Invalid username or password. Please double-check your credentials</string>
     <string name="invalid_signup" translatable="false">Oops! Something went wrong during user creation</string>
     <string name="error_date_format" translatable="false">Invalid date format</string>
+
+    <!-- Not available functions -->
+    <string name="not_available" translatable="false">Function currently not available</string>
+    <string name="not_available_description" translatable="false">We\'re working hard to bring you this feature in a future update. Stay tuned for exciting updates!</string>
 
     <!-- Navigation -->
     <string name="to_homepage" translatable="false">Go to Homepage</string>

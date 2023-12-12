@@ -10,10 +10,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.AlertDialog
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -30,8 +32,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,6 +50,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -56,8 +62,11 @@ import com.example.sirius.R
 import com.example.sirius.model.Animal
 import com.example.sirius.tools.buildAnAgeText
 import com.example.sirius.tools.calculateAge
+import com.example.sirius.tools.isPasswordValid
+import com.example.sirius.ui.theme.Green1
 import com.example.sirius.ui.theme.Orange
 import com.example.sirius.ui.theme.Wine
+import com.example.sirius.view.components.NotAvailableDialog
 import com.example.sirius.viewmodel.AnimalViewModel
 import com.example.sirius.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
@@ -71,6 +80,8 @@ fun AnimalInfo(
     viewModel: AnimalViewModel,
     userViewModel: UserViewModel
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -118,7 +129,7 @@ fun AnimalInfo(
                             )
                             // Botón "Adopt me"
                             Button(
-                                onClick = { /* Handle adoption */ },
+                                onClick = { showDialog = true },
                                 modifier = Modifier
                                     .width(200.dp)
                                     .align(Alignment.BottomCenter)
@@ -126,7 +137,7 @@ fun AnimalInfo(
                                 colors = ButtonDefaults.buttonColors(Orange)
                             ) {
                                 Text(
-                                    text = "Adopt me!",
+                                    text = stringResource(id = R.string.adopt_me),
                                     style = TextStyle(
                                         fontSize = 13.sp,
                                         fontWeight = FontWeight(400),
@@ -227,6 +238,13 @@ fun AnimalInfo(
                 }
             }
         }
+    }
+    if (showDialog) {
+        NotAvailableDialog(
+            onDismiss = {
+                showDialog = false
+            }
+        )
     }
 }
 

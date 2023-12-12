@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import com.example.sirius.R
 import com.example.sirius.navigation.Routes
 import com.example.sirius.ui.theme.SiriusTheme
+import com.example.sirius.view.components.NotAvailableDialog
 import com.example.sirius.viewmodel.ContactsViewModel
 
 @SuppressLint("RememberReturnType")
@@ -57,9 +58,6 @@ fun DonationsScreen(navController: NavController) {
         }
         item {
             DonationButton(
-                onClick = {
-                    navController.navigate(route = Routes.LOADING + "/" + 1)
-                },
                 imageResIdLeft = R.drawable.paypal_logo,
                 buttonText = "Donate with PayPal"
             )
@@ -67,18 +65,12 @@ fun DonationsScreen(navController: NavController) {
 
         item {
             DonationButton(
-                onClick = {
-                    navController.navigate(route = Routes.LOADING + "/" + 1)
-                },
                 imageResIdLeft = R.drawable.mastercard_logo,
                 buttonText = "Donate with Debit or Credit Card"
             )
         }
         item {
             DonationButton(
-                onClick = {
-                    navController.navigate(route = Routes.LOADING + "/" + 1)
-                },
                 imageResIdLeft = R.drawable.bizum_logo,
                 buttonText = "Donate with Bizum"
             )
@@ -98,12 +90,13 @@ fun DonationsScreen(navController: NavController) {
 
 @Composable
 fun DonationButton(
-    onClick: () -> Unit,
     imageResIdLeft: Int,
     buttonText: String
 ) {
+    var showDialog by remember { mutableStateOf(false)  }
+
     Button(
-        onClick = onClick,
+        onClick = { showDialog = true },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 60.dp)
@@ -126,6 +119,13 @@ fun DonationButton(
                 fontSize = 16.sp
             )
         }
+    }
+    if (showDialog) {
+        NotAvailableDialog(
+            onDismiss = {
+                showDialog = false
+            }
+        )
     }
 }
 

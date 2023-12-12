@@ -106,9 +106,19 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
         userDao.update(user)
     }
 
-    suspend fun updateEmail(user: User, newEmail: String) {
-        user.email = newEmail
-        userDao.update(user)
+    suspend fun updateEmail(user: User, newEmail: String): Boolean {
+        return if (isEmailAvailable(newEmail)) {
+            user.email = newEmail
+            userDao.update(user)
+            true
+        } else {
+            false
+        }
+    }
+
+    private suspend fun isEmailAvailable(email: String): Boolean {
+        val existingUser = getUserByEmail(email)
+        return existingUser == null
     }
 
     suspend fun updatePassword(user: User, currentPassword: String, newPassword: String): Boolean {

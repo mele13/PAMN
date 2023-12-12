@@ -80,4 +80,7 @@ interface AnimalDao {
 
     @Query("DELETE FROM LikedAnimal WHERE user_id = :userId AND animal_id = :animalId")
     suspend fun removeLikedAnimal(userId: Int, animalId: Int)
+
+    @Query("SELECT * FROM Animal WHERE SUBSTR(birth_date, 1, 4) BETWEEN :startYear AND :endYear ORDER BY birth_date DESC")
+    fun getAnimalsByAgeDesc(startYear: String, endYear: String): Flow<List<Animal>>
 }

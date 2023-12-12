@@ -251,7 +251,7 @@ fun ProfileItem(
 ) {
     var isEditing by remember { mutableStateOf(false) }
     var editedValue by remember { mutableStateOf(initialValue) }
-    var originalValue by remember { mutableStateOf(initialValue) }
+    val originalValue by remember { mutableStateOf(initialValue) }
     var errorMessage by rememberSaveable { mutableStateOf<String?>(null) }
     val label = stringResource(id = labelId)
     val user by remember { mutableStateOf(userViewModel.getAuthenticatedUser()) }
@@ -281,7 +281,6 @@ fun ProfileItem(
                         .clickable {
                             isEditing = true
                             onEditClick?.invoke()
-                            editedValue = originalValue
                         }
                 )
             } else {
@@ -311,10 +310,14 @@ fun ProfileItem(
                                         userViewModel.viewModelScope.launch {
                                             if (isEmailValid(editedValue)) {
                                                 user?.let {
-                                                    userViewModel.updateEmail(
+                                                    val updateSuccessful = userViewModel.updateEmail(
                                                         user = it,
                                                         newEmail = editedValue
                                                     )
+                                                    if (!updateSuccessful) {
+                                                        errorMessage = "Unable to update email. Please try again."
+                                                        editedValue = originalValue
+                                                    }
                                                 }
                                             } else {
                                                 errorMessage =
@@ -506,7 +509,10 @@ fun AnimalCardGallery(navController: NavController, likedAnimal: Animal) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(4.dp),
+            .padding(4.dp)
+            .clickable {
+                navController.navigate(route = Routes.ANIMALINFO + "/" + likedAnimal.id)
+            },
         colors = CardDefaults.cardColors(
             containerColor = Green1,
         ),
@@ -582,16 +588,16 @@ fun AnimalCardGallery(navController: NavController, likedAnimal: Animal) {
                     )
                 }
             }
-            Button(
-                onClick = {
-                    navController.navigate(route = Routes.ANIMALINFO + "/" + likedAnimal.id)
-                },
-                modifier = Modifier
-                    .align(Alignment.End),
-                colors = ButtonDefaults.buttonColors(Orange)
-            ) {
-                Text(text = stringResource(id = R.string.details), color = Color.White)
-            }
+//            Button(
+//                onClick = {
+//                    navController.navigate(route = Routes.ANIMALINFO + "/" + likedAnimal.id)
+//                },
+//                modifier = Modifier
+//                    .align(Alignment.End),
+//                colors = ButtonDefaults.buttonColors(Orange)
+//            ) {
+//                Text(text = stringResource(id = R.string.details), color = Color.White)
+//            }
         }
     }
 }
