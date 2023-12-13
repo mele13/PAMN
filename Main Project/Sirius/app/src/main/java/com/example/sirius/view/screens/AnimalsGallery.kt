@@ -95,8 +95,6 @@ fun AnimalsGallery(
     var breedDropdownExpanded by remember { mutableStateOf(false) }
     var typeDropdownExpanded by remember { mutableStateOf(false) }
 
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()

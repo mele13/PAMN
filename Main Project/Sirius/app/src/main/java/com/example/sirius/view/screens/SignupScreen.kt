@@ -34,6 +34,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,6 +61,7 @@ import com.example.sirius.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 import com.example.sirius.tools.isEmailValid
 import com.example.sirius.tools.isPasswordValid
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -225,6 +227,7 @@ fun SignupScreen(navController: NavController, userViewModel: UserViewModel) {
                         if (isEmailValid(email) && isPasswordValid(password)) {
                             val success = userViewModel.registerUser(username, email, password)
                             if (success) {
+                                delay(2000)
                                 navController.navigate(Routes.HOME)
                             } else {
                                 errorMessage = "Oops! Something went wrong during user creation"

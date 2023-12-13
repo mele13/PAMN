@@ -14,11 +14,16 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sirius.view.components.NavigationActions
 import com.example.sirius.view.components.NavigationContent
 import com.example.sirius.viewmodel.AnimalViewModel
+import com.example.sirius.viewmodel.NewsViewModel
 import com.example.sirius.viewmodel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavigationController (userViewModel: UserViewModel, animalViewModel: AnimalViewModel){
+fun NavigationController(
+    userViewModel: UserViewModel,
+    animalViewModel: AnimalViewModel,
+    newsViewModel: NewsViewModel
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -37,7 +42,8 @@ fun NavigationController (userViewModel: UserViewModel, animalViewModel: AnimalV
             userViewModel = userViewModel,
             selectedDestination = selectedDestination,
             navigateDestination = navigateAction::navigateTo,
-            animalViewModel = animalViewModel
+            animalViewModel = animalViewModel,
+            newsViewModel = newsViewModel,
         )
     }
 }
