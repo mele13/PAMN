@@ -25,7 +25,7 @@ The key objectives of the Sirius Animal Shelter app are as follows:
 - [Mele13](https://github.com/mele13)
 
 ## Application's Video
-![Application's demonstration gif](./Tools/Media/application_video.mp4)
+https://github.com/mele13/PAMN/assets/87198060/cc35f415-b961-443a-8529-9005d7ab1339
 
 --------------------------------------------------
 
