@@ -226,20 +226,6 @@ fun ClearFilterIconButton(
     selectedOption: String
 ) {
     if (selectedOption.isNotBlank()) {
-//        IconButton(
-//            onClick = {
-//                onClick()
-//                onOptionSelected("")
-//            },
-//            modifier = Modifier
-//                .padding(start = 8.dp)
-//                .offset(x = (-16).dp)
-//        ) {
-//            Icon(
-//                imageVector = Icons.Default.Clear,
-//                contentDescription = null,
-//            )
-//        }
         Box(
             modifier = Modifier
                 .padding(start = 10.dp)
