@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -57,6 +58,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -382,6 +385,8 @@ fun ChangePasswordButton(userViewModel: UserViewModel, user: User) {
     var successfulPasswordChange by remember { mutableStateOf(true) }
     var errorMessage by rememberSaveable { mutableStateOf<String?>(null) }
     var passwordChangeButton by remember { mutableStateOf(false) }
+    var passwordVisibilityCp by remember { mutableStateOf(false) }
+    var passwordVisibilityNp by remember { mutableStateOf(false) }
 
     IconButton(
         onClick = {
@@ -396,6 +401,8 @@ fun ChangePasswordButton(userViewModel: UserViewModel, user: User) {
         AlertDialog(
             onDismissRequest = {
                 isChangePasswordVisible = false
+                currentPassword = ""
+                newPassword = ""
             },
             title = { Text(stringResource(id = R.string.change_password)) },
             text = {
@@ -413,7 +420,21 @@ fun ChangePasswordButton(userViewModel: UserViewModel, user: User) {
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = if (passwordChangeButton && currentPassword.isBlank()) Color.Red else Green1,
                             unfocusedBorderColor = if (passwordChangeButton && currentPassword.isBlank()) Color.Red else Green1
-                        )
+                        ),
+                        visualTransformation = if (passwordVisibilityCp) VisualTransformation.None
+                                               else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            if (currentPassword.isNotBlank()) {
+                                IconButton(onClick = { passwordVisibilityCp = !passwordVisibilityCp }) {
+                                    Icon(
+                                        painter = if (passwordVisibilityCp) painterResource(id = R.drawable.visibility)
+                                        else painterResource(id = R.drawable.visibility_off),
+                                        contentDescription = if (passwordVisibilityCp) "Hide password" else "Show password",
+                                        modifier = Modifier.aspectRatio(0.5f)
+                                    )
+                                }
+                            }
+                        },
                     )
                     OutlinedTextField(
                         value = newPassword,
@@ -428,7 +449,21 @@ fun ChangePasswordButton(userViewModel: UserViewModel, user: User) {
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = if (passwordChangeButton && currentPassword.isBlank()) Color.Red else Green1,
                             unfocusedBorderColor = if (passwordChangeButton && currentPassword.isBlank()) Color.Red else Green1
-                        )
+                        ),
+                        visualTransformation = if (passwordVisibilityNp) VisualTransformation.None
+                                               else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            if (newPassword.isNotBlank()) {
+                                IconButton(onClick = { passwordVisibilityNp = !passwordVisibilityNp }) {
+                                    Icon(
+                                        painter = if (passwordVisibilityNp) painterResource(id = R.drawable.visibility)
+                                        else painterResource(id = R.drawable.visibility_off),
+                                        contentDescription = if (passwordVisibilityNp) "Hide password" else "Show password",
+                                        modifier = Modifier.aspectRatio(0.5f)
+                                    )
+                                }
+                            }
+                        },
                     )
                 }
             },
@@ -436,25 +471,33 @@ fun ChangePasswordButton(userViewModel: UserViewModel, user: User) {
                 Button(
                     onClick = {
                         passwordChangeButton = true
-                        if (!isPasswordValid(currentPassword) || !isPasswordValid(newPassword)) {
-                            errorMessage = "Invalid password format.\nPassword must have at least 6 characters, 1 uppercase letter, and 1 special symbol\n"
-                        } else {
-                            userViewModel.viewModelScope.launch {
-                                successfulPasswordChange = userViewModel.updatePassword(
-                                    user,
-                                    currentPassword = currentPassword,
-                                    newPassword = newPassword
-                                )
+                        userViewModel.viewModelScope.launch {
+                            try {
+                                if (isPasswordValid(newPassword)) {
+                                    successfulPasswordChange = userViewModel.updatePassword(
+                                        user,
+                                        currentPassword = currentPassword,
+                                        newPassword = newPassword
+                                    )
+                                    if (successfulPasswordChange) {
+                                        isChangePasswordVisible = false
+                                    } else {
+                                        errorMessage = "Failed to update password."
+                                    }
+                                } else {
+                                    errorMessage = "Invalid password format.\nPassword must " +
+                                            "have at least 6 characters, 1 uppercase letter, " +
+                                            "and 1 special symbol\n"
+                                }
+                            } catch (e: Exception) {
+                                errorMessage = "Failed to update password."
+                                isChangePasswordVisible = false
+                            } finally {
+                                currentPassword = ""
+                                newPassword = ""
+                                passwordChangeButton = true
                                 isChangePasswordVisible = false
                             }
-                        }
-                        userViewModel.viewModelScope.launch {
-                            successfulPasswordChange = userViewModel.updatePassword(
-                                user,
-                                currentPassword = currentPassword,
-                                newPassword = newPassword
-                            )
-                            isChangePasswordVisible = false
                         }
                     }
                 ) {

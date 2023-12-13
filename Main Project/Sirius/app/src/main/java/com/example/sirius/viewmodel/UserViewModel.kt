@@ -122,11 +122,18 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
     }
 
     suspend fun updatePassword(user: User, currentPassword: String, newPassword: String): Boolean {
-        return if (user.password == currentPassword) {
-            user.password = newPassword
-            userDao.update(user)
-            true
-        } else {
+        return try {
+            val existingUser = userDao.getUserByCredentials(user.username, newPassword)
+
+            if (user.password == currentPassword && newPassword != currentPassword && existingUser == null) {
+                user.password = newPassword
+                userDao.update(user)
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
             false
         }
     }

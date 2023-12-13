@@ -7,7 +7,7 @@ This report details the planning and development of the Sirius animal shelter ap
 3. Technical Summary
 
 ## Application's GIF
-![Application's demonstration gif](../Main%20Project/Tools/Media/E2%20-%20sprint%202.gif)
+![Application's demonstration gif](../Main%20Project/Tools/Media/application_gif.gif)
 
 ## Collaborators
 - [Selene](https://github.com/SeleneGonzalezCurbelo)

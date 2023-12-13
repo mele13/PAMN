@@ -25,8 +25,7 @@ fun NotAvailableDialog(onDismiss: () -> Unit) {
         title = {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(

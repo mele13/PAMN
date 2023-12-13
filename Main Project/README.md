@@ -8,7 +8,7 @@ This repository documents the proposed mobile application that aims to facilitat
   - [Table of Contents](#table-of-contents)
   - [Application Objectives](#application-objectives)
   - [Collaborators](#collaborators)
-  - [Application's GIF](#applications-gif)
+  - [Application's Video](#applications-video)
 
 ## Application Objectives
 The key objectives of the Sirius Animal Shelter app are as follows:
@@ -24,8 +24,8 @@ The key objectives of the Sirius Animal Shelter app are as follows:
 - [Selene](https://github.com/SeleneGonzalezCurbelo)
 - [Mele13](https://github.com/mele13)
 
-## Application's GIF
-![Application's demonstration gif](./Tools/E1.gif)
+## Application's Video
+![Application's demonstration gif](./Tools/Media/application_video.mp4)
 
 --------------------------------------------------
 

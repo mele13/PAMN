@@ -46,3 +46,54 @@ fun buildAnAgeText(age: Int, birthDate: String, isShorten: Boolean = false): Str
         else -> formatPluralizedAge(age, if (!isShorten) "year" else "", if (!isShorten) "years" else "")
     }
 }
+
+/**
+ * Calculates the age category based on the provided birth date.
+
+ * @param birthDate The birth date in the format "YYYY-MM-DD".
+ * @return The calculated age category.
+ */
+@RequiresApi(Build.VERSION_CODES.O)
+fun calculateAgeCategory(birthDate: String): String {
+    val age = calculateAge(birthDate)
+
+    return when {
+        age <= 1 -> "Cachorro" // Menos de un año
+        age in 2..3 -> "Joven" // De 2 a 3 años
+        age in 4..7 -> "Adulto" // De 4 a 7 años
+        age >= 8 -> "Senior" // Mayores de 7 años
+        else -> "No definido"
+    }
+}
+
+/**
+ * Maps the animal age category to its corresponding year range.
+
+ * @param category The animal age category.
+ * @return The mapped year range for the category.
+ */
+fun mapCategoryToYearRange(category: String): String {
+    return when (category) {
+        "Cachorro" -> "<= 1"
+        "Joven" -> "2-3"
+        "Adulto" -> "4-7"
+        "Senior" -> ">= 8"
+        else -> ""
+    }
+}
+
+/**
+ * Retrieves the year range from the provided animal age category.
+
+ * @param ageRange The animal age category as a string.
+ * @return The corresponding year range as a pair of integers.
+ */
+fun getYearRangeFromCategory(ageRange: String): Pair<Int, Int> {
+    return when (ageRange) {
+        "<= 1" -> Pair(0, 1)
+        "2-3" -> Pair(2, 3)
+        "4-7" -> Pair(4, 7)
+        ">= 8" -> Pair(8, Int.MAX_VALUE)
+        else -> Pair(0, Int.MAX_VALUE) // Rango predeterminado si no se encuentra ninguna categoría
+    }
+}
