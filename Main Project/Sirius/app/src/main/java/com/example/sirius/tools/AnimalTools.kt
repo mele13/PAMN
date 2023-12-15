@@ -58,11 +58,11 @@ fun calculateAgeCategory(birthDate: String): String {
     val age = calculateAge(birthDate)
 
     return when {
-        age <= 1 -> "Cachorro" // Menos de un año
-        age in 2..3 -> "Joven" // De 2 a 3 años
-        age in 4..7 -> "Adulto" // De 4 a 7 años
+        age <= 1 -> "Puppy" // Menos de un año
+        age in 2..3 -> "Young" // De 2 a 3 años
+        age in 4..7 -> "Adult" // De 4 a 7 años
         age >= 8 -> "Senior" // Mayores de 7 años
-        else -> "No definido"
+        else -> "Not defined"
     }
 }
 
@@ -74,9 +74,9 @@ fun calculateAgeCategory(birthDate: String): String {
  */
 fun mapCategoryToYearRange(category: String): String {
     return when (category) {
-        "Cachorro" -> "<= 1"
-        "Joven" -> "2-3"
-        "Adulto" -> "4-7"
+        "Puppy" -> "<= 1"
+        "Young" -> "2-3"
+        "Adult" -> "4-7"
         "Senior" -> ">= 8"
         else -> ""
     }

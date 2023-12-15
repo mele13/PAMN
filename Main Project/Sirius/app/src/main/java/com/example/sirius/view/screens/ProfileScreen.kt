@@ -136,7 +136,7 @@ fun ProfileScreen(
                         Icon(
                             imageVector = Icons.Outlined.Edit,
                             contentDescription = null,
-                            tint = if (isSystemInDarkTheme()) Color.White else Color.Black
+                            tint = Color.Black
                         )
                     }
                 }

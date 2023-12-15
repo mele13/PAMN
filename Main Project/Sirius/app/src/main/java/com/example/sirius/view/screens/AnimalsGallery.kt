@@ -324,7 +324,7 @@ fun DropdownButton(
                         when (text) {
                             "Age range" -> {
                                 when (option) {
-                                    "Cachorro", "Joven", "Adulto", "Senior" -> {
+                                    "Puppy", "Young", "Adult", "Senior" -> {
                                         viewModel.getAnimalsByAgeDesc(option)
                                     }
                                 }
